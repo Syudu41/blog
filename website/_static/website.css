@@ -1,0 +1,29 @@
+/* Preserve the requested white background, including on dark-mode devices. */
+body, body[data-theme="dark"], body[data-theme="light"] {
+  color-scheme: light;
+  --color-foreground-primary: #222;
+  --color-foreground-secondary: #444;
+  --color-foreground-muted: #555;
+  --color-background-primary: #fff;
+  --color-background-secondary: #fff;
+  --color-background-hover: #f4f4f4;
+  --color-background-border: #ddd;
+  --color-brand-primary: #1756a9;
+  --color-brand-content: #1756a9;
+  --color-sidebar-background: #fff;
+  --color-sidebar-brand-text: #222;
+  --color-sidebar-link-text: #333;
+  --color-sidebar-link-text--top-level: #222;
+  --color-sidebar-search-background: #fff;
+  --color-sidebar-search-foreground: #222;
+  --font-stack: Arial, Helvetica, sans-serif;
+  --font-stack--headings: Arial, Helvetica, sans-serif;
+  background: #fff;
+  color: #222;
+}
+.theme-toggle-container { display: none; }
+.sample-card { border: 1px solid #ddd; box-shadow: none !important; }
+.sample-card .sd-card-img-top { height: 150px; object-fit: contain; background: #fff; }
+.sample-card .sd-card-title { font-size: 1.1rem; }
+.sample-card .sd-card-footer { font-size: .8rem; color: #555; background: #fff; }
+article img, article video { max-width: 100%; height: auto; }

@@ -1,4 +1,4 @@
-"""Prepare render reviews and publish only reviewed task outputs to MkDocs."""
+"""Prepare render reviews and publish only reviewed task outputs to Sphinx."""
 
 import argparse
 import hashlib
@@ -110,7 +110,7 @@ def page_content(folder, task):
         visual = f'<video controls preload="metadata" poster="{thumbnail}" aria-label="{alt}"><source src="{escaped_media}" type="video/mp4">{alt}</video>'
     else:
         visual = f'<img src="{escaped_media}" alt="{alt}">'
-    # MkDocs rewrites Markdown image URLs for directory-style detail pages.
+    # Sphinx resolves Markdown images from their source document's directory.
     if not media.endswith(".mp4"):
         visual = f'![{task["alt"]}]({media})'
     else:

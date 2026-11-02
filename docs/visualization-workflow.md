@@ -31,14 +31,16 @@ Set `status` to `passed` and record the reviewing agent only when every result p
 
 ## Wire passing output to the website
 
-Run `python scripts/visualization_workflow.py publish tasks/<task-id>`. It refuses incomplete, failed, or stale reviews, then copies the reviewed media and thumbnail, creates the MkDocs detail page, and adds the gallery card. Use a distinct id from existing concept previews.
+Run `python scripts/visualization_workflow.py publish tasks/<task-id>`. It refuses incomplete, failed, or stale reviews, then copies the reviewed media and thumbnail, creates the Sphinx/MyST detail page, and adds the gallery card. Use a distinct id from existing concept previews.
 
-Run `python -m unittest discover -s tests` and `python scripts/visualization_workflow.py check`, then build with `python -m mkdocs build --strict --config-file website/mkdocs.yml`. Inspect the resulting page before committing the task and its website integration together as a completed subfeature. Push the commit to deploy through GitHub Pages.
+Install the website dependencies, then run `python -m unittest discover -s tests` and `python scripts/visualization_workflow.py check`. Build with `python -m sphinx -b dirhtml -W --keep-going -n website _site`. Inspect the resulting page before committing the task and its website integration together as a completed subfeature. Push the commit to deploy through GitHub Pages.
 
-The MkDocs build also checks that published Manim renders still match their reviewed task files. Concept previews are explicitly labeled and are not represented as reviewed Manim outputs.
+The Sphinx build also checks that published Manim renders still match their reviewed task files. Concept previews are explicitly labeled and are not represented as reviewed Manim outputs.
 
 ## Website structure
 
-`website/` is the source folder. Jekyll/Minima builds the About page. MkDocs builds the gallery and detail pages under `/samples/` into the same deployment artifact. `/samples.html` remains a redirect for existing links. Both use a white background and Arial-family text.
+`website/` is the source folder. Sphinx builds the entire website with the Furo theme. MyST parses the Markdown pages, and Sphinx Design provides cards generated from `website/samples/catalog.json`. The directory-style HTML builder preserves `/samples/` and existing detail-page URLs. `/samples.html` remains a redirect for existing links. The website uses a white background and Arial-family text.
 
-Install gallery dependencies with `python -m pip install -r website/requirements.txt`. Run `python -m mkdocs serve --config-file website/mkdocs.yml` to preview the sample section. GitHub Actions builds both sections before publishing.
+Install dependencies with `python -m pip install -r website/requirements.txt`, then use the Sphinx build command above. Preview the generated website with `python -m http.server 8000 --directory _site` and open http://localhost:8000/. Rebuild after source changes. GitHub Actions runs tests and builds the complete website before publishing.
+
+Write inline mathematics as `$...$` and displayed mathematics as `$$...$$` or a MyST `math` directive. MyST parses the LaTeX expressions and Sphinx's MathJax extension typesets them in the browser. Math within Manim-rendered images and animations continues to use Manim's LaTeX pipeline. Keep the LaTeX source editable in both cases.
