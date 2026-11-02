@@ -1,3 +1,3 @@
 # Visualizer
 
-This is a visualization tool
+This is a visualization tool based on ManimML 
