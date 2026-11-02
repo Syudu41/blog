@@ -8,7 +8,7 @@ Status: proposal, not an implemented generation agent.
 - Benchmark topic: neural network forward propagation and backpropagation. Detailed benchmark selection is deferred; a small hand-checkable network is preferred, with a batched tensor example as the second choice.
 - Primary output: publication figures. Companion outputs: 1080p/30 fps video, PNG, and GIF.
 - Existing project purpose: visualizations for presentations.
-- Showcase: GitHub Pages, with source in `site/`.
+- Showcase: GitHub Pages, with source in `website/`.
 - Initial interface: a local CLI producing editable Manim source and rendered assets.
 - All mathematics in every output format must be authored and rendered through LaTeX. Running text uses Arial or a similar sans-serif family.
 
