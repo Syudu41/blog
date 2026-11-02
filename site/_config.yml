@@ -1,0 +1,11 @@
+title: Agent
+description: Visualizations for machine learning research.
+url: https://syudu41.github.io
+baseurl: /visualizer
+theme: minima
+header_pages:
+  - index.md
+  - samples.md
+exclude:
+  - Gemfile
+  - Gemfile.lock

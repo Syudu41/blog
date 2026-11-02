@@ -7,7 +7,9 @@ This is a visualization tool based on ManimML, 3Blue1Brown standards.
 
 ## Website
 
-Website is a statis design made to showcase the agent visualizations and my presentations. 
+The website uses the Minima Jekyll theme with a white background and Arial text. Its two pages live in `site/index.md` and `site/samples.md`. GitHub Actions builds `site/` with Jekyll and deploys the generated `_site/` directory to GitHub Pages.
+
+To preview locally with Ruby and Bundler installed, run `cd site`, `bundle install`, then `bundle exec jekyll serve --baseurl /visualizer`. Open http://localhost:4000/visualizer/.
 
 ## Agent design
 
