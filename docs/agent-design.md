@@ -45,7 +45,7 @@ Version one is a local CLI. Its output bundle should include editable Manim Pyth
 4. Execute Python in an isolated render worker with bounded resources, restricted network/filesystem access, and pinned Python, Manim, ManimML, fonts, LaTeX, and FFmpeg. Keep deployment credentials out of the worker.
 5. Render a draft, then inspect representative frames and actual-size figures for mathematical errors, clipping, label collisions, timing, and contrast. Use a bounded correction loop; a successful render alone is insufficient.
 6. Export artifacts plus a manifest recording the prompt/spec, source, dependencies, fonts, seeds, settings, timings, licenses, and artifact hashes.
-7. Publish selected assets and metadata to GitHub Pages. Rendering and model API calls run separately; Pages presents static outputs.
+7. Cross-check every output against its task folder's requirements and record passing tests and visual review evidence. Only then wire the output to the MkDocs gallery and detail page, and publish through GitHub Pages. Rendering and model API calls run separately; Pages presents static outputs. Follow [the render/review/publish workflow](visualization-workflow.md).
 
 Set per-job limits for duration, resolution, runtime, memory, retries, cost, and file size. Cache identical scene specifications. Keep intermediates outside Git and publish only selected web-sized assets; use artifact storage as the gallery grows.
 
@@ -70,4 +70,4 @@ Use a small fully connected network with explicit dimensions, activation, and lo
 2. Revisit benchmark details when ready, beginning with the preferred hand-checkable small network and considering batched tensors second.
 3. Should video be silent with captions or narrated? Which language/voice?
 4. For the local CLI, which model provider and cost/render-time budgets are available?
-5. Should publication require review, or should selected categories publish automatically?
+5. Publication requires a passing requirement cross-check, relevant tests, and output inspection; this is settled. Choose the concrete numerical and media checks per task.

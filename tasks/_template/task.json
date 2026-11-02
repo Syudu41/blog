@@ -1,0 +1,15 @@
+{
+  "id": "your-task-id",
+  "title": "Visualization title",
+  "subtitle": "Optional subtitle",
+  "description": "One short description for the gallery card.",
+  "alt": "An accessible description of the visualization.",
+  "source": "scene.py",
+  "output": "output/figure.png",
+  "thumbnail": "output/thumbnail.png",
+  "requirements": [
+    {"id": "concept", "description": "Specify the concept and what the visualization must demonstrate."},
+    {"id": "format", "description": "Specify the output format, dimensions, and duration or frame rate if animated."},
+    {"id": "typography", "description": "Use LaTeX for all mathematics and Arial-family text."}
+  ]
+}
