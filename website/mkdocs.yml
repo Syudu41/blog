@@ -1,0 +1,16 @@
+site_name: Agent
+site_url: https://syudu41.github.io/visualizer/samples/
+docs_dir: samples
+site_dir: ../_site/samples
+theme:
+  name: null
+  custom_dir: theme
+  locale: en
+use_directory_urls: true
+plugins: []
+hooks:
+  - hooks.py
+exclude_docs: |
+  catalog.json
+nav:
+  - Sample visualizations: index.md

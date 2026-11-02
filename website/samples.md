@@ -2,6 +2,9 @@
 layout: page
 title: Sample visualizations
 permalink: /samples.html
+redirect_to: /visualizer/samples/
 ---
 
-This page will contain sample images, GIFs, and videos created with Agent. Visualizations will be added as the project develops.
+<script>window.location.replace({{ '/samples/' | relative_url | jsonify }});</script>
+
+[View sample visualizations]({{ '/samples/' | relative_url }})

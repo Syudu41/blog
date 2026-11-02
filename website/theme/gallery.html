@@ -1,0 +1,17 @@
+{% extends "main.html" %}
+{% block content %}
+{{ page.content }}
+<div class="sample-grid">
+  {% for sample in config.extra.samples %}
+  <a class="sample-card" href="{{ sample.page | url }}">
+    <img src="{{ sample.thumbnail | url }}" alt="{{ sample.alt | e }}" width="360" height="220">
+    <div class="card-content">
+      <h2>{{ sample.title | e }}</h2>
+      {% if sample.subtitle %}<div class="subtitle">{{ sample.subtitle | e }}</div>{% endif %}
+      <p>{{ sample.description | e }}</p>
+      {% if sample.kind == 'concept' %}<small>Concept preview</small>{% endif %}
+    </div>
+  </a>
+  {% endfor %}
+</div>
+{% endblock %}

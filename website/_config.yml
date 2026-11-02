@@ -9,3 +9,8 @@ header_pages:
 exclude:
   - Gemfile
   - Gemfile.lock
+  - mkdocs.yml
+  - requirements.txt
+  - samples
+  - theme
+  - hooks.py
