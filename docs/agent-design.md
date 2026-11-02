@@ -5,10 +5,12 @@ Status: proposal, not an implemented generation agent.
 ## Agreed direction
 
 - Audience: ML researchers.
-- Benchmark: neural network forward propagation and backpropagation.
+- Benchmark topic: neural network forward propagation and backpropagation. Detailed benchmark selection is deferred; a small hand-checkable network is preferred, with a batched tensor example as the second choice.
 - Primary output: publication figures. Companion outputs: 1080p/30 fps video, PNG, and GIF.
 - Existing project purpose: visualizations for presentations.
 - Showcase: GitHub Pages, with source in `site/`.
+- Initial interface: a local CLI producing editable Manim source and rendered assets.
+- All mathematics in every output format must be authored and rendered through LaTeX. Running text uses Arial or a similar sans-serif family.
 
 ## Engine and references
 
@@ -27,11 +29,15 @@ Start with Manim Community. [ManimML](https://github.com/helblazer811/ManimML) t
 
 ## Fonts
 
-Proposed defaults: Source Sans 3 for labels/prose, Latin Modern through LaTeX for equations, and monospace only for code or literal values. Add a serif preset if a target venue requires it. These are proposals, not claims about 3Blue1Brown's fonts.
+Confirmed typography: Arial or a similar sans-serif family for running text and prose labels. Every equation and other mathematical expression must use LaTeX across still images, animation frames, GIFs, and videos, including mathematical axis labels, tensor notation, and inline math. Do not substitute Unicode approximations or ordinary text rendering for mathematics. A specific LaTeX math font is still undecided; Latin Modern is a proposed default. Use monospace only for literal code, not as a replacement for mathematical typesetting.
 
 [Manim's text guide](https://docs.manim.community/en/stable/guides/using_text.html) distinguishes Pango-backed `Text` from LaTeX-backed `Tex`/`MathTex`. Install and pin fonts in the render environment; check availability and missing glyphs before rendering. Keep font licenses with distributed files, reject silent substitution, and match equation sizes optically across the two pipelines.
 
+Use `Text` for prose and `Tex`/`MathTex` for all mathematical content. Keep LaTeX source editable alongside the scene source. Select and record an available Arial-family font explicitly during setup; use an appropriately licensed alternative if Arial is unavailable. Existing website concept SVGs predate this agent rendering standard and are not compliant Manim output examples.
+
 ## Pipeline and logistics
+
+Version one is a local CLI. Its output bundle should include editable Manim Python, LaTeX source/templates, rendered assets, and a reproducibility manifest. The public website remains the showcase. Model provider, CLI command syntax, and installation method remain to be decided.
 
 1. Capture the concept, audience, assumptions/data, tensor dimensions, target physical size/venue, desired formats, duration, and narration needs.
 2. Produce a structured storyboard with mathematical invariants, equations, object identities, and export presets.
@@ -54,12 +60,14 @@ Set per-job limits for duration, resolution, runtime, memory, retries, cost, and
 
 ## First benchmark acceptance criteria
 
+Selection is deferred. The following is a provisional design for the preferred small-network option, not a requirement to choose or implement the benchmark now.
+
 Use a small fully connected network with explicit dimensions, activation, and loss. Verify forward values and gradients using an independent numerical/autodiff calculation. Show chain-rule flow and distinguish parameter gradients from activation gradients. Deliver a publication panel sequence, matching animation, and accessible textual explanation. Validate that selected ManimML primitives support the required semantics; implement custom scenes where needed.
 
 ## Questions for the next discussion
 
-1. Which target venue/figure width and existing paper fonts should we match?
-2. Should the benchmark use a hand-checkable scalar toy network or a small batched tensor example?
+1. Which target venue/figure width should we match? Running text is already set to the Arial family; all mathematics uses LaTeX.
+2. Revisit benchmark details when ready, beginning with the preferred hand-checkable small network and considering batched tensors second.
 3. Should video be silent with captions or narrated? Which language/voice?
-4. Should version one be a local CLI, notebook workflow, or API service? Which model provider and cost/render-time budgets are available?
+4. For the local CLI, which model provider and cost/render-time budgets are available?
 5. Should publication require review, or should selected categories publish automatically?
