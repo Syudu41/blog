@@ -35,7 +35,7 @@ Confirmed typography: Arial or a similar sans-serif family for running text and 
 
 [Manim's text guide](https://docs.manim.community/en/stable/guides/using_text.html) distinguishes Pango-backed `Text` from LaTeX-backed `Tex`/`MathTex`. Install and pin fonts in the render environment; check availability and missing glyphs before rendering. Keep font licenses with distributed files, reject silent substitution, and match equation sizes optically across the two pipelines.
 
-Use `Text` for prose and `Tex`/`MathTex` for all mathematical content. Keep LaTeX source editable alongside the scene source. Select and record an available Arial-family font explicitly during setup; use an appropriately licensed alternative if Arial is unavailable. Existing website concept SVGs predate this agent rendering standard and are not compliant Manim output examples.
+Use `Text` for prose and `Tex`/`MathTex` for all mathematical content. Keep LaTeX source editable alongside the scene source. Select and record an available Arial-family font explicitly during setup; use an appropriately licensed alternative if Arial is unavailable. The showcase contains reviewed Manim outputs; the initial concept placeholders have been removed.
 
 ## Pipeline and logistics
 

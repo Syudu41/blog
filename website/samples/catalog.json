@@ -1,35 +1,5 @@
 [
   {
-    "id": "forward-pass",
-    "title": "The forward pass",
-    "subtitle": "Neural networks",
-    "description": "Follow information from input layers to a prediction.",
-    "page": "forward-pass/",
-    "thumbnail": "assets/network.svg",
-    "alt": "Three connected layers of a neural network.",
-    "kind": "concept"
-  },
-  {
-    "id": "gradient-descent",
-    "title": "Gradient descent",
-    "subtitle": "Optimization",
-    "description": "See how parameter updates approach a loss minimum.",
-    "page": "gradient-descent/",
-    "thumbnail": "assets/descent.svg",
-    "alt": "A path of steps approaching the center of loss contours.",
-    "kind": "concept"
-  },
-  {
-    "id": "linear-transformation",
-    "title": "Linear transformations",
-    "subtitle": "Linear algebra",
-    "description": "Understand a shear through its effect on basis directions.",
-    "page": "linear-transformation/",
-    "thumbnail": "assets/transform.svg",
-    "alt": "A square sheared into a parallelogram.",
-    "kind": "concept"
-  },
-  {
     "id": "rendering-check",
     "title": "A simple identity",
     "subtitle": "",

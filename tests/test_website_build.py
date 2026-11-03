@@ -83,7 +83,7 @@ class WebsiteBuildTests(unittest.TestCase):
             gallery = (output / "samples/index.html").read_text()
             expected_cards = len(json.loads((root / "website/samples/catalog.json").read_text()))
             self.assertEqual(gallery.count('class="sd-card-title'), expected_cards)
-            for slug in ("forward-pass", "gradient-descent", "linear-transformation", "image-fixture", "video-fixture"):
+            for slug in [sample["id"] for sample in json.loads((root / "website/samples/catalog.json").read_text())]:
                 self.assertTrue((output / "samples" / slug / "index.html").is_file())
             self.assertIn('url=samples/', (output / "samples.html").read_text())
             video = (output / "samples/video-fixture/index.html").read_text()
@@ -98,8 +98,10 @@ class WebsiteBuildTests(unittest.TestCase):
             # incremental build, not only when the build directory is empty.
             catalog_path = root / "website/samples/catalog.json"
             entries = json.loads(catalog_path.read_text())
-            extra = dict(next(entry for entry in entries if entry["kind"] == "concept"))
-            extra.update(id="incremental-fixture", page="incremental-fixture/", title="Incremental fixture")
+            (root / "website/samples/assets/incremental.svg").write_text('<svg xmlns="http://www.w3.org/2000/svg"><circle r="2"/></svg>')
+            extra = {"id": "incremental-fixture", "page": "incremental-fixture/", "title": "Incremental fixture",
+                     "thumbnail": "assets/incremental.svg", "alt": "Test circle.",
+                     "description": "A synthetic test preview.", "kind": "concept"}
             entries.append(extra)
             write_json(catalog_path, entries)
             (root / "website/samples/incremental-fixture.md").write_text("# Incremental fixture\n\nA new sample.\n")
