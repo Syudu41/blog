@@ -107,7 +107,11 @@ def page_content(folder, task):
     alt = html.escape(task["alt"], quote=True)
     if media.endswith(".mp4"):
         thumbnail = catalog_entry(task)["thumbnail"]
-        visual = f'<video controls preload="metadata" poster="{thumbnail}" aria-label="{alt}"><source src="{escaped_media}" type="video/mp4">{alt}</video>'
+        render = task.get("render", {})
+        width, height = int(render.get("width", 1920)), int(render.get("height", 1080))
+        if width <= 0 or height <= 0:
+            raise ValueError("Video dimensions must be positive")
+        visual = f'<video controls playsinline preload="metadata" width="{width}" height="{height}" style="aspect-ratio: {width} / {height};" poster="{thumbnail}" aria-label="{alt}"><source src="{escaped_media}" type="video/mp4">{alt}</video>'
     else:
         visual = f'<img src="{escaped_media}" alt="{alt}">'
     # Sphinx resolves Markdown images from their source document's directory.

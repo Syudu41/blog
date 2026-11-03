@@ -27,3 +27,4 @@ body, body[data-theme="dark"], body[data-theme="light"] {
 .sample-card .sd-card-title { font-size: 1.1rem; }
 .sample-card .sd-card-footer { font-size: .8rem; color: #555; background: #fff; }
 article img, article video { max-width: 100%; height: auto; }
+article video { display: block; width: 100%; object-fit: contain; }
