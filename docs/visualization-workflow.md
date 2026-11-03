@@ -2,6 +2,8 @@
 
 Every Manim task lives in `tasks/<task-id>/`. The folder holds the request, editable scene source, output files, explanation, and review evidence. Copy `tasks/_template/` to start a task; replace its placeholders and add `scene.py` and `output/`.
 
+Alternatively, use `python -m tensorquill new <task-id> --request-file request.txt --format png`. The coding agent writes the requested scene, renders a draft, inspects it, and renders the final output with the [local rendering CLI](rendering.md). No separate model API is needed.
+
 ```text
 tasks/<task-id>/
   task.json          # Metadata, acceptance criteria, source and output paths

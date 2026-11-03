@@ -76,7 +76,8 @@ class WebsiteBuildTests(unittest.TestCase):
                 for target in parser.targets:
                     self.assertTrue(target.is_file(), f"Broken local link in {page}: {target}")
             gallery = (output / "samples/index.html").read_text()
-            self.assertEqual(gallery.count('class="sd-card-title'), 5)
+            expected_cards = len(json.loads((root / "website/samples/catalog.json").read_text()))
+            self.assertEqual(gallery.count('class="sd-card-title'), expected_cards)
             for slug in ("forward-pass", "gradient-descent", "linear-transformation", "image-fixture", "video-fixture"):
                 self.assertTrue((output / "samples" / slug / "index.html").is_file())
             self.assertIn('url=samples/', (output / "samples.html").read_text())

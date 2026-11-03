@@ -7,6 +7,11 @@
   "source": "scene.py",
   "output": "output/figure.png",
   "thumbnail": "output/thumbnail.png",
+  "render": {
+    "scene": "Visualization",
+    "font": "Liberation Sans",
+    "seed": 42
+  },
   "requirements": [
     {"id": "concept", "description": "Specify the concept and what the visualization must demonstrate."},
     {"id": "format", "description": "Specify the output format, dimensions, and duration or frame rate if animated."},

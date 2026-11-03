@@ -1,6 +1,6 @@
 # TensorQuill: design discussion
 
-Status: proposal, not an implemented generation agent.
+Status: the local rendering CLI and review/publication workflow are implemented. The coding agent writes scene source; there is no separate model API or autonomous natural-language generation service. See [local rendering](rendering.md).
 
 ## Agreed direction
 
@@ -37,12 +37,12 @@ Use `Text` for prose and `Tex`/`MathTex` for all mathematical content. Keep LaTe
 
 ## Pipeline and logistics
 
-Version one is a local CLI. Its output bundle should include editable Manim Python, LaTeX source/templates, rendered assets, and a reproducibility manifest. The public website remains the showcase. Model provider, CLI command syntax, and installation method remain to be decided.
+Version one is a local CLI. Its output bundle includes editable Manim Python, generated LaTeX files, rendered assets, logs, and a settings/environment report. The public website remains the showcase. The coding agent handles scene authoring within the existing session; no additional model API is required.
 
 1. Capture the concept, audience, assumptions/data, tensor dimensions, target physical size/venue, desired formats, duration, and narration needs.
 2. Produce a structured storyboard with mathematical invariants, equations, object identities, and export presets.
 3. Retrieve compatible patterns and generate editable scene source.
-4. Execute Python in an isolated render worker with bounded resources, restricted network/filesystem access, and pinned Python, Manim, ManimML, fonts, LaTeX, and FFmpeg. Keep deployment credentials out of the worker.
+4. Execute trusted local scene code in a separate worker process with a timeout and output-size limit. Keep model/deployment credentials out of the worker environment. Pin and check the rendering tools and record resolved versions. The current local worker is not a container or filesystem/network sandbox.
 5. Render a draft, then inspect representative frames and actual-size figures for mathematical errors, clipping, label collisions, timing, and contrast. Use a bounded correction loop; a successful render alone is insufficient.
 6. Export artifacts plus a manifest recording the prompt/spec, source, dependencies, fonts, seeds, settings, timings, licenses, and artifact hashes.
 7. Cross-check every output against its task folder's requirements and record passing tests and visual review evidence. Only then wire the output to the Sphinx/Furo gallery and detail page, and publish through GitHub Pages. Rendering and model API calls run separately; Pages presents static outputs. Follow [the render/review/publish workflow](visualization-workflow.md).
@@ -69,5 +69,5 @@ Use a small fully connected network with explicit dimensions, activation, and lo
 1. Which target venue/figure width should we match? Running text is already set to the Arial family; all mathematics uses LaTeX.
 2. Revisit benchmark details when ready, beginning with the preferred hand-checkable small network and considering batched tensors second.
 3. Should video be silent with captions or narrated? Which language/voice?
-4. For the local CLI, which model provider and cost/render-time budgets are available?
+4. What render-time and output-size limits should larger tasks use? The CLI starts with a 180-second timeout and configurable size limits; no model-provider setup is needed.
 5. Publication requires a passing requirement cross-check, relevant tests, and output inspection; this is settled. Choose the concrete numerical and media checks per task.
