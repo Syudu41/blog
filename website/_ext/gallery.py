@@ -25,6 +25,7 @@ def validate_reviews(app):
 def insert_gallery(app, docname, source):
     if docname != "samples/index":
         return
+    app.env.note_dependency(str(Path(app.srcdir) / "samples" / "catalog.json"))
     entries = catalog(app)
     lines = ["::::{grid} 1 1 2 3", ":gutter: 3", ""]
     for sample in entries:
