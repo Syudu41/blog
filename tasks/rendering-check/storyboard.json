@@ -1,0 +1,58 @@
+{
+  "artifact_sha256": "f6b7bdbb881f9ed3af685a204cb50c6c4c6b2adf46b3cf96ef1b66d155c2a323",
+  "source_sha256": "262a49d75fa4cd2dfde84980cbf786097efcf5b8b80496388a234920e2dfc023",
+  "stages": {
+    "square": {
+      "time": 0.4,
+      "expression": "(a+b)^2"
+    },
+    "factors": {
+      "time": 1.9333333333333331,
+      "expression": "(a+b)(a+b)"
+    },
+    "product-1": {
+      "time": 3.6666666666666705,
+      "expression": "a\\cdot a"
+    },
+    "product-2": {
+      "time": 5.133333333333335,
+      "expression": "a\\cdot a+a\\cdot b"
+    },
+    "product-3": {
+      "time": 6.599999999999998,
+      "expression": "a\\cdot a+a\\cdot b+b\\cdot a"
+    },
+    "product-4": {
+      "time": 8.066666666666661,
+      "expression": "a\\cdot a+a\\cdot b+b\\cdot a+b\\cdot b"
+    },
+    "distributed": {
+      "time": 8.733333333333327,
+      "expression": "a\\cdot a+a\\cdot b+b\\cdot a+b\\cdot b"
+    },
+    "expanded": {
+      "time": 10.199999999999992,
+      "expression": "a^2+ab+ba+b^2"
+    },
+    "matching-cross-terms": {
+      "time": 12.466666666666654,
+      "expression": "a^2+ab+ab+b^2"
+    },
+    "collected": {
+      "time": 14.333333333333318,
+      "expression": "a^2+2ab+b^2"
+    },
+    "final": {
+      "time": 16.733333333333317,
+      "expression": "(a+b)^2=a^2+2ab+b^2"
+    }
+  },
+  "render_run": "20261103T213324Z-7d2bbc",
+  "render_fps": 15,
+  "tool_versions": {
+    "ffmpeg": "ffmpeg version 7.1.1 Copyright (c) 2000-2025 the FFmpeg developers",
+    "ffprobe": "ffprobe version 7.1.1 Copyright (c) 2007-2025 the FFmpeg developers",
+    "latex": "pdfTeX 3.141592653-2.6-1.40.29 (TeX Live 2026)",
+    "dvisvgm": "dvisvgm 3.6"
+  }
+}

@@ -1,23 +1,54 @@
 {
   "passed": true,
-  "artifact_sha256": "363c105a9d661bb921caba015e8879ead78b552651e2eec3324aa30c938b3c61",
+  "artifact_sha256": "f6b7bdbb881f9ed3af685a204cb50c6c4c6b2adf46b3cf96ef1b66d155c2a323",
   "dimensions": [
-    1800,
-    1200
+    960,
+    540
   ],
-  "dpi": 300,
+  "frames": 267,
+  "duration_seconds": 17.800000000000036,
+  "loop": 0,
+  "render_fps": 15,
+  "final_hold_seconds": 2.1299999999999937,
+  "stage_times": {
+    "square": 0.4,
+    "factors": 1.9333333333333331,
+    "product-1": 3.6666666666666705,
+    "product-2": 5.133333333333335,
+    "product-3": 6.599999999999998,
+    "product-4": 8.066666666666661,
+    "distributed": 8.733333333333327,
+    "expanded": 10.199999999999992,
+    "matching-cross-terms": 12.466666666666654,
+    "collected": 14.333333333333318,
+    "final": 16.733333333333317
+  },
+  "hold_tolerance": "Foreground mean RGB difference <=0.25; at most 0.5% of foreground pixels differ by more than 20.",
+  "stage_frame_hashes": {
+    "square": "3f6671db0060bb41962eb1c3f2350aa00d17d4b8e057fb2760aed7de95822c09",
+    "factors": "709edb7aea44b6e80db188486a4a7f133e1f94f4ae573c885f50a128146dcdb0",
+    "product-1": "290e20bf0e5151bbf1a4ae17a26641ae7e7a24840ac466b64ab7b802b0f533a4",
+    "product-2": "7c712ec5453e75eab199b325a77b78479bba3fa3d46e214855f8624f9383e0ab",
+    "product-3": "57a6515547b593880b32bc2fcd16cad043906564109005e1765f80d41469a0fa",
+    "product-4": "e1a7845f5da7f86946616c1f9d7b10a572de90d6ee010d294d0e5d0556a16853",
+    "distributed": "cc04ee04108956704bf2d80f870153bd39536091c8cc00eb515a569a3ac3a4c2",
+    "expanded": "14d37a17df666f9633e09ee75edac96a251e8a6e9517ebe34fdfe22cc452c6a6",
+    "matching-cross-terms": "915ecd668d28f637b91a79b7418774c3c63374913bd2ef102afadeffbd192f3c",
+    "collected": "5215fe3f2d0bc8c07229d699f6ba9c64ea6223d0f54c3653142acbe7cf53ee1f",
+    "final": "23e4c8da633c9302c57d5c0cc4a58ec9ee1afba5807f5e4d41919ff461d4b58e"
+  },
   "foreground_bounds": [
-    547,
-    475,
-    1253,
-    725
+    286,
+    22,
+    939,
+    352
   ],
-  "math": "Exact polynomial coefficient expansion passed, plus 121 integer-pair checks.",
+  "math": "Exact polynomial coefficient expansion and 121 integer-pair checks passed.",
+  "render_run": "20261103T213324Z-7d2bbc",
   "tool_versions": {
     "ffmpeg": "ffmpeg version 7.1.1 Copyright (c) 2000-2025 the FFmpeg developers",
     "ffprobe": "ffprobe version 7.1.1 Copyright (c) 2007-2025 the FFmpeg developers",
     "latex": "pdfTeX 3.141592653-2.6-1.40.29 (TeX Live 2026)",
     "dvisvgm": "dvisvgm 3.6"
-  },
-  "render_run": "20261103T201642Z-bef7d5"
+  }
 }

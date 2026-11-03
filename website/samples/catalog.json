@@ -3,10 +3,10 @@
     "id": "rendering-check",
     "title": "A simple identity",
     "subtitle": "",
-    "description": "A visualization of a simple identity.",
+    "description": "Watch multiplication unfold term by term, then simplify.",
     "page": "rendering-check/",
     "thumbnail": "assets/rendering-check/thumbnail.png",
-    "alt": "Visualization of a simple identity.",
+    "alt": "An animated expansion of the square of a sum, showing four products and then combining the two cross terms.",
     "kind": "render",
     "task": "rendering-check"
   },

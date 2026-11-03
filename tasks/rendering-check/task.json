@@ -1,10 +1,10 @@
 {
   "id": "rendering-check",
   "title": "A simple identity",
-  "description": "A visualization of a simple identity.",
-  "alt": "Visualization of a simple identity.",
+  "description": "Watch multiplication unfold term by term, then simplify.",
+  "alt": "An animated expansion of the square of a sum, showing four products and then combining the two cross terms.",
   "source": "scene.py",
-  "output": "output/visualization.png",
+  "output": "output/visualization.gif",
   "thumbnail": "output/thumbnail.png",
   "render": {
     "scene": "Visualization",
@@ -13,16 +13,24 @@
   },
   "requirements": [
     {
-      "id": "content",
-      "description": "Render a white figure titled A simple identity in Liberation Sans. Typeset the identity (a+b)^2 = a^2 + 2ab + b^2 with LaTeX below it. Keep the title and equation clearly readable with no clipping."
+      "id": "distribution",
+      "description": "Show two factors and form all four pairwise products in sequence."
+    },
+    {
+      "id": "simplification",
+      "description": "For real scalars, simplify products, make both cross terms match, collect them, and hold the complete final identity."
     },
     {
       "id": "format",
-      "description": "Produce a valid PNG file and PNG thumbnail."
+      "description": "Produce a looping 960x540 GIF at approximately 15 fps and a valid PNG thumbnail; hold the final result for at least two seconds."
     },
     {
       "id": "typography",
-      "description": "Use LaTeX for all math and Arial-family prose."
+      "description": "Use LaTeX for all math, Arial-family prose, a white background, stable colors, and unclipped readable expressions."
+    },
+    {
+      "id": "explanation",
+      "description": "Include one short paragraph on the beauty of visualization with a relevant 3Blue1Brown hyperlink."
     }
   ]
 }

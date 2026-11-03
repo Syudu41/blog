@@ -1,1 +1,1 @@
-Expanding the square of a sum gives the two square terms and twice their product. This example checks that prose and LaTeX mathematics render clearly together.
+The beauty of visualization is seeing why a formula works: each product appears, then matching terms combine. Inspired by [3Blue1Brown’s visual approach to mathematical understanding](https://www.3blue1brown.com/lessons/essence-of-calculus/).

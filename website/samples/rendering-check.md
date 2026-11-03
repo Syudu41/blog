@@ -1,9 +1,9 @@
 # A simple identity
 
-![Visualization of a simple identity.](assets/rendering-check/visualization.png)
+![An animated expansion of the square of a sum, showing four products and then combining the two cross terms.](assets/rendering-check/visualization.gif)
 
-Expanding the square of a sum gives the two square terms and twice their product. This example checks that prose and LaTeX mathematics render clearly together.
+The beauty of visualization is seeing why a formula works: each product appears, then matching terms combine. Inspired by [3Blue1Brown’s visual approach to mathematical understanding](https://www.3blue1brown.com/lessons/essence-of-calculus/).
 
-[Download visualization](assets/rendering-check/visualization.png)
+[Download visualization](assets/rendering-check/visualization.gif)
 
 [Back to sample visualizations](index.md)

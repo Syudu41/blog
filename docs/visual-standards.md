@@ -12,6 +12,8 @@ The [3Blue1Brown neural-network lesson](https://www.3blue1brown.com/lessons/neur
 
 The first samples were created to test the rendering and publication pipeline. Their existing reviews cover their original task requirements. This audit also asks whether they work as explanatory scenes.
 
+The table records that initial audit. The identity sample has since been replaced by a reviewed GIF that forms each product, identifies the matching cross terms, and collects them into the final expression.
+
 | Criterion | ManimML forward-pass sample | Identity figure |
 | --- | --- | --- |
 | Correct structure or expression | Pass: a 2–3–1 schematic, with no numerical prediction claim | Pass: exact algebraic check and LaTeX rendering |
@@ -54,6 +56,6 @@ Keep all mathematics in LaTeX and prose in the selected Arial-family font. Contr
 
 For a forward-pass explanation, introduce the input, hidden, and output roles; focus on one neuron; show its weighted sum and activation; then extend the same mechanism to a layer and its matrix expression. Choose explicit values only when that task's numerical example has been specified and independently checked.
 
-For a visual explanation of the square-of-a-sum identity, show a square partitioned into its four component regions, label their areas with LaTeX, and connect those regions to the expanded expression. The current identity figure remains a typesetting/rendering check.
+The identity GIF now demonstrates the algebraic expansion term by term. A complementary geometric version could show a square partitioned into four regions, label their areas with LaTeX, and connect them to the same expanded expression.
 
 Include the applicable storyboard and explanatory criteria in each new task's requirements. The reviewing agent must assess them from the actual rendered output; media validation cannot infer educational clarity.
