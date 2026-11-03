@@ -20,6 +20,8 @@ Start with Manim Community. [ManimML](https://github.com/helblazer811/ManimML) t
 
 ## Visual standards
 
+Use [the visual and explanatory rubric](visual-standards.md) when storyboarding and reviewing explanatory tasks. It includes an audit of the initial rendering demonstrations and distinguishes successful rendering from explanatory quality.
+
 - Establish the question, show a concrete example, reveal the mechanism, and connect it to the formalism. Give each scene one clear learning objective.
 - Preserve object identity through transformations. Use consistent encodings for activations, parameters, and gradients, with labels and line styles alongside color.
 - Label tensor shapes, units, assumptions, and schematic simplifications. Prefer direct labels over detached legends.

@@ -13,3 +13,4 @@
 - Publish output to `website/` only after all checks and requirements pass. Use `scripts/visualization_workflow.py` to prepare the review, publish approved artifacts, and check their integrity. See `docs/visualization-workflow.md` for the process.
 - Re-review output after any requirement, source, explanation, or artifact changes. Do not bypass a failed check or relabel a Manim output as a concept preview.
 - Build the whole website with Sphinx, MyST Markdown, and Furo; retain the white background and Arial-family text. All mathematics uses LaTeX.
+- For explanatory tasks, storyboard and review the visual progression using `docs/visual-standards.md`. Passing rendering and media checks alone does not establish explanatory quality.
