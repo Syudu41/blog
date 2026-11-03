@@ -1,0 +1,40 @@
+{
+  "sha256": "dd9f3d862babfdfc1d4244cf935f05a13ee7045dff13412d5c9eb0e7eddac6e3",
+  "dimensions": [
+    960,
+    400
+  ],
+  "loop": 0,
+  "frames": 120,
+  "duration_seconds": 8.0,
+  "bytes": 627794,
+  "reset_mean_channel_error": 0.3151657986111111,
+  "stages": {
+    "rough-hidden-layer": 0.4,
+    "carved-node-1": 1.8666666666666665,
+    "carved-node-2": 3.46666666666667,
+    "carved-node-3": 5.066666666666667,
+    "shaped-hidden-layer": 6.333333333333332,
+    "loop-reset": 7.799999999999996
+  },
+  "render_environment": {
+    "manim": "0.19.0",
+    "expected_manim": "0.19.0",
+    "tools": {
+      "ffmpeg": "/home/lab335a/Sudarshan/Research-PhD/visualizer/.venv/render/bin/ffmpeg",
+      "ffprobe": "/home/lab335a/Sudarshan/Research-PhD/visualizer/.venv/render/bin/ffprobe",
+      "latex": "/home/lab335a/Sudarshan/Research-PhD/visualizer/.venv/tex/bin/x86_64-linux/latex",
+      "dvisvgm": "/home/lab335a/Sudarshan/Research-PhD/visualizer/.venv/tex/bin/x86_64-linux/dvisvgm"
+    },
+    "font": "Liberation Sans",
+    "font_available": true,
+    "passed": true,
+    "latex_smoke_test": true,
+    "tool_versions": {
+      "ffmpeg": "ffmpeg version 7.1.1 Copyright (c) 2000-2025 the FFmpeg developers",
+      "ffprobe": "ffprobe version 7.1.1 Copyright (c) 2007-2025 the FFmpeg developers",
+      "latex": "pdfTeX 3.141592653-2.6-1.40.29 (TeX Live 2026)",
+      "dvisvgm": "dvisvgm 3.6"
+    }
+  }
+}

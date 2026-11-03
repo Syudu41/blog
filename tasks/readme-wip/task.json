@@ -1,0 +1,32 @@
+{
+  "id": "readme-wip",
+  "title": "Sculpting the hidden layer",
+  "description": "A sculptor shapes the hidden layer while TensorQuill is a work in progress.",
+  "alt": "A sculptor uses a hammer and chisel to shape the hidden layer of a neural network; work in progress, made with Manim.",
+  "source": "scene.py",
+  "output": "output/visualization.gif",
+  "thumbnail": "output/thumbnail.png",
+  "render": {
+    "scene": "Visualization",
+    "font": "Liberation Sans",
+    "seed": 42,
+    "width": 960,
+    "height": 400,
+    "fps": 15,
+    "max_bytes": 5000000
+  },
+  "requirements": [
+    {
+      "id": "metaphor",
+      "description": "Create a compact, looping work-in-progress GIF made with Manim for the README. Show a recognizable sculptor holding a hammer and chisel, shaping rough stone into the hidden-layer nodes of a neural network. Include the labels Work in progress, Hidden layer, and Made with Manim. Use a white background, readable Arial-family text, and a steady canvas. This is a construction metaphor, not a numerical network simulation."
+    },
+    {
+      "id": "format",
+      "description": "A looping 960x400 GIF at approximately 15 fps, under 5 MB, plus a valid PNG thumbnail."
+    },
+    {
+      "id": "typography",
+      "description": "Use Arial-family text and a white background. Include Work in progress, Hidden layer, and Made with Manim; no mathematical text is required."
+    }
+  ]
+}
