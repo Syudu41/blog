@@ -143,7 +143,8 @@ def publish(folder, root=ROOT):
         source = task_file(folder, task[field])
         shutil.copyfile(source, asset_dir / (name + source.suffix.lower()))
     (gallery / f"{slug}.md").write_text(page_content(folder, task))
-    catalog = [item for item in catalog if item["id"] != slug] + [catalog_entry(task)]
+    entry = catalog_entry(task)
+    catalog = [entry if item["id"] == slug else item for item in catalog] if existing else catalog + [entry]
     write_json(gallery / "catalog.json", catalog)
 
 

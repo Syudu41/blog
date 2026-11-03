@@ -101,6 +101,16 @@ class PublicationGateTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, "differs from reviewed"):
             check_published(self.root)
 
+    def test_updating_a_sample_preserves_card_order(self):
+        self.approve()
+        publish(self.task, self.root)
+        path = self.root / "website/samples/catalog.json"
+        entries = json.loads(path.read_text())
+        entries.append({"id": "later", "kind": "concept"})
+        write_json(path, entries)
+        publish(self.task, self.root)
+        self.assertEqual([entry["id"] for entry in json.loads(path.read_text())], ["test-render", "later"])
+
     def test_missing_output_blocks_review(self):
         (self.task / "figure.svg").unlink()
         with self.assertRaisesRegex(ValueError, "Missing or unsafe"):
