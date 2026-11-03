@@ -28,5 +28,16 @@
     "thumbnail": "assets/transform.svg",
     "alt": "A square sheared into a parallelogram.",
     "kind": "concept"
+  },
+  {
+    "id": "rendering-check",
+    "title": "A simple identity",
+    "subtitle": "",
+    "description": "A visualization of a simple identity.",
+    "page": "rendering-check/",
+    "thumbnail": "assets/rendering-check/thumbnail.png",
+    "alt": "Visualization of a simple identity.",
+    "kind": "render",
+    "task": "rendering-check"
   }
 ]

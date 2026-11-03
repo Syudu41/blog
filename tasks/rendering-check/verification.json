@@ -1,0 +1,23 @@
+{
+  "passed": true,
+  "artifact_sha256": "363c105a9d661bb921caba015e8879ead78b552651e2eec3324aa30c938b3c61",
+  "dimensions": [
+    1800,
+    1200
+  ],
+  "dpi": 300,
+  "foreground_bounds": [
+    547,
+    475,
+    1253,
+    725
+  ],
+  "math": "Exact polynomial coefficient expansion passed, plus 121 integer-pair checks.",
+  "tool_versions": {
+    "ffmpeg": "ffmpeg version 7.1.1 Copyright (c) 2000-2025 the FFmpeg developers",
+    "ffprobe": "ffprobe version 7.1.1 Copyright (c) 2007-2025 the FFmpeg developers",
+    "latex": "pdfTeX 3.141592653-2.6-1.40.29 (TeX Live 2026)",
+    "dvisvgm": "dvisvgm 3.6"
+  },
+  "render_run": "20261103T201642Z-bef7d5"
+}

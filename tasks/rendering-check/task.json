@@ -1,0 +1,28 @@
+{
+  "id": "rendering-check",
+  "title": "A simple identity",
+  "description": "A visualization of a simple identity.",
+  "alt": "Visualization of a simple identity.",
+  "source": "scene.py",
+  "output": "output/visualization.png",
+  "thumbnail": "output/thumbnail.png",
+  "render": {
+    "scene": "Visualization",
+    "font": "Liberation Sans",
+    "seed": 42
+  },
+  "requirements": [
+    {
+      "id": "content",
+      "description": "Render a white figure titled A simple identity in Liberation Sans. Typeset the identity (a+b)^2 = a^2 + 2ab + b^2 with LaTeX below it. Keep the title and equation clearly readable with no clipping."
+    },
+    {
+      "id": "format",
+      "description": "Produce a valid PNG file and PNG thumbnail."
+    },
+    {
+      "id": "typography",
+      "description": "Use LaTeX for all math and Arial-family prose."
+    }
+  ]
+}

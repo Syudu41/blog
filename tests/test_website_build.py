@@ -41,6 +41,11 @@ class WebsiteBuildTests(unittest.TestCase):
             shutil.copytree(ROOT / "website", root / "website")
             (root / "scripts").mkdir()
             shutil.copyfile(ROOT / "scripts/visualization_workflow.py", root / "scripts/visualization_workflow.py")
+            existing = json.loads((root / "website/samples/catalog.json").read_text())
+            for sample in existing:
+                if sample.get("kind") == "render":
+                    shutil.copytree(ROOT / "tasks" / sample["task"], root / "tasks" / sample["task"],
+                                    ignore=shutil.ignore_patterns("runs", "__pycache__"))
             for slug, suffix in (("image-fixture", ".svg"), ("video-fixture", ".mp4")):
                 task = root / "tasks" / slug
                 task.mkdir(parents=True)
