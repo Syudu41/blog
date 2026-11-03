@@ -1,4 +1,4 @@
-# Agent: design discussion
+# TensorQuill: design discussion
 
 Status: proposal, not an implemented generation agent.
 
