@@ -1,0 +1,27 @@
+{
+  "passed": true,
+  "artifact_sha256": "63101474f292326f2a21bc10d2be426b1ac2aa355e2f79fd6593ace2e41fef0c",
+  "dimensions": [
+    1920,
+    1080
+  ],
+  "fps": 30,
+  "duration_seconds": 4.5,
+  "codec": "h264",
+  "pixel_format": "yuv420p",
+  "activation_x_at_seconds": {
+    "0.8": 0.2835386375875067,
+    "1.4": 0.3576339478223372,
+    "2.0": 0.49965061745852185,
+    "2.6": 0.6433645124716553,
+    "3.2": 0.7155065082059989
+  },
+  "final_hold": "No activation highlight at 4.2 seconds.",
+  "tool_versions": {
+    "ffmpeg": "ffmpeg version 7.1.1 Copyright (c) 2000-2025 the FFmpeg developers",
+    "ffprobe": "ffprobe version 7.1.1 Copyright (c) 2007-2025 the FFmpeg developers",
+    "latex": "pdfTeX 3.141592653-2.6-1.40.29 (TeX Live 2026)",
+    "dvisvgm": "dvisvgm 3.6"
+  },
+  "render_run": "20261103T201748Z-5e90c6"
+}

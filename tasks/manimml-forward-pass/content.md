@@ -1,0 +1,1 @@
+This schematic network has two input nodes, three hidden nodes, and one output node. The animation highlights the order of a forward pass through its connections. It illustrates the architecture and direction of information flow; no numerical weights or predictions are shown.

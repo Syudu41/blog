@@ -1,5 +1,5 @@
 # Sample visualizations
 
-Select a card to view the visualization and explanation. These concept previews illustrate planned topics; reviewed Manim outputs will be added here.
+Select a card to view its visualization and explanation. Concept previews are labeled.
 
 <!-- gallery -->
