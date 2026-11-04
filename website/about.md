@@ -1,5 +1,5 @@
 # About
 
-TensorQuill explores how clear, carefully paced visualizations can explain machine learning. Built with Manim and ManimML, it draws inspiration from 3Blue1Brown’s visual explanations and the Manim Community Gallery, with examples intended for research and presentations.
+TensorQuill explores how clear, carefully paced visualizations can explain machine learning. Built with Manim and ManimML, it draws inspiration from [3Blue1Brown’s visual explanations](https://www.3blue1brown.com/) and the Manim Community Gallery, with examples intended for research and presentations.
 
 Author: Sudarshan Balaji.
