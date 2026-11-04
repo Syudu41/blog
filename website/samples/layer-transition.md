@@ -1,4 +1,4 @@
-# Input → hidden → output
+# A forward pass through a neural network
 
 <video controls controlslist="nodownload" playsinline preload="metadata" width="1920" height="1080" style="aspect-ratio: 1920 / 1080;" poster="../assets/layer-transition/thumbnail.png" aria-label="A three-input, four-hidden-neuron, two-output network; orange signals travel left to right and blue fills show computed activations."><source src="../assets/layer-transition/visualization.mp4" type="video/mp4">A three-input, four-hidden-neuron, two-output network; orange signals travel left to right and blue fills show computed activations.</video>
 

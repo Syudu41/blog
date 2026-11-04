@@ -29,7 +29,7 @@ class Visualization(Scene):
 
     def construct(self):
         self.stages={};data=compute()
-        title=Text('Input → hidden → output',font_size=36,weight='BOLD',color=INK).move_to([0,3.15,0])
+        title=Text('A forward pass through a neural network',font_size=32,weight='BOLD',color=INK).move_to([0,3.15,0])
         legend=Text('Orange: signal flow     Blue: activation strength',font_size=20,color='#536c7f').move_to([0,2.55,0])
         layers=[FeedForwardLayer(n,node_radius=.28,node_spacing=.83,
                                 rectangle_fill_color=WHITE,rectangle_stroke_width=0,

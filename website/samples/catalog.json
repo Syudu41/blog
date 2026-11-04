@@ -23,7 +23,7 @@
   },
   {
     "id": "layer-transition",
-    "title": "Input \u2192 hidden \u2192 output",
+    "title": "A forward pass through a neural network",
     "subtitle": "",
     "description": "Follow a forward pass from three inputs through four hidden neurons to two outputs.",
     "page": "layer-transition/",

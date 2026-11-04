@@ -3,50 +3,50 @@
   "reviewer": "TensorQuill coding agent",
   "hashes": {
     "content.md": "2cf29d5b35d5cdf9b44f7aa80f307373873a90e4df3b306d2cd965dcc7ea8c8c",
-    "output/thumbnail.png": "c553753d24dc5ba79bbbf98b031688e3d16e19e74bdc681f07dfd252a7db797f",
-    "output/visualization.mp4": "c97c20d8fd00d6be905816a21dab4dbf091b45c1aba5a3680a4e812629ae3ef2",
+    "output/thumbnail.png": "24ea26c7f6157d654c760f1995371d4bd86cd4ce2643014d66d0c2e2d557f687",
+    "output/visualization.mp4": "2d42bc65779ad9cf033bfdd3bea554150a9ac5e6a94c4c0488608d632564f2c4",
     "requirements.md": "a1095592e14e0ad1bdf54a0dffda72eba0e911764c220ee774817731f80d03f8",
-    "scene.py": "fbc3585c680f035bcd79d1df4f005cbdce1da2fd5b97a70468f1bf8373641b4b",
-    "task.json": "c5f081f5e9088a0fa59f2ba1356ccf362a4640f3dc91081991f3860167e6f03d"
+    "scene.py": "68999a6cc46da3bf862ac04fc43b662fcbd2e6d67ccf4fdefc403f5135b27059",
+    "task.json": "ed8cd0638b4e99857040ce53102106038f33e36c72b7cd3ecd8ab80b8dccbaa6"
   },
   "requirements": {
     "flow": {
       "passed": true,
-      "evidence": "Final review-stages-1/2/3.png show the complete 3-4-2 architecture, input activation, moving orange pulses, hidden activation, second pulse phase, output activation, hold and reset. Source uses ManimML primitives. Pixel checks confirm causal activation order."
+      "evidence": "Inspected all ten current frames in review-stages-1/2/3.png and current thumbnail:3-4-2 ManimML network, input activation, smooth orange input-hidden pulses, hidden activation, hidden-output pulses, output activation, hold and reset. Stage ordering and activation pixels independently verified."
     },
     "computation": {
       "passed": true,
-      "evidence": "checks.py independently recomputed ReLU and sigmoid values, and verified node-fill pixels at five stages (max channel error1.84/255). Weights and values are recorded in computation.json. Final rendered values match rounding. No trained classifier claim."
+      "evidence": "Reran checks.py against this render: independent math.fsum and sigmoid calculations match hidden [0.675,0.36,0.68,0.39] and outputs [0.6938116308,0.5732197727]. Max activation pixel channel error1.84/255. Rendered numbers match rounding; fixed illustrative weights identified."
     },
     "presentation": {
       "passed": true,
-      "evidence": "Inspected all ten sampled final frames at900px and thumbnail: white background, stable network, readable separated labels and LaTeX numbers. Full decode:427 frames,1920x1080,H264/yuv420p,30fps,14.233s,1913595bytes. PNG640x360 verified."
+      "evidence": "Full decode passed:427 frames,1920x1080,H264/yuv420p,30fps,14.233s,2033480bytes. Current640x360 PNG thumbnail verified. Inspected longer heading, labels, values and captions: readable and unclipped on white."
     }
   },
   "checks": {
     "render_success": {
       "passed": true,
-      "evidence": "Final TensorQuill CLI render with native Manim0.19.0 exited0,27 animations. Exact command and tool versions recorded in review-evidence.md and verification.json."
+      "evidence": "Fresh final TensorQuill CLI render exited0;29 animations; native Manim0.19.0. Command and actual environment recorded in review-evidence.md and verification.json."
     },
     "output_integrity": {
       "passed": true,
-      "evidence": "Inspected all ten sampled final frames at900px and thumbnail: white background, stable network, readable separated labels and LaTeX numbers. Full decode:427 frames,1920x1080,H264/yuv420p,30fps,14.233s,1913595bytes. PNG640x360 verified. First-to-last mean channel error0.0056/255; SHA256 recorded."
+      "evidence": "Full decode passed:427 frames,1920x1080,H264/yuv420p,30fps,14.233s,2033480bytes. Current640x360 PNG thumbnail verified. Inspected longer heading, labels, values and captions: readable and unclipped on white. SHA256 recorded in verification.json; first-to-last mean channel error0.0053/255."
     },
     "mathematics": {
       "passed": true,
-      "evidence": "checks.py independently recomputed ReLU and sigmoid values, and verified node-fill pixels at five stages (max channel error1.84/255). Weights and values are recorded in computation.json. Final rendered values match rounding. No trained classifier claim. Geometry check confirms3/4/2 nodes,12/8 connections; all inputs and activations in[0,1] use the same fill scale."
+      "evidence": "Reran checks.py against this render: independent math.fsum and sigmoid calculations match hidden [0.675,0.36,0.68,0.39] and outputs [0.6938116308,0.5732197727]. Max activation pixel channel error1.84/255. Rendered numbers match rounding; fixed illustrative weights identified. Independent geometry confirms3/4/2 nodes and12/8 edges, with shared intensity scale."
     },
     "latex_and_fonts": {
       "passed": true,
-      "evidence": "All node values are MathTex. Renderer confirms Liberation Sans installed and LaTeX smoke test passed; actual labels and numbers visually inspected."
+      "evidence": "Installed Liberation Sans confirmed; native LaTeX smoke test passed. All numbers use MathTex. Current final typography visually inspected."
     },
     "layout": {
       "passed": true,
-      "evidence": "Ten final sampled frames and640px thumbnail inspected. Draft hidden-layer-label collision fixed by moving labels down; numerical geometry clearance check passes. No clipping, fixed positions and steady canvas."
+      "evidence": "Current ten stage frames and thumbnail inspected: the revised longer title fits the canvas; layer labels have clearance, positions stay fixed and all numbers/captions remain readable."
     },
     "visual_review": {
       "passed": true,
-      "evidence": "Final review-stages-1/2/3.png show the complete 3-4-2 architecture, input activation, moving orange pulses, hidden activation, second pulse phase, output activation, hold and reset. Source uses ManimML primitives. Pixel checks confirm causal activation order. Inspected early and late signal positions in both transitions, captions, final hold and reset; no lingering dots. See review-evidence.md for explanatory scope."
+      "evidence": "Inspected all ten current frames in review-stages-1/2/3.png and current thumbnail:3-4-2 ManimML network, input activation, smooth orange input-hidden pulses, hidden activation, hidden-output pulses, output activation, hold and reset. Stage ordering and activation pixels independently verified. Reviewed early and late positions in both pulse phases, completion and reset; no lingering dots. See review-evidence.md."
     }
   }
 }

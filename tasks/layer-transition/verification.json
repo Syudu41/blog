@@ -1,5 +1,5 @@
 {
-  "sha256": "c97c20d8fd00d6be905816a21dab4dbf091b45c1aba5a3680a4e812629ae3ef2",
+  "sha256": "2d42bc65779ad9cf033bfdd3bea554150a9ac5e6a94c4c0488608d632564f2c4",
   "dimensions": [
     1920,
     1080
@@ -7,8 +7,8 @@
   "fps": 30,
   "frames": 427,
   "duration": 14.233,
-  "bytes": 1913595,
-  "seam_mean_channel_error": 0.005589152520576132,
+  "bytes": 2033480,
+  "seam_mean_channel_error": 0.005265078446502058,
   "max_activation_pixel_channel_error": 1.8392361504715495,
   "hidden": [
     0.675,

@@ -2,13 +2,13 @@
   "desktop": {
     "before_play": {
       "x": 392,
-      "y": 94,
+      "y": 144,
       "width": 736,
       "height": 414
     },
     "during_play": {
       "x": 392,
-      "y": 94,
+      "y": 144,
       "width": 736,
       "height": 414
     },
@@ -22,13 +22,13 @@
   "mobile": {
     "before_play": {
       "x": 16,
-      "y": 193,
+      "y": 243,
       "width": 358,
       "height": 201.375
     },
     "during_play": {
       "x": 16,
-      "y": 193,
+      "y": 243,
       "width": 358,
       "height": 201.375
     },
