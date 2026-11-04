@@ -20,5 +20,16 @@
     "alt": "A two-input, three-hidden-node, one-output-node network with left-to-right activation.",
     "kind": "render",
     "task": "manimml-forward-pass"
+  },
+  {
+    "id": "layer-transition",
+    "title": "Input \u2192 hidden \u2192 output",
+    "subtitle": "",
+    "description": "Follow a forward pass from three inputs through four hidden neurons to two outputs.",
+    "page": "layer-transition/",
+    "thumbnail": "assets/layer-transition/thumbnail.png",
+    "alt": "A three-input, four-hidden-neuron, two-output network; orange signals travel left to right and blue fills show computed activations.",
+    "kind": "render",
+    "task": "layer-transition"
   }
 ]

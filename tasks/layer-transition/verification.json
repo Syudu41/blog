@@ -1,0 +1,56 @@
+{
+  "sha256": "c97c20d8fd00d6be905816a21dab4dbf091b45c1aba5a3680a4e812629ae3ef2",
+  "dimensions": [
+    1920,
+    1080
+  ],
+  "fps": 30,
+  "frames": 427,
+  "duration": 14.233,
+  "bytes": 1913595,
+  "seam_mean_channel_error": 0.005589152520576132,
+  "max_activation_pixel_channel_error": 1.8392361504715495,
+  "hidden": [
+    0.675,
+    0.3599999999999999,
+    0.6799999999999999,
+    0.39
+  ],
+  "outputs": [
+    0.6938116307732638,
+    0.5732197726798348
+  ],
+  "stages": {
+    "network-ready": 0.23333333333333334,
+    "input-activations": 1.8000000000000014,
+    "input-hidden-start": 2.466666666666667,
+    "signals-arrive-hidden": 4.36666666666666,
+    "hidden-activations": 5.833333333333322,
+    "hidden-output-start": 6.533333333333321,
+    "signals-arrive-output": 8.433333333333314,
+    "output-activations": 10.066666666666643,
+    "completed-forward-pass": 11.766666666666643,
+    "reset": 13.999999999999972
+  },
+  "thumbnail_frame_seconds": 11.766666666666643,
+  "environment": {
+    "manim": "0.19.0",
+    "expected_manim": "0.19.0",
+    "tools": {
+      "ffmpeg": "/home/lab335a/Sudarshan/Research-PhD/visualizer/.venv/render/bin/ffmpeg",
+      "ffprobe": "/home/lab335a/Sudarshan/Research-PhD/visualizer/.venv/render/bin/ffprobe",
+      "latex": "/home/lab335a/Sudarshan/Research-PhD/visualizer/.venv/tex/bin/x86_64-linux/latex",
+      "dvisvgm": "/home/lab335a/Sudarshan/Research-PhD/visualizer/.venv/tex/bin/x86_64-linux/dvisvgm"
+    },
+    "font": "Liberation Sans",
+    "font_available": true,
+    "passed": true,
+    "latex_smoke_test": true,
+    "tool_versions": {
+      "ffmpeg": "ffmpeg version 7.1.1 Copyright (c) 2000-2025 the FFmpeg developers",
+      "ffprobe": "ffprobe version 7.1.1 Copyright (c) 2007-2025 the FFmpeg developers",
+      "latex": "pdfTeX 3.141592653-2.6-1.40.29 (TeX Live 2026)",
+      "dvisvgm": "dvisvgm 3.6"
+    }
+  }
+}

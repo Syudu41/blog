@@ -1,0 +1,3 @@
+Watch three inputs pass through four hidden neurons to two outputs. Orange pulses mark information moving along connections; blue intensity shows each neuron’s activation. A layer receives its signals before its values appear.
+
+This example uses fixed illustrative weights: the hidden layer computes $h=\operatorname{ReLU}(W_1x+b_1)$, and the output layer computes $y=\sigma(W_2h+b_2)$. The two outputs are independent sigmoid values, rather than a softmax probability distribution. Values inside nodes are rounded to two decimal places. This is a forward-pass demonstration, not a trained classifier.

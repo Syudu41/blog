@@ -1,0 +1,42 @@
+{
+  "desktop": {
+    "before_play": {
+      "x": 392,
+      "y": 94,
+      "width": 736,
+      "height": 414
+    },
+    "during_play": {
+      "x": 392,
+      "y": 94,
+      "width": 736,
+      "height": 414
+    },
+    "video": {
+      "width": 1920,
+      "height": 1080,
+      "duration": 14.233333,
+      "error": null
+    }
+  },
+  "mobile": {
+    "before_play": {
+      "x": 16,
+      "y": 193,
+      "width": 358,
+      "height": 201.375
+    },
+    "during_play": {
+      "x": 16,
+      "y": 193,
+      "width": 358,
+      "height": 201.375
+    },
+    "video": {
+      "width": 1920,
+      "height": 1080,
+      "duration": 14.233333,
+      "error": null
+    }
+  }
+}

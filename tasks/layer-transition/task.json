@@ -1,0 +1,31 @@
+{
+  "id": "layer-transition",
+  "title": "Input \u2192 hidden \u2192 output",
+  "description": "Follow a forward pass from three inputs through four hidden neurons to two outputs.",
+  "alt": "A three-input, four-hidden-neuron, two-output network; orange signals travel left to right and blue fills show computed activations.",
+  "source": "scene.py",
+  "output": "output/visualization.mp4",
+  "thumbnail": "output/thumbnail.png",
+  "render": {
+    "scene": "Visualization",
+    "font": "Liberation Sans",
+    "seed": 42,
+    "width": 1920,
+    "height": 1080,
+    "fps": 30
+  },
+  "requirements": [
+    {
+      "id": "flow",
+      "description": "Use actual ManimML feed-forward primitives for a fully connected 3-4-2 network. Animate input activation, smooth staggered signals into the hidden layer, hidden activation, signals to outputs, and output activation in that causal order. Hold the result and gently reset. Label all layers and explain orange signal motion versus blue activation fill."
+    },
+    {
+      "id": "computation",
+      "description": "Use deterministic inputs and fixed illustrative weights, actual ReLU hidden activations and sigmoid outputs. Show matching LaTeX values in the nodes. Verify the arithmetic independently; make no trained prediction claim."
+    },
+    {
+      "id": "presentation",
+      "description": "Stable white canvas, Arial-family prose, all math LaTeX, clear labels and legible values. Deliver 1920x1080 H264 MP4 at30fps and a valid PNG thumbnail. Keep the explanation brief and the animation simple."
+    }
+  ]
+}
