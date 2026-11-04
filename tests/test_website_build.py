@@ -89,6 +89,10 @@ class WebsiteBuildTests(unittest.TestCase):
             video = (output / "samples/video-fixture/index.html").read_text()
             self.assertIn('src="../assets/video-fixture/visualization.mp4"', video)
             self.assertIn('poster="../assets/video-fixture/thumbnail.svg"', video)
+            self.assertIn('controlslist="nodownload"', video)
+            for sample in json.loads((root / "website/samples/catalog.json").read_text()):
+                page = (output / "samples" / sample["id"] / "index.html").read_text()
+                self.assertNotIn("Download visualization", page)
             self.assertIn('class="math', video)
             self.assertIn("mathjax", video.lower())
             self.assertIn('dataset.theme = "light"', video)

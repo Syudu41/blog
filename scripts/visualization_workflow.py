@@ -111,7 +111,7 @@ def page_content(folder, task):
         width, height = int(render.get("width", 1920)), int(render.get("height", 1080))
         if width <= 0 or height <= 0:
             raise ValueError("Video dimensions must be positive")
-        visual = f'<video controls playsinline preload="metadata" width="{width}" height="{height}" style="aspect-ratio: {width} / {height};" poster="{thumbnail}" aria-label="{alt}"><source src="{escaped_media}" type="video/mp4">{alt}</video>'
+        visual = f'<video controls controlslist="nodownload" playsinline preload="metadata" width="{width}" height="{height}" style="aspect-ratio: {width} / {height};" poster="{thumbnail}" aria-label="{alt}"><source src="{escaped_media}" type="video/mp4">{alt}</video>'
     else:
         visual = f'<img src="{escaped_media}" alt="{alt}">'
     # Sphinx resolves Markdown images from their source document's directory.
@@ -121,7 +121,7 @@ def page_content(folder, task):
         visual = visual.replace('src="assets/', 'src="../assets/').replace('poster="assets/', 'poster="../assets/')
     title = html.escape(task["title"])
     content = (folder / "content.md").read_text().strip()
-    return f"# {title}\n\n{visual}\n\n{content}\n\n[Download visualization]({media})\n\n[Back to sample visualizations](index.md)\n"
+    return f"# {title}\n\n{visual}\n\n{content}\n\n[Back to sample visualizations](index.md)\n"
 
 
 def publish(folder, root=ROOT):
