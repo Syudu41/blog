@@ -9,5 +9,5 @@ TensorQuill is a project for explaining machine learning concepts through figure
 > [!IMPORTANT]
 > This was done for the sole purpose of visualizing outputs / presentations!
 
-[About the project](https://syudu41.github.io/visualizer/) · [Sample visualizations](https://syudu41.github.io/visualizer/samples/)
+[About the project](https://syudu41.github.io/visualizer/about/) · [Sample visualizations](https://syudu41.github.io/visualizer/samples/)
 
