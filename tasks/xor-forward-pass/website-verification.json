@@ -1,43 +1,43 @@
 {
   "desktop": {
-    "before_play": {
+    "before": {
       "x": 392,
       "y": 94,
       "width": 736,
       "height": 414
     },
-    "during_play": {
+    "playing": {
       "x": 392,
       "y": 94,
       "width": 736,
       "height": 414
     },
     "mathjax_errors": 0,
-    "video": {
+    "media": {
       "width": 1920,
       "height": 1080,
-      "duration": 33.466667,
+      "duration": 31.333333,
       "error": null
     }
   },
   "mobile": {
-    "before_play": {
+    "before": {
       "x": 16,
       "y": 193,
       "width": 358,
       "height": 201.375
     },
-    "during_play": {
+    "playing": {
       "x": 16,
       "y": 193,
       "width": 358,
       "height": 201.375
     },
     "mathjax_errors": 0,
-    "video": {
+    "media": {
       "width": 1920,
       "height": 1080,
-      "duration": 33.466667,
+      "duration": 31.333333,
       "error": null
     }
   }

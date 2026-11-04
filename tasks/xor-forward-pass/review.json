@@ -2,55 +2,55 @@
   "status": "passed",
   "reviewer": "TensorQuill coding agent",
   "hashes": {
-    "content.md": "2a044f1e7da664cb96340b2d309ecb765110bd798c6855b079dde7bf7da14ea3",
-    "output/thumbnail.png": "b2d7cc5345b48e331e16b4d26941c83fc506b27e8f28e38de65ffa1e7c1cd6a3",
-    "output/visualization.mp4": "4a2ff7befbcb8b06470a93dc73ab6a2818f235bd32ea2621ba9caf897d9ceb51",
-    "requirements.md": "c3aafd8109e6ba2a051da4cf206c2b74d89599adb4af0fa9b69de7791b53b834",
-    "scene.py": "b2266cefc3f3f372fd639c3ccd717df37ff6ddec4fcb9fb0ca3412c4cfa3a081",
-    "task.json": "30cee25ecc311ece5e4b0623a1a0c06700e710ad5cc49194d37c5b2885ba1dca"
+    "content.md": "e1f56537fb8691bf5bce09546c8971d03de11720b805001fa9b411dab3f8676f",
+    "output/thumbnail.png": "ec1bbdbdf61811d159039f5a9dcc70b465dd356edd59dba19524b57ba79e572a",
+    "output/visualization.mp4": "5ce7575ef631a891e4e05896d06af2049030f57419674ea1c971e425f9a678cf",
+    "requirements.md": "fb7de9bd1d31c0805c7f77c800489d7e612a97b917ec8372a57a7fc8b011e02b",
+    "scene.py": "2a77c54461540a6fd7696945f5ae5d9ea533d967037ad9f246c882381e94f161",
+    "task.json": "ccccbf58ecff3ef164250213965811b641204e19926b8aa620bbb4ec5012d93e"
   },
   "requirements": {
     "scope": {
       "passed": true,
-      "evidence": "Inspected all18 sampled final frames and thumbnail: one input(1,0),target1 through a2-2-1 ManimML network, with fixed chosen weights, thin connections, outlined nodes/layer frames and causal pulses. No training sequence. See review-evidence.md. Re-reviewed against the introduction added in commit f18e6ed: it describes one forward pass,2input neurons,1hidden layer and1output layer, matching the unchanged2-2-1 video. Independent checks.py rerun passed; current ReLU, prediction, final-loss and signal-stage frames inspected."
+      "evidence": "Inspected23 current frames and thumbnail: one(1,0) forward pass through a2-2-1 ManimML network, fixed chosen weights, outlined neurons and focused smooth pulses. No training or updates. See review-evidence.md."
     },
     "activations": {
       "passed": true,
-      "evidence": "Final graph stages show1->ReLU->1,-1->ReLU->0, then hidden signals travel to the output; logit5->sigmoid->0.9933. Moving markers, axis projections and graph-result-to-neuron transitions visually inspected. Independent graph-marker pixel max error5/255. Re-reviewed against the introduction added in commit f18e6ed: it describes one forward pass,2input neurons,1hidden layer and1output layer, matching the unchanged2-2-1 video. Independent checks.py rerun passed; current ReLU, prediction, final-loss and signal-stage frames inspected."
+      "evidence": "A single separated right panel evaluates the selected hidden neuron with ReLU and then the output with sigmoid. Actual graph stages map1->1,-1->0,5->0.9933; independent marker pixel errors2/3/2 out of255. Focus ring and equations associate each mapping with its neuron; no graphs overlap the network."
     },
     "correctness": {
       "passed": true,
-      "evidence": "checks.py verifies exact specified matrices/biases and independently checks all4 XOR cases, intermediate values, probabilities, classification and BCE; max arithmetic error1.25e-16. Rendered output0.9933,class1,target1,and loss0.006715 match. Loss appears after output. Re-reviewed against the introduction added in commit f18e6ed: it describes one forward pass,2input neurons,1hidden layer and1output layer, matching the unchanged2-2-1 video. Independent checks.py rerun passed; current ReLU, prediction, final-loss and signal-stage frames inspected."
+      "evidence": "checks.py independently verifies exact weights, all4 XOR cases, intermediate values, classification and BCE: max arithmetic error1.25e-16. Rendered probability0.9933,class1,target1 and loss0.006715 match. Final node-fill max channel error2.15/255. Loss is evaluated only after prediction."
     },
     "presentation": {
       "passed": true,
-      "evidence": "All final stage/transition frames and thumbnail inspected at900px: stable white canvas, readable separated typography, function labels and phase equations. Full decode confirms1004frames,1080p30fps,H264/yuv420p,33.467s,3255686bytes. PNG640x360 verified. Re-reviewed against the introduction added in commit f18e6ed: it describes one forward pass,2input neurons,1hidden layer and1output layer, matching the unchanged2-2-1 video. Independent checks.py rerun passed; current ReLU, prediction, final-loss and signal-stage frames inspected."
+      "evidence": "Inspected23 final stage, signal and caption-transition samples at900px and PNG640x360. Stable white canvas, readable separated labels, measured network/panel gap2.1753units, one graph at a time, no overlapping captions. Full decode:940frames,1080p30fps,H264/yuv420p,31.333s,3722875bytes."
     }
   },
   "checks": {
     "render_success": {
       "passed": true,
-      "evidence": "Fresh final TensorQuill CLI native Manim0.19.0 render exited0 with63animations. Exact command and actual tool versions recorded in review-evidence.md and verification.json. Re-reviewed against the introduction added in commit f18e6ed: it describes one forward pass,2input neurons,1hidden layer and1output layer, matching the unchanged2-2-1 video. Independent checks.py rerun passed; current ReLU, prediction, final-loss and signal-stage frames inspected."
+      "evidence": "Fresh native Manim0.19.0 final render exited0,81animations. Command and actual environment recorded in review-evidence.md and verification.json."
     },
     "output_integrity": {
       "passed": true,
-      "evidence": "All final stage/transition frames and thumbnail inspected at900px: stable white canvas, readable separated typography, function labels and phase equations. Full decode confirms1004frames,1080p30fps,H264/yuv420p,33.467s,3255686bytes. PNG640x360 verified. Artifact SHA256 recorded in verification.json. Re-reviewed against the introduction added in commit f18e6ed: it describes one forward pass,2input neurons,1hidden layer and1output layer, matching the unchanged2-2-1 video. Independent checks.py rerun passed; current ReLU, prediction, final-loss and signal-stage frames inspected."
+      "evidence": "Inspected23 final stage, signal and caption-transition samples at900px and PNG640x360. Stable white canvas, readable separated labels, measured network/panel gap2.1753units, one graph at a time, no overlapping captions. Full decode:940frames,1080p30fps,H264/yuv420p,31.333s,3722875bytes. MP4 SHA256 recorded in verification.json; thumbnail verifies and comes from completed hold."
     },
     "mathematics": {
       "passed": true,
-      "evidence": "checks.py verifies exact specified matrices/biases and independently checks all4 XOR cases, intermediate values, probabilities, classification and BCE; max arithmetic error1.25e-16. Rendered output0.9933,class1,target1,and loss0.006715 match. Loss appears after output. Node activation fill pixels independently checked against numeric values; max channel error2.15/255. Source and stage times establish2-2-1 topology and causal ordering. Re-reviewed against the introduction added in commit f18e6ed: it describes one forward pass,2input neurons,1hidden layer and1output layer, matching the unchanged2-2-1 video. Independent checks.py rerun passed; current ReLU, prediction, final-loss and signal-stage frames inspected."
+      "evidence": "checks.py independently verifies exact weights, all4 XOR cases, intermediate values, classification and BCE: max arithmetic error1.25e-16. Rendered probability0.9933,class1,target1 and loss0.006715 match. Final node-fill max channel error2.15/255. Loss is evaluated only after prediction. Geometry and stage-order checks confirm2-2-1 nodes,4/2 edges, each hidden activation before output transmission, and all3 correct graph mappings."
     },
     "latex_and_fonts": {
       "passed": true,
-      "evidence": "Native font check confirms Liberation Sans and LaTeX smoke test passes. All mathematical text is MathTex; actual rendered labels and equations inspected. Re-reviewed against the introduction added in commit f18e6ed: it describes one forward pass,2input neurons,1hidden layer and1output layer, matching the unchanged2-2-1 video. Independent checks.py rerun passed; current ReLU, prediction, final-loss and signal-stage frames inspected."
+      "evidence": "Liberation Sans installed; native LaTeX smoke test passed. All mathematical text uses MathTex; prose and mathematical typography visually inspected in the actual final frames."
     },
     "layout": {
       "passed": true,
-      "evidence": "Inspected all18 current sampled frames and thumbnail: graphs above the correct neurons, distinct graph results/captions, visible arrows, clear loss placement after output, no clipped labels. Graph panels intentionally cover background structure. Re-reviewed against the introduction added in commit f18e6ed: it describes one forward pass,2input neurons,1hidden layer and1output layer, matching the unchanged2-2-1 video. Independent checks.py rerun passed; current ReLU, prediction, final-loss and signal-stage frames inspected."
+      "evidence": "Visible network geometry and graph/text panel bounds measured with more than0.5unit clearance from the separator. All23 final samples and thumbnail inspected: no charts over network, no clipped labels, sequential caption fades, clear final summary."
     },
     "visual_review": {
       "passed": true,
-      "evidence": "Final graph stages show1->ReLU->1,-1->ReLU->0, then hidden signals travel to the output; logit5->sigmoid->0.9933. Moving markers, axis projections and graph-result-to-neuron transitions visually inspected. Independent graph-marker pixel max error5/255. Also inspected architecture, weighted sums, positive and negative neuron values, both pulse phases, classification, final loss and completed hold. Scope reviewed against storyboard. Re-reviewed against the introduction added in commit f18e6ed: it describes one forward pass,2input neurons,1hidden layer and1output layer, matching the unchanged2-2-1 video. Independent checks.py rerun passed; current ReLU, prediction, final-loss and signal-stage frames inspected."
+      "evidence": "A single separated right panel evaluates the selected hidden neuron with ReLU and then the output with sigmoid. Actual graph stages map1->1,-1->0,5->0.9933; independent marker pixel errors2/3/2 out of255. Focus ring and equations associate each mapping with its neuron; no graphs overlap the network. Also reviewed all3 early/late connection phases, stable node values, prediction/summary transition and3 caption fade samples. See review-evidence.md for storyboard assessment."
     }
   }
 }

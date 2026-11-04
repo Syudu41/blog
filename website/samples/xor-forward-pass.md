@@ -4,7 +4,7 @@ description: Trace one XOR input through weighted sums, ReLU graphs, sigmoid and
 task: xor-forward-pass
 media: assets/xor-forward-pass/visualization.mp4
 thumbnail: assets/xor-forward-pass/thumbnail.png
-alt: A 2-2-1 XOR network with activation-function graphs above the neurons. The input (1,0) produces hidden values (1,0), output logit5 and prediction0.9933.
+alt: An XOR network with two inputs, two hidden neurons, and one output beside a single activation panel. Input (1, 0) becomes a prediction of 0.9933 through ReLU and sigmoid.
 order: 40
 width: 1920
 height: 1080
@@ -13,7 +13,7 @@ height: 1080
 This is an experiment - XOR Gate. Here is a single iteration of a neural network with 2 input neurons (1 input layer), 1 hidden layer and 1 output later. The forward pass - depicting on single iteration is show in the video.
 
 
-One forward pass solves the XOR input $x=(1,0)$ with target $y=1$. Markers on the graphs show how each weighted sum becomes an activation: $h_1=\operatorname{ReLU}(x_1-x_2)=1$ and $h_2=\operatorname{ReLU}(x_2-x_1)=0$. Those values travel to the output, where $z=10h_1+10h_2-5=5$ and $\hat y=\sigma(z)\approx0.9933$. The threshold $0.5$ gives the predicted class $1$.
+One forward pass solves the XOR input $x=(1,0)$ with target $y=1$. A separate activation panel shows how each weighted sum becomes an activation: $h_1=\operatorname{ReLU}(x_1-x_2)=1$ and $h_2=\operatorname{ReLU}(x_2-x_1)=0$. Those values travel to the output, where $z=10h_1+10h_2-5=5$ and $\hat y=\sigma(z)\approx0.9933$. The threshold $0.5$ gives the predicted class $1$.
 
 The weights are chosen for clarity, rather than learned during the animation. The hidden layer uses $W_1=\begin{bmatrix}1&-1\\-1&1\end{bmatrix}$ and $b_1=(0,0)$; the output uses $W_2=\begin{bmatrix}10&10\end{bmatrix}$ and $b_2=-5$. Binary cross-entropy is computed **after** the prediction: $\mathcal L=-y\ln\hat y-(1-y)\ln(1-\hat y)\approx0.006715$. It does not feed into the forward pass.
 

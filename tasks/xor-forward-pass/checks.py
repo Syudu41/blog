@@ -28,11 +28,21 @@ def main():
             np.testing.assert_allclose(case[name],expected,atol=1e-12,rtol=1e-12)
             errors.append(float(np.max(np.abs(np.array(case[name])-expected))))
     assert [len(layer) for layer in layout['nodes']]==[2,2,1] and layout['edges']==[4,2]
-    for g,result in zip(layout['graphs'],[1,0,1/(1+math.exp(-5))]):assert abs(g['activation']-result)<1e-12
+    assert len(layout['graphs'])==3
+    assert layout['separator_x']-layout['network_right']>.5
+    assert layout['panel_left']-layout['separator_x']>.5
+    for g,result in zip(layout['graphs'],[1,0,1/(1+math.exp(-5))]):
+        assert abs(g['activation']-result)<1e-12
+        assert g['bounds'][0]>layout['panel_left'], 'Activation graph overlaps network area'
+    assert stages['relu-positive-neuron-value']<stages['input-hidden-second-start']<stages['relu-negative-on-curve']
     assert stages['hidden-weighted-sums']<stages['relu-positive-neuron-value']<stages['relu-negative-neuron-value']<stages['hidden-output-start']<stages['output-logit']<stages['sigmoid-neuron-value']<stages['prediction']<stages['completed-forward-pass']
     samples=[(k,t) for k,t in stages.items() if not k.endswith('-start')]
     motion=[('input-flow-early',stages['input-hidden-start']+.45),('input-flow-late',stages['input-hidden-start']+1.25),
             ('output-flow-early',stages['hidden-output-start']+.45),('output-flow-late',stages['hidden-output-start']+1.25)]
+    motion += [('second-input-flow-early',stages['input-hidden-second-start']+.35),
+               ('second-input-flow-late',stages['input-hidden-second-start']+1.1)]
+    transition=stages['completed-forward-pass']-1.5-1/3
+    motion += [('caption-fade-out',transition+.06),('caption-change',transition+.14),('caption-fade-in',transition+.28)]
     samples+=motion;captures={};frames=0;duration=0
     path=ROOT/'output/visualization.mp4'
     with av.open(str(path)) as video:
@@ -44,7 +54,7 @@ def main():
             for name,target in samples:
                 distance=abs(time-target)
                 if distance<=.04 and (name not in captures or distance<captures[name][0]):captures[name]=(distance,frame.to_image())
-    assert 25<=duration<=65 and frames>750 and path.stat().st_size<20000000
+    assert 20<=duration<=45 and frames>600 and path.stat().st_size<20000000
     # The evaluated graph cursor must lie at the function's correct output.
     orange=np.array([212,98,23]);marker_errors=[]
     for graph,name in zip(layout['graphs'],['relu-positive','relu-negative','sigmoid']):
@@ -77,7 +87,9 @@ def main():
     report=dict(sha256=hashlib.sha256(path.read_bytes()).hexdigest(),dimensions=[1920,1080],frames=frames,
                 duration=round(duration,3),fps=30,bytes=path.stat().st_size,
                 arithmetic_max_error=max(errors),curve_marker_pixel_errors=marker_errors,
-                activation_color_max_channel_error=max(color_errors),stages=stages,environment=environment)
+                activation_color_max_channel_error=max(color_errors),
+                network_panel_gap=layout['panel_left']-layout['network_right'],
+                stages=stages,environment=environment)
     (ROOT/'verification.json').write_text(json.dumps(report,indent=2)+'\n')
     for name in ['computation.json','layout.json']:(ROOT/name).write_text((run/name).read_text())
     print(json.dumps({k:v for k,v in report.items() if k not in ['stages','environment']}))

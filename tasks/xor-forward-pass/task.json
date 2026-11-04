@@ -2,7 +2,7 @@
   "id": "xor-forward-pass",
   "title": "XOR: inside a forward pass",
   "description": "Trace one XOR input through weighted sums, ReLU graphs, sigmoid and a prediction.",
-  "alt": "A 2-2-1 XOR network with activation-function graphs above the neurons. The input (1,0) produces hidden values (1,0), output logit5 and prediction0.9933.",
+  "alt": "An XOR network with two inputs, two hidden neurons, and one output beside a single activation panel. Input (1, 0) becomes a prediction of 0.9933 through ReLU and sigmoid.",
   "source": "scene.py",
   "output": "output/visualization.mp4",
   "thumbnail": "output/thumbnail.png",
@@ -18,11 +18,11 @@
   "requirements": [
     {
       "id": "scope",
-      "description": "One forward pass for XOR input(1,0), target1, through a2-2-1 MLP using ManimML primitives. Chosen weights, no training or updates. Thin connections, outlined neurons, subtle layer frames and smooth causal highlights inspired by the ManimML logo."
+      "description": "One forward pass for XOR input(1,0),target1, through a2-2-1 MLP using ManimML primitives. Chosen weights, no training or updates. Outlined neurons and thin connections, with smooth, focused causal highlights."
     },
     {
       "id": "activations",
-      "description": "Show ReLU graphs above both hidden neurons and sigmoid above the output. Explicitly trace weighted sums1 and-1 through ReLU to1 and0; carry these activations along output connections; show output logit5 passing through sigmoid to0.9933. Activation graphs are not loss graphs."
+      "description": "Keep the network unobstructed on the left. Use one separate activation panel on the right, showing ReLU for the selected hidden neuron and then sigmoid for the output. Trace weighted sums1 and-1 to hidden values1 and0; transmit both values to the output; map logit5 to0.9933. A focus ring and headings identify the selected neuron. No graphs above or across the network."
     },
     {
       "id": "correctness",
@@ -30,7 +30,7 @@
     },
     {
       "id": "presentation",
-      "description": "White canvas, Arial-family prose, all mathematical labels and numbers in LaTeX. Stable architecture and readable nonoverlapping graph labels, equations and captions. Deliver1080p30fps H264 video and a useful PNG thumbnail. Review actual transitions and graphical mappings."
+      "description": "Redesign for whitespace and restrained motion: stable network, one active function at a time, short captions, smooth signals and crossfades, a clean final prediction/loss summary. White canvas, Arial-family prose and LaTeX mathematics. Readable nonoverlapping labels at900px review width. Deliver1080p30fps H264 video and a useful PNG thumbnail."
     }
   ]
 }

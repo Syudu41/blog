@@ -1,18 +1,17 @@
-"""One XOR forward pass, with graphical activation-function evaluation."""
+"""A restrained XOR explanation with a stable network and one detail panel."""
 import json
 from pathlib import Path
 import numpy as np
 from manim import (Scene, VGroup, Text, MathTex, Circle, Dot, Line, DashedLine,
-                   Rectangle, SurroundingRectangle, Axes, Arrow, FadeIn, FadeOut,
-                   TransformFromCopy, AnimationGroup, MoveAlongPath, ShowPassingFlash,
-                   interpolate_color, ManimColor, WHITE, UP, RIGHT, config, smooth)
+                   Axes, FadeIn, FadeOut, Create, AnimationGroup, MoveAlongPath,
+                   ShowPassingFlash, interpolate_color, ManimColor, WHITE, UP,
+                   RIGHT, config, smooth)
 from manim_ml.neural_network import NeuralNetwork, FeedForwardLayer
 
 BLUE=ManimColor('#126b91')
 ORANGE='#d46217'
 INK='#193549'
 GRAY='#647887'
-
 
 def compute():
     w1=np.array([[1.,-1.],[-1.,1.]])
@@ -26,24 +25,23 @@ def compute():
     return dict(w1=w1.tolist(),b1=[0.,0.],w2=w2.tolist(),b2=-5.,cases=cases)
 
 
-class FunctionGraph(VGroup):
-    def __init__(self,center,name,sigmoid=False):
+class ActivationPlot(VGroup):
+    def __init__(self,sigmoid=False):
         super().__init__()
-        self.sigmoid=sigmoid
-        box=Rectangle(width=2.05,height=1.67,stroke_color='#d1e1e9',stroke_width=1,
-                      fill_color=WHITE,fill_opacity=1).move_to(center).set_z_index(1)
-        xr=[-6,6,3] if sigmoid else [-1.4,1.4,1]
-        self.axes=Axes(x_range=xr,y_range=[0,1.2,.5],x_length=1.55,y_length=.88,
-                       axis_config={'color':GRAY,'stroke_width':1.2,'include_tip':False}).move_to(np.array(center)+[0,-.08,0]).set_z_index(2)
         self.fn=(lambda z:1/(1+np.exp(-z))) if sigmoid else (lambda z:max(0,z))
-        self.curve=self.axes.plot(self.fn,x_range=[-6,6,.08] if sigmoid else [-1.35,1.15,.02],
-                                  color=BLUE,stroke_width=2.5,use_smoothing=False).set_z_index(3)
-        header=MathTex(name,font_size=21,color=INK).move_to(np.array(center)+[0,.63,0]).set_z_index(4)
-        xlabel=MathTex('z',font_size=16,color=GRAY).move_to(self.axes.c2p(xr[1],0)+[.11,.06,0]).set_z_index(4)
-        ylabel=MathTex('a',font_size=16,color=GRAY).move_to(self.axes.c2p(0,1.2)+[-.11,.07,0]).set_z_index(4)
-        self.result=Dot(np.array(center)+[0,-.65,0],radius=.001).set_opacity(0).set_z_index(5)
-        self.box=box
-        self.add(box,self.axes,self.curve,header,xlabel,ylabel,self.result)
+        limits=[-6,6,3] if sigmoid else [-1.5,1.5,1]
+        self.axes=Axes(x_range=limits,y_range=[0,1.2,.5],x_length=2.65,y_length=1.4,
+                       axis_config={'color':'#a2b3be','stroke_width':1.2,'include_tip':False})
+        self.axes.move_to([4.25,.15,0])
+        self.curve=self.axes.plot(self.fn,x_range=[-6,6,.05] if sigmoid else [-1.4,1.2,.02],
+                                  color=BLUE,stroke_width=3,use_smoothing=False)
+        self.add(self.axes,self.curve)
+        ticks=[-5,0,5] if sigmoid else [-1,0,1]
+        for value in ticks:
+            self.add(MathTex(str(value),font_size=18,color=GRAY).move_to(self.axes.c2p(value,0)+[0,-.19,0]))
+        self.add(MathTex('1',font_size=18,color=GRAY).move_to(self.axes.c2p(0,1)+[-.17,0,0]))
+        self.add(MathTex('z',font_size=20,color=GRAY).move_to(self.axes.c2p(limits[1],0)+[.15,.02,0]))
+        self.add(MathTex('a',font_size=20,color=GRAY).move_to(self.axes.c2p(0,1.2)+[.03,.16,0]))
 
 
 class Visualization(Scene):
@@ -51,109 +49,129 @@ class Visualization(Scene):
         self.wait(duration/2);self.stages[name]=float(self.time);self.wait(duration/2)
 
     def construct(self):
-        self.stages={};data=compute();case=data['cases'][2]
-        title=Text('XOR: inside a forward pass',font_size=34,weight='BOLD',color=INK).move_to([0,3.55,0])
-        input_header=MathTex(r'x=(1,0),\quad y=1',font_size=28,color=INK).move_to([-4.6,2.15,0])
-        input_note=Text('One input · chosen weights',font_size=16,color=GRAY).move_to([-4.6,1.65,0])
-        layers=[FeedForwardLayer(n,node_radius=.29,node_spacing=2.7,node_color=BLUE,
-                                node_stroke_width=2.2,rectangle_stroke_width=1,
-                                rectangle_fill_color=WHITE) for n in (2,2,1)]
-        net=NeuralNetwork(layers,layer_spacing=3.8)
-        locations=[[[-4.8,.4,0],[-4.8,-2.3,0]],[[0,.4,0],[0,-2.3,0]],[[4.7,-.9,0]]]
+        data=compute();case=data['cases'][2];self.stages={};traces=[];panel_bounds=[]
+        title=Text('XOR: one forward pass',font_size=33,weight='BOLD',color=INK)
+        title.move_to([-6.15,3.28,0],aligned_edge=np.array([-1,0,0]))
+        subtitle=Text('Follow the values, one operation at a time',font_size=19,color=GRAY)
+        subtitle.move_to([-6.15,2.7,0],aligned_edge=np.array([-1,0,0]))
+        case_label=MathTex(r'x=(1,0),\quad y=1',font_size=28,color=INK).move_to([4.25,3.25,0])
+        separator=Line([1.45,2.35,0],[1.45,-2.25,0],color='#dde6ec',stroke_width=1)
+        footer_rule=Line([-6.15,-2.65,0],[6.15,-2.65,0],color='#e1e8ed',stroke_width=1)
+        footer_note=Text('One forward pass · fixed illustrative weights',font_size=16,color=GRAY).move_to([0,-3.66,0])
+        self.add(title,subtitle,case_label,separator,footer_rule,footer_note)
+        locations=[[[-5.2,.65,0],[-5.2,-1.05,0]],[[-2.65,.65,0],[-2.65,-1.05,0]],[[.15,-.2,0]]]
+        layers=[FeedForwardLayer(n,node_radius=.38,node_color=BLUE,node_stroke_width=2.4,
+                                rectangle_stroke_width=0,rectangle_fill_color=WHITE) for n in(2,2,1)]
+        network=NeuralNetwork(layers,layer_spacing=2)
         for layer,positions in zip(layers,locations):
-            for node,point in zip(layer.node_group,positions):
-                node.move_to(point).set_fill(WHITE,opacity=1).set_z_index(3)
-            layer.surrounding_rectangle.become(SurroundingRectangle(layer.node_group,buff=.16,
-                              color='#b9d1dd',stroke_width=1,fill_opacity=0)).set_z_index(-3)
-        for connection in net.connective_layers:
-            paths=VGroup(*(Line(a.get_center(),b.get_center(),buff=.29,color='#b5cbd7',stroke_width=1.2)
+            layer.surrounding_rectangle.set_opacity(0)
+            for node,position in zip(layer.node_group,positions):
+                node.move_to(position).set_fill(WHITE,opacity=1).set_z_index(3)
+        for connection in network.connective_layers:
+            paths=VGroup(*(Line(a.get_center(),b.get_center(),buff=.38,color='#c4d4df',stroke_width=1.4)
                            for a in connection.input_layer.node_group for b in connection.output_layer.node_group))
             connection.edges.become(paths).set_z_index(-2)
-        layer_labels=VGroup(*(Text(name,font_size=21,color=INK).move_to([x,-2.9,0])
-                             for name,x in [('Input layer',-4.8),('Hidden layer',0),('Output layer',4.7)]))
-        self.add(title,input_header,input_note,net,layer_labels)
-        graphs=[FunctionGraph([0,2.05,0],r'h_1=\mathrm{ReLU}(z_1)'),
-                FunctionGraph([0,-1.02,0],r'h_2=\mathrm{ReLU}(z_2)'),
-                FunctionGraph([4.7,1.30,0],r'\hat y=\sigma(z)',sigmoid=True)]
-        for graph in graphs:self.add(graph)
-        graph_links=VGroup(*(Arrow(graph.get_bottom()+[0,-.03,0],node.get_top()+[0,.03,0],
-                                    buff=.03,stroke_width=1,color='#8ca9b9',max_tip_length_to_length_ratio=.14)
-                            for graph,node in zip(graphs,[*layers[1].node_group,*layers[2].node_group])))
-        self.add(graph_links)
-        caption=VGroup()
-        def say(words,formula=None):
+        headers=VGroup(*(Text(name,font_size=21,color=INK).move_to([x,1.9,0])
+                         for name,x in [('Input',-5.2),('Hidden',-2.65),('Output',.15)]))
+        symbols=VGroup()
+        for layer,names in zip(layers,[(r'x_1',r'x_2'),(r'h_1',r'h_2'),(r'\hat y',)]):
+            for node,name in zip(layer.node_group,names):
+                symbols.add(MathTex(name,font_size=22,color=GRAY).move_to(node.get_center()+[0,.6,0]))
+        self.play(FadeIn(network),FadeIn(headers),FadeIn(symbols),run_time=.8)
+        node_labels=VGroup()
+        def activate(node,value,label,run_time=.45):
+            label=MathTex(label,font_size=27 if len(label)<3 else 22,color=INK).move_to(node).set_z_index(5)
+            if label.width>.62:label.scale_to_fit_width(.62)
+            self.play(FadeIn(label),node.animate.set_fill(interpolate_color(WHITE,BLUE,.55*value),opacity=1),run_time=run_time)
+            node_labels.add(label)
+        caption=VGroup();panel_title=VGroup();panel_formula=VGroup();result=VGroup()
+        def crossfade(old,new,time=.3):
+            if old.has_points() or len(old.submobjects):
+                self.play(FadeOut(old),run_time=time*.4)
+            self.play(FadeIn(new),run_time=time*.6)
+            return new
+        def say(words):
             nonlocal caption
-            text=Text(words,font_size=21,color=INK).move_to([0,-3.28,0])
-            parts=[text]
-            if formula:parts.append(MathTex(formula,font_size=25,color=INK).move_to([0,-3.72,0]))
-            next_group=VGroup(*parts)
-            self.play(FadeOut(caption),FadeIn(next_group),run_time=.3)
-            caption=next_group
-        def node_value(node,value,text):
-            label=MathTex(text,font_size=23,color=INK).move_to(node).set_z_index(5)
-            self.play(node.animate.set_fill(interpolate_color(WHITE,BLUE,.55*value),opacity=1),FadeIn(label),run_time=.4)
-            return label
-        def send(index):
-            edges=net.connective_layers[index].edges
-            dots=VGroup(*(Dot(radius=.045,color=ORANGE).move_to(edge.get_start()) for edge in edges)).set_z_index(4)
+            new=Text(words,font_size=22,color=INK).move_to([0,-3.12,0])
+            caption=crossfade(caption,new)
+        def panel(words,formula):
+            nonlocal panel_title,panel_formula
+            heading=Text(words,font_size=24,weight='BOLD',color=INK).move_to([4.25,2.05,0])
+            equation=MathTex(formula,font_size=26,color=INK).move_to([4.25,1.45,0])
+            if equation.width>3.8:equation.scale_to_fit_width(3.8)
+            self.play(FadeOut(panel_title),FadeOut(panel_formula),run_time=.12)
+            self.play(FadeIn(heading),FadeIn(equation),run_time=.22)
+            panel_bounds.append(float(min(heading.get_left()[0],equation.get_left()[0])))
+            panel_title,panel_formula=heading,equation
+        def send(paths,name):
+            self.stages[name]=float(self.time)
+            dots=VGroup(*(Dot(radius=.04,color=ORANGE).move_to(edge.get_start()) for edge in paths)).set_z_index(4)
             self.add(dots)
             self.play(AnimationGroup(*(AnimationGroup(MoveAlongPath(dot,edge,rate_func=smooth),
-                ShowPassingFlash(edge.copy().set_stroke(color=ORANGE,width=3).set_z_index(2),time_width=.25))
-                for dot,edge in zip(dots,edges)),lag_ratio=.10),run_time=1.7)
+                ShowPassingFlash(edge.copy().set_stroke(color=ORANGE,width=2.7).set_z_index(1),time_width=.28))
+                for dot,edge in zip(dots,paths)),lag_ratio=.08),run_time=1.35)
             self.remove(*dots,dots)
-        def evaluate(graph,z,result,formula,node,name):
-            axes=graph.axes;fx=graph.fn(z)
-            self.play(graph.box.animate.set_stroke(color=ORANGE,width=2),run_time=.25)
-            cursor=Dot(axes.c2p(0,0),radius=.045,color=ORANGE).set_z_index(6)
-            x_tag=MathTex(f'{z:g}',font_size=18,color=ORANGE).move_to(axes.c2p(z,0)+[0,-.16,0]).set_z_index(6)
-            vertical=DashedLine(axes.c2p(z,0),axes.c2p(z,max(fx,.001)),color=ORANGE,stroke_width=1.3).set_z_index(5)
-            horizontal=DashedLine(axes.c2p(z,fx),axes.c2p(.001,fx),color=ORANGE,stroke_width=1.3).set_z_index(5)
-            self.add(cursor)
-            self.play(cursor.animate.move_to(axes.c2p(z,0)),FadeIn(x_tag),run_time=.65)
-            self.play(cursor.animate.move_to(axes.c2p(z,fx)),FadeIn(vertical),run_time=.8)
+        ring=Circle(.47,color=ORANGE,stroke_width=2.2).move_to(layers[1].node_group[0]).set_z_index(2)
+        relu=ActivationPlot();sigmoid=ActivationPlot(sigmoid=True)
+        def evaluate(plot,z,value,label,node,name):
+            nonlocal result
+            axes=plot.axes;fx=float(plot.fn(z))
+            cursor=Dot(axes.c2p(z,0),radius=.052,color=ORANGE).set_z_index(6)
+            vertical=DashedLine(axes.c2p(z,0),axes.c2p(z,max(.001,fx)),color=ORANGE,stroke_width=1.4)
+            horizontal=DashedLine(axes.c2p(z,fx),axes.c2p(.001,fx),color=ORANGE,stroke_width=1.4)
+            self.play(FadeIn(cursor),run_time=.25)
+            self.play(cursor.animate.move_to(axes.c2p(z,fx)),FadeIn(vertical),run_time=.7)
             self.mark(name+'-on-curve',.55)
-            self.play(cursor.animate.move_to(axes.c2p(0,fx)),FadeIn(horizontal),FadeOut(x_tag),run_time=.65)
-            result_label=MathTex(formula,font_size=19,color=INK).move_to(graph.result).set_z_index(6)
-            self.play(FadeIn(result_label),run_time=.3)
-            self.mark(name+'-graph-result',.7)
-            text='0.9933' if graph.sigmoid else f'{result:g}'
-            label=MathTex(text,font_size=22 if graph.sigmoid else 25,color=INK).move_to(node).set_z_index(6)
-            if graph.sigmoid:label.scale_to_fit_width(.48)
-            self.play(TransformFromCopy(result_label,label),
-                      node.animate.set_fill(interpolate_color(WHITE,BLUE,.55*result),opacity=1),run_time=.8)
-            self.play(FadeOut(cursor),FadeOut(vertical),FadeOut(horizontal),
-                      graph.box.animate.set_stroke(color='#d1e1e9',width=1),run_time=.25)
+            self.play(cursor.animate.move_to(axes.c2p(0,fx)),FadeIn(horizontal),run_time=.5)
+            next_result=MathTex(label,font_size=30,color=INK).move_to([4.25,-1.48,0])
+            result=crossfade(result,next_result)
+            self.mark(name+'-graph-result',.65)
+            activate(node,value,'0.9933' if plot is sigmoid else f'{value:g}')
+            self.play(FadeOut(cursor),FadeOut(vertical),FadeOut(horizontal),run_time=.25)
             self.mark(name+'-neuron-value',.65)
-        say('Follow one input through the XOR network')
-        self.mark('architecture',1.2)
-        node_value(layers[0].node_group[0],1,'1');node_value(layers[0].node_group[1],0,'0')
-        say('Inputs form two weighted sums',r'z_1=x_1-x_2=1,\qquad z_2=x_2-x_1=-1')
-        self.stages['input-hidden-start']=float(self.time);send(0);self.mark('hidden-weighted-sums',1.8)
-        say('The first ReLU passes a positive value',r'h_1=\max(0,1)=1')
-        evaluate(graphs[0],1,1,r'\mathrm{ReLU}(1)=1',layers[1].node_group[0],'relu-positive')
-        say('The second ReLU clips a negative value to zero',r'h_2=\max(0,-1)=0')
-        evaluate(graphs[1],-1,0,r'\mathrm{ReLU}(-1)=0',layers[1].node_group[1],'relu-negative')
-        say('Hidden activations feed the output neuron',r'z=10h_1+10h_2-5')
-        # Show the contribution weights without cluttering the input crossings.
-        weights=VGroup(*(MathTex('10',font_size=22,color=GRAY).move_to(edge.get_center()+[0,.16,0]).set_z_index(5)
-                         for edge in net.connective_layers[1].edges))
-        self.play(FadeIn(weights),run_time=.3)
-        self.stages['hidden-output-start']=float(self.time);send(1)
-        say('The weighted sum becomes the sigmoid input',r'z=10(1)+10(0)-5=5')
-        self.mark('output-logit',1.5)
-        evaluate(graphs[2],5,case['p'],r'\sigma(5)\approx0.9933',layers[2].node_group[0],'sigmoid')
-        say('The prediction matches the XOR target',r'\hat y=0.9933>0.5\quad\Longrightarrow\quad\mathrm{class}=1=y')
-        self.mark('prediction',1.8)
-        loss=MathTex(r'\mathcal L=-\ln(\hat y)\approx0.006715',font_size=22,color=INK).move_to([4.7,-1.95,0])
-        loss_title=Text('Loss after prediction',font_size=16,color=GRAY).move_to([4.7,-1.55,0])
-        self.play(FadeIn(loss_title),FadeIn(loss),run_time=.6)
-        say('One forward pass is complete; the weights stay fixed')
-        self.mark('completed-forward-pass',3)
+            traces.append(dict(z=z,activation=fx,on_curve=axes.c2p(z,fx).tolist(),on_y_axis=axes.c2p(0,fx).tolist(),
+                               bounds=[float(plot.get_left()[0]),float(plot.get_right()[0]),float(plot.get_bottom()[1]),float(plot.get_top()[1])]))
+        panel('The XOR question',r'1\oplus0=1')
+        intro=Text('Exactly one input is active',font_size=20,color=GRAY).move_to([4.25,.25,0])
+        self.play(FadeIn(intro),run_time=.3)
+        say('Can this network recognize unequal inputs?');self.mark('architecture',1)
+        activate(layers[0].node_group[0],1,'1');activate(layers[0].node_group[1],0,'0')
+        say('First, evaluate the upper hidden neuron')
+        panel('Hidden activation',r'z_1=x_1-x_2=1')
+        self.play(FadeOut(intro),FadeIn(ring),run_time=.3)
+        incoming=network.connective_layers[0].edges
+        send(VGroup(incoming[0],incoming[2]),'input-hidden-start')
+        self.mark('hidden-weighted-sums',.65)
+        self.play(FadeIn(relu),run_time=.4)
+        evaluate(relu,1,1,r'\mathrm{ReLU}(1)=1',layers[1].node_group[0],'relu-positive')
+        say('A negative weighted sum is clipped to zero')
+        panel('Hidden activation',r'z_2=x_2-x_1=-1')
+        self.play(ring.animate.move_to(layers[1].node_group[1]),FadeOut(result),run_time=.4)
+        result=VGroup()
+        send(VGroup(incoming[1],incoming[3]),'input-hidden-second-start')
+        evaluate(relu,-1,0,r'\mathrm{ReLU}(-1)=0',layers[1].node_group[1],'relu-negative')
+        say('Both hidden values now feed the output')
+        panel('Output activation',r'z=10(1)+10(0)-5=5')
+        self.play(FadeOut(relu),FadeOut(result),ring.animate.move_to(layers[2].node_group[0]),run_time=.4)
+        result=VGroup()
+        send(network.connective_layers[1].edges,'hidden-output-start')
+        self.mark('output-logit',.8)
+        self.play(FadeIn(sigmoid),run_time=.4)
+        evaluate(sigmoid,5,case['p'],r'\sigma(5)\approx0.9933',layers[2].node_group[0],'sigmoid')
+        say('The prediction matches the XOR target')
+        self.mark('prediction',.8)
+        panel('Prediction',r'\hat y=0.9933')
+        self.play(FadeOut(sigmoid),FadeOut(result),FadeOut(ring),run_time=.4)
+        summary=VGroup(MathTex(r'\hat y>0.5\quad\Rightarrow\quad\mathrm{class}=1',font_size=26,color=INK).move_to([4.25,.55,0]),
+                       Text('Matches the target',font_size=21,color='#23735a').move_to([4.25,-.05,0]),
+                       MathTex(r'\mathcal L=-\ln\hat y\approx0.006715',font_size=24,color=GRAY).move_to([4.25,-1.15,0]))
+        self.play(FadeIn(summary),run_time=.6)
+        say('One forward pass. No weight update.');self.mark('completed-forward-pass',3)
         run=Path(config.media_dir).parent
         (run/'stages.json').write_text(json.dumps(self.stages,indent=2)+'\n')
         (run/'computation.json').write_text(json.dumps(data,indent=2)+'\n')
-        layout=dict(nodes=locations,edges=[len(c.edges) for c in net.connective_layers],
-                    radius=.29,graphs=[dict(center=list(g.get_center()),bounds=[float(g.get_left()[0]),float(g.get_right()[0]),float(g.get_bottom()[1]),float(g.get_top()[1])],
-                    z=z,activation=float(g.fn(z)),on_curve=g.axes.c2p(z,g.fn(z)).tolist(),
-                    on_y_axis=g.axes.c2p(0,g.fn(z)).tolist()) for g,z in zip(graphs,[1,-1,5])])
+        layout=dict(nodes=locations,edges=[len(c.edges) for c in network.connective_layers],radius=.38,graphs=traces,
+                    network_right=float(max(headers.get_right()[0],symbols.get_right()[0],
+                        max(node.get_right()[0] for layer in layers for node in layer.node_group))),
+                    panel_left=float(min(*panel_bounds,summary.get_left()[0],*(g['bounds'][0] for g in traces))),separator_x=1.45)
         (run/'layout.json').write_text(json.dumps(layout,indent=2)+'\n')

@@ -1,17 +1,15 @@
-# XOR: inside a forward pass
+# XOR forward-pass redesign
 
-One forward pass for XOR input(1,0), target1, through a2-2-1 MLP using ManimML primitives. Chosen weights, no training or updates. Thin connections, outlined neurons, subtle layer frames and smooth causal highlights inspired by the ManimML logo.
+One forward pass for XOR input(1,0),target1, through a2-2-1 MLP using ManimML primitives. Chosen weights, no training or updates. Outlined neurons and thin connections, with smooth, focused causal highlights.
 
-Show ReLU graphs above both hidden neurons and sigmoid above the output. Explicitly trace weighted sums1 and-1 through ReLU to1 and0; carry these activations along output connections; show output logit5 passing through sigmoid to0.9933. Activation graphs are not loss graphs.
+Keep the network unobstructed on the left. Use one separate activation panel on the right, showing ReLU for the selected hidden neuron and then sigmoid for the output. Trace weighted sums1 and-1 to hidden values1 and0; transmit both values to the output; map logit5 to0.9933. A focus ring and headings identify the selected neuron. No graphs above or across the network.
 
 Use W1=[[1,-1],[-1,1]],b1=[0,0],W2=[[10,10]],b2=-5. Verify all four XOR cases independently. Show threshold0.5, predicted1, target1 and BCE about0.006715 after the output. Do not feed loss into a neuron.
 
-White canvas, Arial-family prose, all mathematical labels and numbers in LaTeX. Stable architecture and readable nonoverlapping graph labels, equations and captions. Deliver1080p30fps H264 video and a useful PNG thumbnail. Review actual transitions and graphical mappings.
+Redesign for whitespace and restrained motion: stable network, one active function at a time, short captions, smooth signals and crossfades, a clean final prediction/loss summary. White canvas, Arial-family prose and LaTeX mathematics. Readable nonoverlapping labels at900px review width. Deliver1080p30fps H264 video and a useful PNG thumbnail.
 
 ## Storyboard
 
-Establish the2-2-1 architecture, graph annotations and the selected input/target. Activate the inputs. Send weighted signals into the hidden layer and display both weighted sums. Focus on each hidden neuron in turn: move a marker to the input on the graph’s horizontal axis, project to the ReLU curve, then to its output on the vertical axis. Reveal the corresponding neuron value. Send hidden activations to the output. Form logit5, trace the sigmoid graph and reveal prediction0.9933. Compare with target1, classify at0.5, show the small BCE loss, and hold the finished state.
+Establish a clear left-side2-2-1 network, input values and target; the right panel initially states the XOR question. Focus the first hidden neuron, send only its incoming signals, show its weighted sum and ReLU graph, then commit its activation. Move focus to the second hidden neuron, retain the same ReLU axes while changing the argument, clip the negative sum to zero, and commit that activation. Send both hidden values to the output. Replace the right-side graph with sigmoid, evaluate logit5 and commit0.9933. Replace the graph with a concise prediction, class and loss summary; hold.
 
-The graphs annotate activation functions, not the loss. Loss is evaluated after prediction. No training, weight changes or repeated input examples are animated. The hidden negative preactivation must visibly map to zero. Surrounding page defines all weights and the XOR table.
-
-Reference inspected: ManimMLLogo.gif from https://github.com/helblazer811/ManimML . Preserve its sparse outlined-network treatment and travelling highlights, adapted to the required white background. Original media only.
+The network is the primary visual. No chart, formula, label or loss badge overlaps its nodes or edges. A thin separator and generous gap distinguish the single detail panel. Only the selected operation is emphasized. Avoid flying formula morphs and repeated busy guide lines. The graph marker and node value update establish the relationship; travelling pulses carry the results onward. Loss follows prediction and never feeds into the network.
