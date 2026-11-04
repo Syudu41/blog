@@ -11,3 +11,12 @@ TensorQuill is a project for explaining machine learning concepts through figure
 
 [About the project](https://syudu41.github.io/visualizer/about/) · [Sample visualizations](https://syudu41.github.io/visualizer/samples/)
 
+Edit website pages in `website/`, then build or preview:
+
+```sh
+python3 scripts/website.py build
+python3 scripts/website.py preview
+```
+
+See the [website editing guide](docs/website.md) for cards, pages, and setup.
+
