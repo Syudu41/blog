@@ -1,0 +1,56 @@
+{
+  "sha256": "4a2ff7befbcb8b06470a93dc73ab6a2818f235bd32ea2621ba9caf897d9ceb51",
+  "dimensions": [
+    1920,
+    1080
+  ],
+  "frames": 1004,
+  "duration": 33.467,
+  "fps": 30,
+  "bytes": 3255686,
+  "arithmetic_max_error": 1.240327285323417e-16,
+  "curve_marker_pixel_errors": [
+    5.0,
+    2.0,
+    5.0
+  ],
+  "activation_color_max_channel_error": 2.1447980652367846,
+  "stages": {
+    "architecture": 0.8999999999999999,
+    "input-hidden-start": 2.599999999999999,
+    "hidden-weighted-sums": 5.199999999999994,
+    "relu-positive-on-curve": 8.399999999999988,
+    "relu-positive-graph-result": 9.966666666666653,
+    "relu-positive-neuron-value": 11.66666666666665,
+    "relu-negative-on-curve": 14.266666666666644,
+    "relu-negative-graph-result": 15.833333333333309,
+    "relu-negative-neuron-value": 17.533333333333363,
+    "hidden-output-start": 18.433333333333394,
+    "output-logit": 21.166666666666828,
+    "sigmoid-on-curve": 23.900000000000247,
+    "sigmoid-graph-result": 25.46666666666696,
+    "sigmoid-neuron-value": 27.166666666667012,
+    "prediction": 28.666666666667027,
+    "completed-forward-pass": 31.96666666666707
+  },
+  "environment": {
+    "manim": "0.19.0",
+    "expected_manim": "0.19.0",
+    "tools": {
+      "ffmpeg": "/home/lab335a/Sudarshan/Research-PhD/visualizer/.venv/render/bin/ffmpeg",
+      "ffprobe": "/home/lab335a/Sudarshan/Research-PhD/visualizer/.venv/render/bin/ffprobe",
+      "latex": "/home/lab335a/Sudarshan/Research-PhD/visualizer/.venv/tex/bin/x86_64-linux/latex",
+      "dvisvgm": "/home/lab335a/Sudarshan/Research-PhD/visualizer/.venv/tex/bin/x86_64-linux/dvisvgm"
+    },
+    "font": "Liberation Sans",
+    "font_available": true,
+    "passed": true,
+    "latex_smoke_test": true,
+    "tool_versions": {
+      "ffmpeg": "ffmpeg version 7.1.1 Copyright (c) 2000-2025 the FFmpeg developers",
+      "ffprobe": "ffprobe version 7.1.1 Copyright (c) 2007-2025 the FFmpeg developers",
+      "latex": "pdfTeX 3.141592653-2.6-1.40.29 (TeX Live 2026)",
+      "dvisvgm": "dvisvgm 3.6"
+    }
+  }
+}

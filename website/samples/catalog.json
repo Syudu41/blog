@@ -31,5 +31,16 @@
     "alt": "A three-input, four-hidden-neuron, two-output network; orange signals travel left to right and blue fills show computed activations.",
     "kind": "render",
     "task": "layer-transition"
+  },
+  {
+    "id": "xor-forward-pass",
+    "title": "XOR: inside a forward pass",
+    "subtitle": "",
+    "description": "Trace one XOR input through weighted sums, ReLU graphs, sigmoid and a prediction.",
+    "page": "xor-forward-pass/",
+    "thumbnail": "assets/xor-forward-pass/thumbnail.png",
+    "alt": "A 2-2-1 XOR network with activation-function graphs above the neurons. The input (1,0) produces hidden values (1,0), output logit5 and prediction0.9933.",
+    "kind": "render",
+    "task": "xor-forward-pass"
   }
 ]

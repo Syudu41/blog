@@ -1,0 +1,36 @@
+{
+  "id": "xor-forward-pass",
+  "title": "XOR: inside a forward pass",
+  "description": "Trace one XOR input through weighted sums, ReLU graphs, sigmoid and a prediction.",
+  "alt": "A 2-2-1 XOR network with activation-function graphs above the neurons. The input (1,0) produces hidden values (1,0), output logit5 and prediction0.9933.",
+  "source": "scene.py",
+  "output": "output/visualization.mp4",
+  "thumbnail": "output/thumbnail.png",
+  "render": {
+    "scene": "Visualization",
+    "font": "Liberation Sans",
+    "seed": 42,
+    "width": 1920,
+    "height": 1080,
+    "fps": 30,
+    "max_bytes": 20000000
+  },
+  "requirements": [
+    {
+      "id": "scope",
+      "description": "One forward pass for XOR input(1,0), target1, through a2-2-1 MLP using ManimML primitives. Chosen weights, no training or updates. Thin connections, outlined neurons, subtle layer frames and smooth causal highlights inspired by the ManimML logo."
+    },
+    {
+      "id": "activations",
+      "description": "Show ReLU graphs above both hidden neurons and sigmoid above the output. Explicitly trace weighted sums1 and-1 through ReLU to1 and0; carry these activations along output connections; show output logit5 passing through sigmoid to0.9933. Activation graphs are not loss graphs."
+    },
+    {
+      "id": "correctness",
+      "description": "Use W1=[[1,-1],[-1,1]],b1=[0,0],W2=[[10,10]],b2=-5. Verify all four XOR cases independently. Show threshold0.5, predicted1, target1 and BCE about0.006715 after the output. Do not feed loss into a neuron."
+    },
+    {
+      "id": "presentation",
+      "description": "White canvas, Arial-family prose, all mathematical labels and numbers in LaTeX. Stable architecture and readable nonoverlapping graph labels, equations and captions. Deliver1080p30fps H264 video and a useful PNG thumbnail. Review actual transitions and graphical mappings."
+    }
+  ]
+}
