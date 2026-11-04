@@ -1,0 +1,1 @@
+A small convolutional network turns pixels into feature maps and a prediction. Each moving window reveals the corresponding computed activations; the dense layers then combine those features. The connections from feature maps to the dense layer bundle each map row for readability. This deterministic demonstration uses fixed illustrative weights, not a trained classifier.

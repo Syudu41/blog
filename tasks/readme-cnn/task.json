@@ -1,0 +1,32 @@
+{
+  "id": "readme-cnn",
+  "title": "From pixels to prediction",
+  "description": "An original convolutional-network showcase with spatial filters, feature maps, and a dense prediction.",
+  "alt": "TensorQuill convolutional network: scanning receptive fields build perspective feature-map stacks, then activations flow into a dense prediction.",
+  "source": "scene.py",
+  "output": "output/visualization.gif",
+  "thumbnail": "output/thumbnail.png",
+  "render": {
+    "scene": "Visualization",
+    "font": "Liberation Sans",
+    "seed": 42,
+    "width": 1200,
+    "height": 600,
+    "fps": 30,
+    "max_bytes": 12000000
+  },
+  "requirements": [
+    {
+      "id": "visual_quality",
+      "description": "Original Manim animation with perspective feature-map stacks, detailed cells, continuous eased window motion, coordinated dense-layer pulses, stable composition, and no cartoon. Inspired by ManimML\u2019s CNN showcase, without copying its asset."
+    },
+    {
+      "id": "computation",
+      "description": "Visualize a deterministic valid stride-one CNN: 1x7x7 input, 3x5x5 ReLU features, 4x3x3 ReLU features, flatten to 36, dense 5, softmax 3. Reveal each output spatial location as its receptive field is scanned. Activation fills and output scores must match actual computed values."
+    },
+    {
+      "id": "presentation",
+      "description": "White background, Arial-family prose, LaTeX for dimensions and formulas, readable at README width 900; no overlapping labels or clipped objects. GIF loops, 1200x600 near 30fps, under12MB, with PNG thumbnail."
+    }
+  ]
+}
