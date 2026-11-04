@@ -8,6 +8,8 @@ import re
 import shutil
 from pathlib import Path
 
+import yaml
+
 ROOT = Path(__file__).resolve().parents[1]
 CHECKS = ("render_success", "output_integrity", "mathematics", "latex_and_fonts", "layout", "visual_review")
 IMAGES = {".png", ".gif", ".svg"}
@@ -76,8 +78,11 @@ def validated_task(folder):
     review = read_json(folder / "review.json")
     if review.get("status") != "passed" or not str(review.get("reviewer", "")).strip():
         raise ValueError("A completed review with a reviewer is required")
-    if review.get("hashes") != hashes(folder, task):
-        raise ValueError("Task or output changed after review; review the current files again")
+    current = hashes(folder, task)
+    if review.get("hashes") != current:
+        previous = review.get("hashes", {})
+        changed = sorted(name for name in set(previous) | set(current) if previous.get(name) != current.get(name))
+        raise ValueError(f"Task or output changed after review ({task['id']}: {', '.join(changed)}); review the current files again")
     for group, expected in (("checks", set(CHECKS)), ("requirements", {r["id"] for r in task["requirements"]})):
         results = review.get(group, {})
         if set(results) != expected:
@@ -89,39 +94,104 @@ def validated_task(folder):
     return task
 
 
-def catalog_entry(task):
+def split_page(source):
+    """Read a page's YAML front matter without changing its Markdown body."""
+    if not source.startswith("---\n"):
+        return {}, source
+    match = re.match(r"\A---\n(.*?)\n---(?:\n|$)", source, re.S)
+    if not match:
+        raise ValueError("Page front matter needs a closing --- line")
+    try:
+        metadata = yaml.safe_load(match.group(1))
+    except yaml.YAMLError as error:
+        raise ValueError(f"Invalid page front matter: {error}") from error
+    if not isinstance(metadata, dict):
+        raise ValueError("Page front matter must be a mapping")
+    return metadata, source[match.end():].lstrip("\n")
+
+
+def write_page(path, metadata, body):
+    header = yaml.safe_dump(metadata, sort_keys=False, allow_unicode=True, width=10000).strip()
+    path.write_text(f"---\n{header}\n---\n\n{body.strip()}\n")
+
+
+def gallery_asset(gallery, relative):
+    if not isinstance(relative, str) or not relative or "\\" in relative:
+        raise ValueError(f"Invalid gallery asset: {relative}")
+    path = (gallery / relative).resolve()
+    if Path(relative).is_absolute() or not path.is_relative_to(gallery.resolve()) or not path.is_file():
+        raise ValueError(f"Missing or unsafe gallery asset: {relative}")
+    return path
+
+
+def gallery_entries(gallery):
+    """Discover cards from authored Markdown; no separate catalog is required."""
+    entries = []
+    for path in sorted(gallery.glob("*.md")):
+        if path.stem == "index":
+            continue
+        metadata, _ = split_page(path.read_text())
+        if not {"task", "kind", "thumbnail", "media", "description"}.intersection(metadata):
+            continue
+        slug = path.stem
+        if not re.fullmatch(r"[a-z0-9]+(?:-[a-z0-9]+)*", slug):
+            raise ValueError(f"Invalid sample filename: {path.name}")
+        for field in ("title", "description", "thumbnail", "alt"):
+            value = metadata.get(field)
+            if not isinstance(value, str) or not value.strip() or len(value.splitlines()) != 1:
+                raise ValueError(f"{path.name} needs a single-line {field}")
+        if not isinstance(metadata.get("subtitle", ""), str) or len(metadata.get("subtitle", "").splitlines()) > 1:
+            raise ValueError(f"{path.name} needs a single-line subtitle")
+        kind = metadata.get("kind", "render" if metadata.get("task") else None)
+        if kind not in ("render", "concept"):
+            raise ValueError(f"{path.name} needs a reviewed task, or explicit kind: concept for a non-render preview")
+        if kind == "concept" and metadata.get("task"):
+            raise ValueError(f"{path.name} cannot relabel a Manim task as a concept preview")
+        for dimension in ("width", "height"):
+            if dimension in metadata and (not isinstance(metadata[dimension], int) or isinstance(metadata[dimension], bool) or metadata[dimension] <= 0):
+                raise ValueError(f"{path.name} {dimension} must be a positive integer")
+        if kind == "render" and metadata.get("task") != slug:
+            raise ValueError(f"{path.name} must reference its matching reviewed task: {slug}")
+        if not isinstance(metadata.get("order", 10000), int) or isinstance(metadata.get("order"), bool):
+            raise ValueError(f"{path.name} order must be an integer")
+        if gallery_asset(gallery, metadata["thumbnail"]).suffix.lower() not in IMAGES:
+            raise ValueError(f"{path.name} needs an image thumbnail")
+        if kind == "render" and not metadata.get("media"):
+            raise ValueError(f"{path.name} needs media")
+        if metadata.get("media"):
+            if gallery_asset(gallery, metadata["media"]).suffix.lower() not in IMAGES | {".mp4"}:
+                raise ValueError(f"{path.name} has unsupported media")
+        entry = dict(metadata, id=slug, page=f"{slug}/", kind=kind)
+        entries.append(entry)
+    return sorted(entries, key=lambda item: (item.get("order", 10000), item["id"]))
+
+
+def task_assets(task):
     slug = task["id"]
-    thumb = Path(task["thumbnail"]).suffix.lower()
     return {
-        "id": slug, "title": task["title"], "subtitle": task.get("subtitle", ""),
-        "description": task["description"], "page": f"{slug}/",
-        "thumbnail": f"assets/{slug}/thumbnail{thumb}", "alt": task["alt"],
-        "kind": "render", "task": slug,
+        "media": f"assets/{slug}/visualization{Path(task['output']).suffix.lower()}",
+        "thumbnail": f"assets/{slug}/thumbnail{Path(task['thumbnail']).suffix.lower()}",
     }
 
 
-def page_content(folder, task):
-    slug = task["id"]
-    media = f"assets/{slug}/visualization{Path(task['output']).suffix.lower()}"
-    escaped_media = html.escape(media, quote=True)
-    alt = html.escape(task["alt"], quote=True)
-    if media.endswith(".mp4"):
-        thumbnail = catalog_entry(task)["thumbnail"]
-        render = task.get("render", {})
-        width, height = int(render.get("width", 1920)), int(render.get("height", 1080))
-        if width <= 0 or height <= 0:
-            raise ValueError("Video dimensions must be positive")
-        visual = f'<video controls controlslist="nodownload" playsinline preload="metadata" width="{width}" height="{height}" style="aspect-ratio: {width} / {height};" poster="{thumbnail}" aria-label="{alt}"><source src="{escaped_media}" type="video/mp4">{alt}</video>'
-    else:
-        visual = f'<img src="{escaped_media}" alt="{alt}">'
-    # Sphinx resolves Markdown images from their source document's directory.
-    if not media.endswith(".mp4"):
-        visual = f'![{task["alt"]}]({media})'
-    else:
-        visual = visual.replace('src="assets/', 'src="../assets/').replace('poster="assets/', 'poster="../assets/')
-    title = html.escape(task["title"])
-    content = (folder / "content.md").read_text().strip()
-    return f"# {title}\n\n{visual}\n\n{content}\n\n[Back to sample visualizations](index.md)\n"
+def render_page(source):
+    """Insert the player at build time while leaving the authored file untouched."""
+    metadata, body = split_page(source)
+    media = metadata.get("media")
+    visual = ""
+    if media:
+        alt = html.escape(metadata["alt"], quote=True)
+        if media.endswith(".mp4"):
+            width, height = metadata.get("width", 1920), metadata.get("height", 1080)
+            visual = (f'<video controls controlslist="nodownload" playsinline preload="metadata" '
+                      f'width="{width}" height="{height}" style="aspect-ratio: {width} / {height};" '
+                      f'poster="../{html.escape(metadata["thumbnail"], quote=True)}" aria-label="{alt}">'
+                      f'<source src="../{html.escape(media, quote=True)}" type="video/mp4">{alt}</video>')
+        else:
+            visual = f'![{metadata["alt"]}]({media})'
+    title = "" if body.lstrip().startswith("# ") else f'# {metadata["title"]}\n\n'
+    header = yaml.safe_dump(metadata, sort_keys=False, allow_unicode=True, width=10000).strip()
+    return f"---\n{header}\n---\n\n{title}{visual}\n\n{body.strip()}\n\n[Back to sample visualizations](index.md)\n"
 
 
 def publish(folder, root=ROOT):
@@ -129,42 +199,56 @@ def publish(folder, root=ROOT):
     slug = task["id"]
     if folder.resolve() != (root / "tasks" / slug).resolve():
         raise ValueError("Publish from tasks/<task-id>/")
-    task_file(folder, "content.md")
     gallery = root / "website" / "samples"
-    catalog = read_json(gallery / "catalog.json")
-    existing = next((item for item in catalog if item["id"] == slug), None)
-    if existing and existing.get("task") != slug:
-        raise ValueError("Choose a task id that does not overwrite a concept preview")
-    if not existing and (gallery / f"{slug}.md").exists():
-        raise ValueError("Choose a task id that does not overwrite an existing page")
+    page = gallery / f"{slug}.md"
+    if page.exists():
+        metadata, body = split_page(page.read_text())
+        if metadata.get("task") != slug:
+            raise ValueError("Choose a task id that does not overwrite an existing page")
+    else:
+        entries = gallery_entries(gallery)
+        metadata = {"title": task["title"], "description": task["description"],
+                    "alt": task["alt"], "task": slug,
+                    "order": max((item.get("order", 0) for item in entries), default=0) + 10}
+        if task.get("subtitle"):
+            metadata["subtitle"] = task["subtitle"]
+        body = task_file(folder, "content.md").read_text()
+    # Publishing new media preserves the website author's wording and ordering.
+    metadata.update(task_assets(task))
+    if Path(task["output"]).suffix.lower() == ".mp4":
+        metadata.update(width=task.get("render", {}).get("width", 1920),
+                        height=task.get("render", {}).get("height", 1080))
     asset_dir = gallery / "assets" / slug
     asset_dir.mkdir(parents=True, exist_ok=True)
     for field, name in (("output", "visualization"), ("thumbnail", "thumbnail")):
         source = task_file(folder, task[field])
         shutil.copyfile(source, asset_dir / (name + source.suffix.lower()))
-    (gallery / f"{slug}.md").write_text(page_content(folder, task))
-    entry = catalog_entry(task)
-    catalog = [entry if item["id"] == slug else item for item in catalog] if existing else catalog + [entry]
-    write_json(gallery / "catalog.json", catalog)
+    write_page(page, metadata, body)
 
 
 def check_published(root=ROOT):
     gallery = root / "website" / "samples"
-    catalog = read_json(gallery / "catalog.json")
-    if len({item["id"] for item in catalog}) != len(catalog):
-        raise ValueError("Duplicate gallery ids")
-    for item in catalog:
-        if item.get("kind") == "concept":
+    for item in gallery_entries(gallery):
+        if item["kind"] == "concept":
+            for field in ("media", "thumbnail"):
+                parts = Path(item.get(field, "")).parts
+                if len(parts) >= 3 and parts[0] == "assets" and (root / "tasks" / parts[1] / "task.json").exists():
+                    raise ValueError("Manim task media must retain its reviewed task reference")
             continue
-        if item.get("kind") != "render" or item.get("task") != item["id"]:
-            raise ValueError("Gallery renders must identify their task")
         slug = item["id"]
         folder = root / "tasks" / slug
         task = validated_task(folder)
-        if task["id"] != slug or item != catalog_entry(task):
-            raise ValueError(f"Gallery metadata differs from reviewed task {slug}")
-        if (gallery / f"{slug}.md").read_text() != page_content(folder, task):
-            raise ValueError(f"Detail page differs from task {slug}; republish it")
+        if task["id"] != slug:
+            raise ValueError(f"Gallery task differs from reviewed task {slug}")
+        for field, relative in task_assets(task).items():
+            if item[field] != relative:
+                raise ValueError(f"Gallery {field} differs from reviewed task {slug}")
+        if item["media"].endswith(".mp4"):
+            for dimension, default in (("width", 1920), ("height", 1080)):
+                actual = item.get(dimension, default)
+                expected = task.get("render", {}).get(dimension, default)
+                if not isinstance(actual, int) or isinstance(actual, bool) or actual <= 0 or actual != expected:
+                    raise ValueError(f"Gallery {dimension} differs from reviewed task {slug}")
         for field, name in (("output", "visualization"), ("thumbnail", "thumbnail")):
             source = task_file(folder, task[field])
             published = gallery / "assets" / slug / (name + source.suffix.lower())

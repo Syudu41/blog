@@ -2,6 +2,8 @@
 
 The coding agent reads the request and writes editable Manim scenes. The local CLI creates task folders, checks the rendering environment, runs scenes, and checks the resulting media. It does not call a language-model API or generate scene code by itself.
 
+The current division of responsibility and how a new session resumes are described in [agent responsibilities](agent-workflow.md). For page text, edit `website/samples/<id>.md`; see [website editing](website.md).
+
 ## Rendering environment
 
 Use Python 3.11 with Manim Community 0.19.0 and ManimML 0.0.24. This pair uses the feed-forward adapter described below. `environment.yml` installs the Python/native rendering dependencies through conda-forge and pip:
@@ -34,7 +36,7 @@ Write the user's request in a text file, then create its task folder:
 python -m tensorquill new my-visualization --request-file request.txt --format png
 ```
 
-The coding agent edits `tasks/my-visualization/scene.py`, the requirements, card description, accessible description, and `content.md`. The initial scene deliberately refuses to render until it is implemented. The scene class defaults to `Visualization`; change `render.scene` in `task.json` if needed.
+The coding agent edits `tasks/my-visualization/scene.py`, the requirements, initial card description, accessible description, and reviewed `content.md` snapshot. After initial publication, website wording is edited in `website/samples/my-visualization.md`. The initial scene deliberately refuses to render until it is implemented. The scene class defaults to `Visualization`; change `render.scene` in `task.json` if needed.
 
 ```sh
 python -m tensorquill render tasks/my-visualization --python .venv/render/bin/python --preset draft

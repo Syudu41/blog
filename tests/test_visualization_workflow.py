@@ -3,7 +3,7 @@ import tempfile
 import unittest
 from pathlib import Path
 
-from scripts.visualization_workflow import check_published, prepare_review, publish, write_json
+from scripts.visualization_workflow import check_published, prepare_review, publish, write_json, gallery_entries, split_page, write_page
 
 
 class PublicationGateTests(unittest.TestCase):
@@ -15,7 +15,6 @@ class PublicationGateTests(unittest.TestCase):
         self.task.mkdir(parents=True)
         gallery = self.root / "website" / "samples"
         gallery.mkdir(parents=True)
-        write_json(gallery / "catalog.json", [])
         write_json(self.task / "task.json", {
             "id": "test-render", "title": "Test render", "description": "A test figure.",
             "alt": "A circle.", "source": "scene.py", "output": "figure.svg",
@@ -90,7 +89,7 @@ class PublicationGateTests(unittest.TestCase):
         check_published(self.root)
         page = self.root / "website/samples/test-render.md"
         self.assertIn("assets/test-render/visualization.svg", page.read_text())
-        catalog = json.loads((self.root / "website/samples/catalog.json").read_text())
+        catalog = gallery_entries(self.root / "website/samples")
         self.assertEqual(catalog[0]["page"], "test-render/")
 
     def test_modified_published_asset_blocks_build(self):
@@ -104,12 +103,52 @@ class PublicationGateTests(unittest.TestCase):
     def test_updating_a_sample_preserves_card_order(self):
         self.approve()
         publish(self.task, self.root)
-        path = self.root / "website/samples/catalog.json"
-        entries = json.loads(path.read_text())
-        entries.append({"id": "later", "kind": "concept"})
-        write_json(path, entries)
+        gallery = self.root / "website/samples"
+        (gallery / "preview.svg").write_text('<svg xmlns="http://www.w3.org/2000/svg"/>')
+        write_page(gallery / "later.md", {"title": "Later", "description": "Preview.", "alt": "Preview.",
+                   "kind": "concept", "thumbnail": "preview.svg", "order": 20}, "Preview text.")
         publish(self.task, self.root)
-        self.assertEqual([entry["id"] for entry in json.loads(path.read_text())], ["test-render", "later"])
+        self.assertEqual([entry["id"] for entry in gallery_entries(gallery)], ["test-render", "later"])
+
+    def test_authored_page_edits_do_not_require_a_new_render_review(self):
+        self.approve()
+        publish(self.task, self.root)
+        page = self.root / "website/samples/test-render.md"
+        metadata, _ = split_page(page.read_text())
+        metadata.update(title="Edited title", description="Edited summary", order=3)
+        write_page(page, metadata, "An edited introduction, reviewed by its author.")
+        check_published(self.root)
+        self.assertEqual(gallery_entries(page.parent)[0]["title"], "Edited title")
+        self.assertFalse((page.parent / "catalog.json").exists())
+        publish(self.task, self.root)
+        self.assertIn("An edited introduction", page.read_text())
+        self.assertEqual(split_page(page.read_text())[0]["title"], "Edited title")
+
+    def test_reviewed_media_cannot_be_relabeled_as_a_concept(self):
+        self.approve()
+        publish(self.task, self.root)
+        page = self.root / "website/samples/test-render.md"
+        metadata, body = split_page(page.read_text())
+        metadata["kind"] = "concept"
+        write_page(page, metadata, body)
+        with self.assertRaisesRegex(ValueError, "cannot relabel"):
+            check_published(self.root)
+        del metadata["task"]
+        write_page(page, metadata, body)
+        with self.assertRaisesRegex(ValueError, "reviewed task reference"):
+            check_published(self.root)
+
+    def test_card_cannot_reference_media_outside_the_gallery(self):
+        self.approve()
+        publish(self.task, self.root)
+        page = self.root / "website/samples/test-render.md"
+        outside = self.root / "outside.svg"
+        outside.write_text('<svg xmlns="http://www.w3.org/2000/svg"/>')
+        metadata, body = split_page(page.read_text())
+        metadata["thumbnail"] = "../../outside.svg"
+        write_page(page, metadata, body)
+        with self.assertRaisesRegex(ValueError, "unsafe gallery asset"):
+            check_published(self.root)
 
     def test_missing_output_blocks_review(self):
         (self.task / "figure.svg").unlink()

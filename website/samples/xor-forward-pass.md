@@ -1,6 +1,14 @@
-# XOR: inside a forward pass
-
-<video controls controlslist="nodownload" playsinline preload="metadata" width="1920" height="1080" style="aspect-ratio: 1920 / 1080;" poster="../assets/xor-forward-pass/thumbnail.png" aria-label="A 2-2-1 XOR network with activation-function graphs above the neurons. The input (1,0) produces hidden values (1,0), output logit5 and prediction0.9933."><source src="../assets/xor-forward-pass/visualization.mp4" type="video/mp4">A 2-2-1 XOR network with activation-function graphs above the neurons. The input (1,0) produces hidden values (1,0), output logit5 and prediction0.9933.</video>
+---
+title: 'XOR: inside a forward pass'
+description: Trace one XOR input through weighted sums, ReLU graphs, sigmoid and a prediction.
+task: xor-forward-pass
+media: assets/xor-forward-pass/visualization.mp4
+thumbnail: assets/xor-forward-pass/thumbnail.png
+alt: A 2-2-1 XOR network with activation-function graphs above the neurons. The input (1,0) produces hidden values (1,0), output logit5 and prediction0.9933.
+order: 40
+width: 1920
+height: 1080
+---
 
 This is an experiment - XOR Gate. Here is a single iteration of a neural network with 2 input neurons (1 input layer), 1 hidden layer and 1 output later. The forward pass - depicting on single iteration is show in the video.
 
@@ -17,5 +25,3 @@ The weights are chosen for clarity, rather than learned during the animation. Th
 | $(1,1)$ | $0$ | $0.0067$ |
 
 The video follows only $(1,0)$. All four cases are checked to verify that the chosen network implements XOR. The visual style draws inspiration from [ManimML’s animated logo](https://github.com/helblazer811/ManimML).
-
-[Back to sample visualizations](index.md)

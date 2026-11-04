@@ -1,48 +1,55 @@
 # Render, review, publish
 
-Every Manim task lives in `tasks/<task-id>/`. The folder holds the request, editable scene source, output files, explanation, and review evidence. Copy `tasks/_template/` to start a task; replace its placeholders and add `scene.py` and `output/`.
+For website text and cards, see [Edit and build the website](website.md). Those edits happen in `website/` and do not require rendering. This document covers producing and approving new Manim media.
 
-Alternatively, use `python -m tensorquill new <task-id> --request-file request.txt --format png`. The coding agent writes the requested scene, renders a draft, inspects it, and renders the final output with the [local rendering CLI](rendering.md). No separate model API is needed.
+## Keep a persistent render task
+
+Every task lives in `tasks/<id>/`:
 
 ```text
-tasks/<task-id>/
-  task.json          # Metadata, acceptance criteria, source and output paths
-  requirements.md    # User request and detailed requirements
-  scene.py           # Editable Manim source
-  content.md         # Explanation for the website detail page
-  output/            # Rendered media and card thumbnail
-  review.json        # Results tied to these exact files
+task.json          # Render metadata and acceptance criteria
+requirements.md    # Request and storyboard
+scene.py           # Editable Manim scene
+content.md         # Reviewed explanation snapshot for the render
+output/            # Primary media and thumbnail
+review.json        # Review evidence tied to exact task files
 ```
 
-## Review every output
+The coding agent can create the scaffold using `python -m tensorquill new <id> --request-file request.txt --format mp4`, then write the scene. The CLI does not write scene code itself. See [rendering](rendering.md) for environment setup and [agent responsibilities](agent-workflow.md) for what runs automatically.
 
-After rendering, run `python scripts/visualization_workflow.py prepare-review tasks/<task-id>`. This creates a pending review with hashes of the request, metadata, source, explanation, output, and thumbnail. It never marks tests as passed automatically.
+Write a storyboard using [visual standards](visual-standards.md). Render a draft, inspect it, revise where necessary, and produce a final render. Inspect the actual animation, including transitions, pacing and final-size typography. Check every requirement and run independent mathematical checks where applicable.
 
-The agent must open and inspect the generated output, compare it with every requirement, and run the relevant numerical and media checks. For animations, inspect representative frames and playback, including transitions and timing. For figures, inspect the image at its final intended size. Check both the output and thumbnail. Every generated revision needs a fresh review; archive the previous review before preparing another.
+## Review the exact output
 
-Record a pass/fail result and specific evidence for each requirement and each check in `review.json`:
+Run:
 
-- `render_success`: actual renderer command, exit status, and log or test result.
-- `output_integrity`: decode the media and verify format, dimensions, duration/frame rate when applicable, and thumbnail validity. Record the tools and measured values.
-- `mathematics`: compare calculations, labels, dimensions, and assumptions with independent calculations or tests. Explain when a check is not applicable.
-- `latex_and_fonts`: confirm all math is rendered from LaTeX and prose uses the configured Arial-family font.
-- `layout`: check clipping, label collisions, readability, and final-size presentation.
-- `visual_review`: inspect the actual output against the requested visual behavior; record the frames or image examined and findings.
+```sh
+python scripts/visualization_workflow.py prepare-review tasks/<id>
+```
 
-Set `status` to `passed` and record the reviewing agent only when every result passes with evidence. Fix failed output and review it again. The publication script validates recorded results and file hashes; it does not replace visual inspection, execute Manim, or independently prove mathematical correctness. Review evidence must describe checks that were actually performed.
+This creates a pending review; it never assumes a pass. Fill every requirement and every check with actual evidence:
 
-## Wire passing output to the website
+- `render_success`: command, renderer exit status and report.
+- `output_integrity`: full media decoding, dimensions, timing, codec and thumbnail checks.
+- `mathematics`: independent calculations or a reason the check is inapplicable.
+- `latex_and_fonts`: LaTeX mathematics and the configured Arial-family prose font.
+- `layout`: clipping, collisions and readability at the intended display size.
+- `visual_review`: inspected frames, transitions and findings against the storyboard.
 
-Run `python scripts/visualization_workflow.py publish tasks/<task-id>`. It refuses incomplete, failed, or stale reviews, then copies the reviewed media and thumbnail, creates the Sphinx/MyST detail page, and adds the gallery card. Use a distinct id from existing concept previews.
+Set `status: passed` and name the reviewer only when all requirements pass. Archive an existing review before preparing a new one. A change to requirements, source, the task's explanation snapshot, metadata, output or thumbnail invalidates that task review. Re-review the current output; rerender when its source or intended behavior changes.
 
-Install the website dependencies, then run `python -m unittest discover -s tests` and `python scripts/visualization_workflow.py check`. Build with `python -m sphinx -b dirhtml -W --keep-going -n website _site`. Inspect the resulting page before committing the task and its website integration together as a completed subfeature. Push the commit to deploy through GitHub Pages.
+## Publish approved media
 
-The Sphinx build also checks that published Manim renders still match their reviewed task files. Concept previews are explicitly labeled and are not represented as reviewed Manim outputs.
+```sh
+python3 scripts/website.py publish tasks/<id>
+python scripts/visualization_workflow.py check
+python3 scripts/website.py build
+```
 
-## Website structure
+Publication validates the review, copies media to `website/samples/assets/<id>/`, and creates a Markdown page with YAML card metadata if the page does not yet exist. It preserves an existing authored page's wording, title, summary and ordering. The agent must ensure that page still correctly explains any newly published render.
 
-`website/` is the source folder. Sphinx builds the entire website with the Furo theme. MyST parses the Markdown pages, and Sphinx Design provides cards generated from `website/samples/catalog.json`. The directory-style HTML builder preserves `/samples/` and existing detail-page URLs. `/samples.html` remains a redirect for existing links. The website uses a white background and Arial-family text.
+Sphinx builds cards automatically from those Markdown files. Its publication gate still rejects stale render reviews, changed task media, mismatched asset references and unsafe paths. Website prose is authored separately; review it against the visualization before committing. Build success does not certify arbitrary scientific claims in text.
 
-Install dependencies with `python -m pip install -r website/requirements.txt`, then use the Sphinx build command above. Preview the generated website with `python -m http.server 8000 --directory _site` and open http://localhost:8000/. Rebuild after source changes. GitHub Actions runs tests and builds the complete website before publishing.
+Run the appropriate tests, inspect the built page, commit the completed feature, and push to deploy through GitHub Pages. All pages retain Sphinx, MyST and Furo, a white background, Arial-family prose and LaTeX mathematics.
 
-Write inline mathematics as `$...$` and displayed mathematics as `$$...$$` or a MyST `math` directive. MyST parses the LaTeX expressions and Sphinx's MathJax extension typesets them in the browser. Math within Manim-rendered images and animations continues to use Manim's LaTeX pipeline. Keep the LaTeX source editable in both cases.
+A review JSON validates recorded evidence and file integrity. It does not replace scientific or visual inspection, and does not generate an animation or certify its explanatory quality automatically.

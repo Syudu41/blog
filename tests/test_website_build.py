@@ -11,7 +11,7 @@ from html.parser import HTMLParser
 from pathlib import Path
 from urllib.parse import unquote, urlsplit
 
-from scripts.visualization_workflow import prepare_review, publish, write_json
+from scripts.visualization_workflow import prepare_review, publish, write_json, gallery_entries, split_page, write_page
 
 ROOT = Path(__file__).resolve().parents[1]
 
@@ -41,7 +41,8 @@ class WebsiteBuildTests(unittest.TestCase):
             shutil.copytree(ROOT / "website", root / "website")
             (root / "scripts").mkdir()
             shutil.copyfile(ROOT / "scripts/visualization_workflow.py", root / "scripts/visualization_workflow.py")
-            existing = json.loads((root / "website/samples/catalog.json").read_text())
+            shutil.copyfile(ROOT / "scripts/website.py", root / "scripts/website.py")
+            existing = gallery_entries(root / "website/samples")
             for sample in existing:
                 if sample.get("kind") == "render":
                     shutil.copytree(ROOT / "tasks" / sample["task"], root / "tasks" / sample["task"],
@@ -72,7 +73,7 @@ class WebsiteBuildTests(unittest.TestCase):
                 publish(task, root)
 
             output = root / "build"
-            command = [sys.executable, "-m", "sphinx", "-b", "dirhtml", "-W", "--keep-going", "-n", str(root / "website"), str(output)]
+            command = [sys.executable, str(root / "scripts/website.py"), "build", "--output", str(output)]
             result = subprocess.run(command, capture_output=True, text=True)
             self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
             for page in output.rglob("*.html"):
@@ -81,16 +82,16 @@ class WebsiteBuildTests(unittest.TestCase):
                 for target in parser.targets:
                     self.assertTrue(target.is_file(), f"Broken local link in {page}: {target}")
             gallery = (output / "samples/index.html").read_text()
-            expected_cards = len(json.loads((root / "website/samples/catalog.json").read_text()))
+            expected_cards = len(gallery_entries(root / "website/samples"))
             self.assertEqual(gallery.count('class="sd-card-title'), expected_cards)
-            for slug in [sample["id"] for sample in json.loads((root / "website/samples/catalog.json").read_text())]:
+            for slug in [sample["id"] for sample in gallery_entries(root / "website/samples")]:
                 self.assertTrue((output / "samples" / slug / "index.html").is_file())
             self.assertIn('url=samples/', (output / "samples.html").read_text())
             video = (output / "samples/video-fixture/index.html").read_text()
             self.assertIn('src="../assets/video-fixture/visualization.mp4"', video)
             self.assertIn('poster="../assets/video-fixture/thumbnail.svg"', video)
             self.assertIn('controlslist="nodownload"', video)
-            for sample in json.loads((root / "website/samples/catalog.json").read_text()):
+            for sample in gallery_entries(root / "website/samples"):
                 page = (output / "samples" / sample["id"] / "index.html").read_text()
                 self.assertNotIn("Download visualization", page)
             self.assertIn('class="math', video)
@@ -98,21 +99,30 @@ class WebsiteBuildTests(unittest.TestCase):
             self.assertIn('dataset.theme = "light"', video)
             self.assertTrue((output / "searchindex.js").is_file())
             self.assertTrue((output / ".nojekyll").is_file())
-            # A new catalog entry must update cards and navigation on an
-            # incremental build, not only when the build directory is empty.
-            catalog_path = root / "website/samples/catalog.json"
-            entries = json.loads(catalog_path.read_text())
+            # Editing the authored Markdown updates the player page and card
+            # without changing the immutable render task or review.
+            page_path = root / "website/samples/video-fixture.md"
+            metadata, body = split_page(page_path.read_text())
+            metadata.update(title="Edited video title", description="Edited card description")
+            write_page(page_path, metadata, body + "\n\nA new human-authored paragraph.")
+            edited = subprocess.run(command, capture_output=True, text=True)
+            self.assertEqual(edited.returncode, 0, edited.stdout + edited.stderr)
+            self.assertIn("Edited video title", (output / "samples/index.html").read_text())
+            self.assertIn("A new human-authored paragraph", (output / "samples/video-fixture/index.html").read_text())
+            # Adding a Markdown file discovers a card on an incremental build.
             (root / "website/samples/assets/incremental.svg").write_text('<svg xmlns="http://www.w3.org/2000/svg"><circle r="2"/></svg>')
-            extra = {"id": "incremental-fixture", "page": "incremental-fixture/", "title": "Incremental fixture",
-                     "thumbnail": "assets/incremental.svg", "alt": "Test circle.",
+            extra = {"title": "Incremental fixture", "thumbnail": "assets/incremental.svg", "alt": "Test circle.",
                      "description": "A synthetic test preview.", "kind": "concept"}
-            entries.append(extra)
-            write_json(catalog_path, entries)
-            (root / "website/samples/incremental-fixture.md").write_text("# Incremental fixture\n\nA new sample.\n")
+            extra_page = root / "website/samples/incremental-fixture.md"
+            write_page(extra_page, extra, "A new sample.")
             incremental = subprocess.run(command, capture_output=True, text=True)
             self.assertEqual(incremental.returncode, 0, incremental.stdout + incremental.stderr)
             self.assertEqual((output / "samples/index.html").read_text().count('class="sd-card-title'), expected_cards + 1)
             self.assertTrue((output / "samples/incremental-fixture/index.html").is_file())
+            extra_page.unlink()
+            removed = subprocess.run(command, capture_output=True, text=True)
+            self.assertEqual(removed.returncode, 0, removed.stdout + removed.stderr)
+            self.assertEqual((output / "samples/index.html").read_text().count('class="sd-card-title'), expected_cards)
             # The actual Sphinx build must refuse output changed since its review.
             (root / "tasks/image-fixture/output.svg").write_text("unreviewed replacement")
             failed = subprocess.run(command, capture_output=True, text=True)

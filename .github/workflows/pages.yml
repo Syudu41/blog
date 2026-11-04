@@ -10,6 +10,7 @@ on:
       - 'tensorquill/**'
       - 'environment.yml'
       - 'tests/**'
+      - 'docs/**'
       - '.github/workflows/pages.yml'
   workflow_dispatch:
 
@@ -39,7 +40,7 @@ jobs:
       - name: Test rendering and publication workflows
         run: python -m unittest discover -s tests
       - name: Build website with Sphinx and Furo
-        run: python -m sphinx -b dirhtml -W --keep-going -n website _site
+        run: python scripts/website.py build
       - uses: actions/upload-pages-artifact@v4
         with:
           path: _site
