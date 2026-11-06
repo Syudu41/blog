@@ -1,6 +1,6 @@
 {
   "status": "passed",
-  "scalar_forward_max_error": 8.881784197001252e-16,
+  "scalar_forward_max_error": 4.440892098500626e-16,
   "finite_difference_max_error": 2.2710552882720947e-10,
   "gradient_parameters_checked": 40,
   "updates_replayed": 2048,

@@ -21,6 +21,8 @@ for snap in trace['snapshots']:
     predicted=[np.argmax(scalar(snap['params'],x,int(y))[3]) for x,y in zip(data['test_x'],data['test_y'])]
     assert sum(predicted==data['test_y'])==snap['test_correct']
 first,after=trace['snapshots'][:2];eps=1e-6
+np.testing.assert_array_equal(data['train_x'][0],first['example']['x'])
+assert data['train_y'][0]==first['example']['target']
 for index,param in enumerate(first['params']):
     original=np.array(param);analytic=np.array(first['example']['gradients'][index]);fd=np.zeros_like(original)
     for ij in np.ndindex(original.shape):

@@ -29,6 +29,7 @@ def main():
     init=np.random.default_rng(42)
     params=[init.normal(0,.6,(4,4)),np.full(4,.2),init.normal(0,.5,(4,4)),np.zeros(4)]
     example=np.array([.1,.9,.1,.9]); lr=.08
+    x[0]=example  # The demonstrated image is one of the 128 training samples.
     snapshots=[]
     first=forward(params,example,0)
     # First update is the explained sample; later updates use shuffled training images.
@@ -46,7 +47,7 @@ def main():
         result=forward(params,sample,target)
         params=[a-lr*np.array(g) for a,g in zip(params,result['gradients'])]
     trace=dict(seed=2026,initialization_seed=42,learning_rate=lr,dtype='float64',classes=CLASSES,
-        prototypes=PROTOTYPES.tolist(),training_count=128,test_count=64,optimizer='single-example SGD',
+        prototypes=PROTOTYPES.tolist(),training_count=128,test_count=64,optimizer='single-example SGD',demonstrated_training_index=0,
         dataset_sha256=hashlib.sha256(x.tobytes()+y.tobytes()+test_x.tobytes()+test_y.tobytes()).hexdigest(),
         snapshots=snapshots)
     (ROOT/'trace.json').write_text(json.dumps(trace,indent=2)+'\n')
