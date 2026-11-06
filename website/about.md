@@ -2,6 +2,8 @@
 
 I'm **Sudarshan Balaji**, and this is my personal blog.
 
+Visit my [personal website](https://syudu41.github.io/home/).
+
 I write to make ideas clearer, working through machine learning, mathematics, and research with explanations, calculations, and visual examples.
 
 ## What I share
