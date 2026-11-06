@@ -8,23 +8,6 @@ These are TensorQuill's working criteria, informed by the references below. They
 
 The [3Blue1Brown neural-network lesson](https://www.3blue1brown.com/lessons/neural-networks/) motivates a concrete recognition problem, defines neurons and activations, and connects the visible network to its mathematical description. The [backpropagation lesson](https://www.3blue1brown.com/lessons/backpropagation/) develops intuition about an example before introducing the notation. The [calculus introduction](https://www.3blue1brown.com/lessons/essence-of-calculus/) develops a general idea through a concrete geometric problem. Our proposed flow draws on these approaches.
 
-## Audit of the first rendered samples
-
-The first samples were created to test the rendering and publication pipeline. Their existing reviews cover their original task requirements. This audit also asks whether they work as explanatory scenes.
-
-The table records that initial audit. The identity sample has since been replaced by a reviewed GIF that forms each product, identifies the matching cross terms, and collects them into the final expression.
-
-| Criterion | ManimML forward-pass sample | Identity figure |
-| --- | --- | --- |
-| Correct structure or expression | Pass: a 2–3–1 schematic, with no numerical prediction claim | Pass: exact algebraic check and LaTeX rendering |
-| Stable objects and focused highlighting | Pass: fixed layout, activation moves left to right | Static figure; animation is not its primary deliverable |
-| Meaning of visual elements | Partial: node and edge roles are described in the page text, but not labeled in the clip | The expression is visible, but has no geometric interpretation |
-| Mechanism explained | Partial: sequence is visible; weighted sums and activation functions are absent | No derivation or visual demonstration of the identity |
-| Connection from intuition to formalism | Absent | The formula is presented directly |
-| Pacing for a standalone explanation | Insufficient: 4.5 seconds illustrates a sequence, without time to teach the mechanism | Not assessed as a standalone explanation |
-
-Assessment: the network follows ManimML's basic animation flow. Neither sample yet demonstrates the full explanatory progression we want from 3Blue1Brown-inspired work. Rendering, typography, and mathematical checks passing do not establish that explanatory progression.
-
 ## Flow for explanatory animations
 
 Write a short storyboard before coding. For a standalone explanation, the usual progression is:
