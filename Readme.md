@@ -1,22 +1,14 @@
-# TensorQuill
+# Sudarshan's Blog
 
-TensorQuill is a project for explaining machine learning concepts through figures and animations for research and presentations. It draws on [ManimML](https://github.com/helblazer811/manimml) [<img src="docs/assets/icons/github.svg" alt="GitHub" width="16" height="16">](https://github.com/helblazer811/manimml) and the Manim Community Gallery.
+Sudarshan Balaji's personal blog about machine learning, mathematics, research, and ideas worth exploring.
 
-<img src="docs/assets/readme-cnn/visualization.gif" alt="TensorQuill CNN animation: receptive fields scan the input, feature maps form, and activations flow through dense layers to a prediction." width="900">
+[Visit the blog](https://syudu41.github.io/blog/) · [About](https://syudu41.github.io/blog/about/) · [Sample visualizations](https://syudu41.github.io/blog/samples/)
 
-**Work in progress** · Original TensorQuill animation made with Manim, inspired by [ManimML’s CNN showcase](https://github.com/helblazer811/ManimML#first-neural-network).
-
-> [!IMPORTANT]
-> This was done for the sole purpose of visualizing outputs / presentations!
-
-[About the project](https://syudu41.github.io/visualizer/about/) · [Sample visualizations](https://syudu41.github.io/visualizer/samples/)
-
-Edit website pages in `website/`, then build or preview:
+The website is built with Sphinx, MyST Markdown, and Furo. Edit its pages in `website/`, then build or preview locally:
 
 ```sh
 python3 scripts/website.py build
 python3 scripts/website.py preview
 ```
 
-See the [website editing guide](docs/website.md) for cards, pages, and setup.
-
+See the [website editing guide](docs/website.md) for setup and page editing. The repository also retains the source and review evidence for the visualization gallery.
