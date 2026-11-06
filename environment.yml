@@ -10,3 +10,5 @@ dependencies:
       - manim-ml==0.0.24
       # Manim 0.19's image camera is incompatible with Pillow 13.
       - Pillow==11.3.0
+      # Use the manylinux wheel compatible with the system C++ runtime.
+      - mapbox-earcut==1.0.3
