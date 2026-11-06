@@ -1,0 +1,18 @@
+{
+  "input": 4.1000000000000005,
+  "patch-and-kernel": 9.766666666666657,
+  "convolution-arithmetic": 14.599999999999984,
+  "relu-positive": 17.76666666666668,
+  "relu-negative": 20.40000000000005,
+  "scan-start": 23.56666666666682,
+  "scan-complete": 32.766666666667234,
+  "four-feature-maps": 38.56666666666701,
+  "pool-window": 43.20000000000019,
+  "pool-maximum": 46.766666666666765,
+  "second-convolution": 54.233333333333164,
+  "second-pooling": 59.49999999999967,
+  "flatten-and-classifier": 66.06666666666611,
+  "logits": 70.63333333333266,
+  "probabilities": 75.16666666666586,
+  "prediction-and-metrics": 79.79999999999914
+}

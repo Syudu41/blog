@@ -1,0 +1,36 @@
+{
+  "id": "mnist-cnn",
+  "title": "MNIST: inside a convolutional network",
+  "description": "Follow a handwritten digit through learned filters, pooling and classification.",
+  "alt": "A real MNIST digit passes through computed convolutional feature maps, ReLU, pooling and a ten-class prediction on a black background.",
+  "source": "scene.py",
+  "output": "output/visualization.mp4",
+  "thumbnail": "output/thumbnail.png",
+  "render": {
+    "scene": "Visualization",
+    "font": "Liberation Sans",
+    "seed": 2026,
+    "width": 1920,
+    "height": 1080,
+    "fps": 30,
+    "max_bytes": 30000000
+  },
+  "requirements": [
+    {
+      "id": "real-model",
+      "description": "Use the trained 4-filter / 8-filter CNN and real MNIST test image 0, with frozen weights, computed activations and reproducible provenance; no training depicted."
+    },
+    {
+      "id": "convolution",
+      "description": "Enlarge an actual patch and learned kernel, reveal products/sum/bias, ReLU including a negative example, and scan one full activation map with shared weights and zero padding."
+    },
+    {
+      "id": "pooling-and-classification",
+      "description": "Show all four first-layer maps, an exact 2x2 pooling maximum, channel-summed second convolution with eight maps, pooling, 392-feature flattening, ten logits, softmax probabilities, sample loss and measured test accuracy."
+    },
+    {
+      "id": "presentation",
+      "description": "Polished black-background technical animation, one focused calculation at a time, smooth motion, readable typography, LaTeX mathematics and Arial-family prose; 1080p30 H264 video and useful thumbnail. Short website description."
+    }
+  ]
+}

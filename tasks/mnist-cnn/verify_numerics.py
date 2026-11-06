@@ -43,7 +43,7 @@ def main(dataset=None):
     count = sum(data[key].size for key in data.files if 'weight' in key or 'bias' in key)
     assert count == metadata['parameter_count'] == 4266
     loss = float(np.logaddexp.reduce(values['logits'])-values['logits'][metadata['target']])
-    assert abs(loss-metadata['sample_cross_entropy']) < 1e-7
+    assert abs(loss-metadata['sample_cross_entropy']) < 1e-9
     assert values['probabilities'].argmax() == metadata['prediction'] == 7
     report = dict(trace_sha256=metadata['trace_sha256'], max_absolute_errors=errors,
                   independent_sample_cross_entropy=loss, parameter_count=count,

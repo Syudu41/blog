@@ -1,0 +1,37 @@
+{
+  "desktop": {
+    "initial": {
+      "x": 392,
+      "y": 144,
+      "width": 736,
+      "height": 414
+    },
+    "playing": {
+      "x": 392,
+      "y": 144,
+      "width": 736,
+      "height": 414
+    },
+    "errors": [],
+    "page_background": "rgb(255, 255, 255)",
+    "font": "Arial, Helvetica, sans-serif"
+  },
+  "mobile": {
+    "initial": {
+      "x": 16,
+      "y": 243,
+      "width": 358,
+      "height": 201.375
+    },
+    "playing": {
+      "x": 16,
+      "y": 243,
+      "width": 358,
+      "height": 201.375
+    },
+    "errors": [],
+    "page_background": "rgb(255, 255, 255)",
+    "font": "Arial, Helvetica, sans-serif"
+  },
+  "gallery_card_present": true
+}
