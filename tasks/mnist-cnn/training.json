@@ -1,0 +1,72 @@
+{
+  "seed": 2026,
+  "torch": "2.5.1+cpu",
+  "dataset_url": "https://storage.googleapis.com/tensorflow/tf-keras-datasets/mnist.npz",
+  "dataset_sha256": "731c5ac602752760c8e48fbffcf8c3b850d9dc2a2aedcf2cc48468fc17b673d1",
+  "preprocessing": "float32 pixel / 255; no augmentation",
+  "splits": {
+    "train": "original training indices 0:55000",
+    "validation": "original training indices 55000:60000",
+    "test": "original test split"
+  },
+  "optimizer": {
+    "name": "Adam",
+    "learning_rate": 0.001,
+    "batch_size": 128,
+    "epochs": 4
+  },
+  "parameter_count": 4266,
+  "test_index": 0,
+  "target": 7,
+  "prediction": 7,
+  "sample_cross_entropy": 1.0848103556782007e-05,
+  "history": [
+    {
+      "epoch": 1,
+      "training_cross_entropy": 0.6284534304272045,
+      "validation": {
+        "count": 5000,
+        "correct": 4720,
+        "accuracy": 0.944,
+        "cross_entropy": 0.2087884853363037
+      }
+    },
+    {
+      "epoch": 2,
+      "training_cross_entropy": 0.22034428009336646,
+      "validation": {
+        "count": 5000,
+        "correct": 4795,
+        "accuracy": 0.959,
+        "cross_entropy": 0.1357905679702759
+      }
+    },
+    {
+      "epoch": 3,
+      "training_cross_entropy": 0.15310225846333939,
+      "validation": {
+        "count": 5000,
+        "correct": 4836,
+        "accuracy": 0.9672,
+        "cross_entropy": 0.11013383207321167
+      }
+    },
+    {
+      "epoch": 4,
+      "training_cross_entropy": 0.12050465702685442,
+      "validation": {
+        "count": 5000,
+        "correct": 4856,
+        "accuracy": 0.9712,
+        "cross_entropy": 0.095807049369812
+      }
+    }
+  ],
+  "test": {
+    "count": 10000,
+    "correct": 9688,
+    "accuracy": 0.9688,
+    "cross_entropy": 0.10121101818606257
+  },
+  "trace_sha256": "e87605ee2ba6f4f3aa0ad921f4a67d93c6579de9955618b8df6b03a4eac45251"
+}
