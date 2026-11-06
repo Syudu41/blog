@@ -1,0 +1,44 @@
+{
+  "id": "pixel-pattern-mlp",
+  "title": "Four pixels, four predictions",
+  "description": "See a 4\u20134\u20134 network recognize a tiny pattern, then learn through backpropagation.",
+  "alt": "A black-background network connects four grayscale pixels to four ReLU neurons and four named pattern probabilities, with numerical weight matrices and an SGD update.",
+  "source": "scene.py",
+  "output": "output/visualization.mp4",
+  "thumbnail": "output/thumbnail.png",
+  "render": {
+    "scene": "Visualization",
+    "font": "Liberation Sans",
+    "seed": 2026,
+    "width": 1920,
+    "height": 1080,
+    "fps": 30,
+    "max_bytes": 35000000
+  },
+  "requirements": [
+    {
+      "id": "meaning",
+      "description": "Classify a synthetic 2x2 grayscale image as Vertical, Horizontal, Diagonal or Anti-diagonal. Define row-major input pixel order and class prototypes visually; identify probabilities as softmax outputs, not pixel intensities. Clearly label the toy task."
+    },
+    {
+      "id": "architecture",
+      "description": "Use a persistent native ManimML 4-input, 4-ReLU-hidden, 4-softmax-output network on black. Keep the actual pixel image, meaningful class glyphs and probability bars visible. Motion follows pixels to inputs, weighted sums to hidden activations, logits to probabilities."
+    },
+    {
+      "id": "weights",
+      "description": "Show both full numerical 4x4 weight matrices above the corresponding connection groups, row i as the incoming weight vector of neuron i. Match a highlighted row to its incoming edges. Signed edge color represents weight sign; width represents magnitude. Include both bias vectors. First-layer weights can be reshaped spatially; output weights cannot."
+    },
+    {
+      "id": "learning",
+      "description": "Show actual float64 first forward pass, cross-entropy against Vertical target, backpropagation through softmax and ReLU, one selected scalar gradient and simultaneous SGD update with learning rate 0.08. Replay the same image after that update, then actual saved training checkpoints through update 2048. Plot same-image loss and show held-out toy test counts. Distinguish gradients, weights and activations."
+    },
+    {
+      "id": "typography",
+      "description": "User override: Computer Modern Roman prose via LaTeX Tex; all math via MathTex. White CMR text on black with teal, pink and amber accents. No Pango prose in the video. Explain what is predicted, what the inputs represent, and what the outputs mean."
+    },
+    {
+      "id": "quality",
+      "description": "Network remains primary; supporting equations occupy a separate lower band. Smooth causal signals, stable object identities, focused highlights, readable complete numerical matrices, generous holds. Inspect actual transitions and final output, 1920x1080 30fps H264 video with a useful thumbnail. All displayed numbers must agree with trace.json and independent checks."
+    }
+  ]
+}

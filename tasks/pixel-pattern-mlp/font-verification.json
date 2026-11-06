@@ -1,0 +1,24 @@
+{
+  "status": "passed",
+  "evidence": "Recompiled the exact rendered headline and gradient LaTeX sources, retaining DVI to inspect embedded font names. Other scene prose and equations use the same templates.",
+  "samples": [
+    {
+      "type": "prose",
+      "tex_source_sha256": "dd6f2af9a6cee7a85dfc265f01a86935ad7ab836fcfb6e835371f663ff0d31cb",
+      "fonts": [
+        "cmr10"
+      ]
+    },
+    {
+      "type": "math",
+      "tex_source_sha256": "e58ad95ba24ae733829849a252b9ae7e3fc8ee7f75481075a62d7b6db9906b29",
+      "fonts": [
+        "cmmi10",
+        "cmmi7",
+        "cmr10",
+        "cmr7",
+        "cmsy10"
+      ]
+    }
+  ]
+}

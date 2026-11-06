@@ -1,0 +1,100 @@
+{
+  "status": "passed",
+  "frames_decoded": 3236,
+  "width": 1920,
+  "height": 1080,
+  "duration": 107.86666666666666,
+  "fps": 30.0,
+  "stage_frames": [
+    "problem",
+    "architecture-and-weights",
+    "selected-weight-vector",
+    "hidden-activations",
+    "initial-prediction",
+    "cross-entropy",
+    "backpropagation",
+    "selected-gradient",
+    "sgd-update",
+    "same-image-after-update",
+    "training-128",
+    "complete-network"
+  ],
+  "out_of_frame_objects": [],
+  "signals": [
+    {
+      "key": "pixel-to-selected-hidden",
+      "time": 15.23333333333331,
+      "reverse": false,
+      "count": 4
+    },
+    {
+      "key": "all-pixels-to-hidden",
+      "time": 22.53333333333337,
+      "reverse": false,
+      "count": 16
+    },
+    {
+      "key": "hidden-to-class-logits",
+      "time": 28.73333333333352,
+      "reverse": false,
+      "count": 12
+    },
+    {
+      "key": "output-error-backward",
+      "time": 44.666666666666764,
+      "reverse": true,
+      "count": 16
+    },
+    {
+      "key": "hidden-gradient-backward",
+      "time": 48.300000000000004,
+      "reverse": true,
+      "count": 12
+    },
+    {
+      "key": "replay-input-hidden",
+      "time": 60.033333333333125,
+      "reverse": false,
+      "count": 16
+    },
+    {
+      "key": "replay-hidden-output",
+      "time": 61.76666666666636,
+      "reverse": false,
+      "count": 12
+    },
+    {
+      "key": "checkpoint-32-forward",
+      "time": 73.99999999999929,
+      "reverse": false,
+      "count": 16
+    },
+    {
+      "key": "checkpoint-128-forward",
+      "time": 80.16666666666569,
+      "reverse": false,
+      "count": 16
+    },
+    {
+      "key": "checkpoint-512-forward",
+      "time": 86.33333333333209,
+      "reverse": false,
+      "count": 16
+    },
+    {
+      "key": "checkpoint-1024-forward",
+      "time": 92.4999999999985,
+      "reverse": false,
+      "count": 16
+    },
+    {
+      "key": "checkpoint-2048-forward",
+      "time": 98.6666666666649,
+      "reverse": false,
+      "count": 16
+    }
+  ],
+  "artifact_sha256": "8c7e725550305c739f9e4bde389024bb9d55b93d6a7ed8e3a5adb823a371aac9",
+  "font_evidence": "All prose uses Tex; all arithmetic, matrix entries and labels use MathTex. Default LaTeX article Computer Modern; no Text objects in scene.py.",
+  "layout_scope": "Recorded object bounds and explicit state checks plus separate human frame/motion review; bounds alone do not certify readability."
+}

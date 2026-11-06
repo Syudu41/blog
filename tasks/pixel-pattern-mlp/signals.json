@@ -1,0 +1,74 @@
+[
+  {
+    "key": "pixel-to-selected-hidden",
+    "time": 15.23333333333331,
+    "reverse": false,
+    "count": 4
+  },
+  {
+    "key": "all-pixels-to-hidden",
+    "time": 22.53333333333337,
+    "reverse": false,
+    "count": 16
+  },
+  {
+    "key": "hidden-to-class-logits",
+    "time": 28.73333333333352,
+    "reverse": false,
+    "count": 12
+  },
+  {
+    "key": "output-error-backward",
+    "time": 44.666666666666764,
+    "reverse": true,
+    "count": 16
+  },
+  {
+    "key": "hidden-gradient-backward",
+    "time": 48.300000000000004,
+    "reverse": true,
+    "count": 12
+  },
+  {
+    "key": "replay-input-hidden",
+    "time": 60.033333333333125,
+    "reverse": false,
+    "count": 16
+  },
+  {
+    "key": "replay-hidden-output",
+    "time": 61.76666666666636,
+    "reverse": false,
+    "count": 12
+  },
+  {
+    "key": "checkpoint-32-forward",
+    "time": 73.99999999999929,
+    "reverse": false,
+    "count": 16
+  },
+  {
+    "key": "checkpoint-128-forward",
+    "time": 80.16666666666569,
+    "reverse": false,
+    "count": 16
+  },
+  {
+    "key": "checkpoint-512-forward",
+    "time": 86.33333333333209,
+    "reverse": false,
+    "count": 16
+  },
+  {
+    "key": "checkpoint-1024-forward",
+    "time": 92.4999999999985,
+    "reverse": false,
+    "count": 16
+  },
+  {
+    "key": "checkpoint-2048-forward",
+    "time": 98.6666666666649,
+    "reverse": false,
+    "count": 16
+  }
+]

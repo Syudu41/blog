@@ -1,0 +1,19 @@
+{
+  "problem": 4.2,
+  "architecture-and-weights": 13.933333333333312,
+  "selected-weight-vector": 19.56666666666668,
+  "hidden-activations": 27.8333333333335,
+  "initial-prediction": 37.60000000000015,
+  "cross-entropy": 41.700000000000124,
+  "backpropagation": 49.966666666666605,
+  "selected-gradient": 54.399999999999885,
+  "sgd-update": 59.533333333333125,
+  "same-image-after-update": 67.63333333333287,
+  "training-1": 70.49999999999945,
+  "training-32": 76.66666666666585,
+  "training-128": 82.83333333333225,
+  "training-512": 88.99999999999865,
+  "training-1024": 95.16666666666505,
+  "training-2048": 101.99999999999812,
+  "complete-network": 105.86666666666477
+}
