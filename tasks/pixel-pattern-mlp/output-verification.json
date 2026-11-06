@@ -94,7 +94,7 @@
       "count": 16
     }
   ],
-  "artifact_sha256": "8c7e725550305c739f9e4bde389024bb9d55b93d6a7ed8e3a5adb823a371aac9",
+  "artifact_sha256": "ce1051276597c42b5b965ca292ddb76e905f871d60a2d39e5317399006682234",
   "font_evidence": "All prose uses Tex; all arithmetic, matrix entries and labels use MathTex. Default LaTeX article Computer Modern; no Text objects in scene.py.",
   "layout_scope": "Recorded object bounds and explicit state checks plus separate human frame/motion review; bounds alone do not certify readability."
 }

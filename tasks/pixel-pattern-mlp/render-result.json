@@ -155,5 +155,7 @@
     "backports.tarfile": "1.2.0",
     "scipy": "1.17.1",
     "pydub": "0.25.1"
-  }
+  },
+  "published_artifact_sha256": "ce1051276597c42b5b965ca292ddb76e905f871d60a2d39e5317399006682234",
+  "postprocess_report": "streaming-verification.json"
 }

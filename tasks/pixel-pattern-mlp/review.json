@@ -1,10 +1,10 @@
 {
   "status": "passed",
-  "reviewer": "Codex \u2014 independent numerical checks, final stage frames and sampled transitions",
+  "reviewer": "Codex \u2014 renewed media, numerical, frame-identity and visual review",
   "hashes": {
     "content.md": "fe0da70bd1a05c8c1c05928f65049ff3fd5809656ddb145e4d6d5b91fb34e818",
     "output/thumbnail.png": "a32999c3ae32dfbca891f12e502bbed087055863e7b5426834e7a7b699fd737c",
-    "output/visualization.mp4": "8c7e725550305c739f9e4bde389024bb9d55b93d6a7ed8e3a5adb823a371aac9",
+    "output/visualization.mp4": "ce1051276597c42b5b965ca292ddb76e905f871d60a2d39e5317399006682234",
     "requirements.md": "217b353876f717bdf127c6b6741ffc94c296fed266b321e4e285f88c540b1570",
     "scene.py": "b5a5b74db4f8d895561c9697f00358c1edbadd3353b233b9c9cabdd8226be85d",
     "task.json": "51ffe18f08e8e62233bf60d0e4ec1d81a80c06805676835f4f450e8f6072a11a"
@@ -38,11 +38,11 @@
   "checks": {
     "render_success": {
       "passed": true,
-      "evidence": "Final CLI render run20261106T180342Z-8f461d completed successfully. render-result.json records worker environment, source/requirements hashes in run request and passed media preflight. Commands and artifact hash are recorded in review.md."
+      "evidence": "Final CLI render run20261106T180342Z-8f461d completed successfully. render-result.json records worker environment, source/requirements hashes in run request and passed media preflight. Commands and artifact hash are recorded in review.md. The unchanged original render was subsequently packaged for web playback; streaming-verification.json records the operation, both hashes and full decoded-frame equivalence."
     },
     "output_integrity": {
       "passed": true,
-      "evidence": "Worker ffprobe and full ffmpeg decode passed H264/yuv420p,1920x1080,30fps. Independent PyAV decode counted3236 frames and107.867s. output-verification.json includes exact MP4 SHA256. Thumbnail is a downscaled final rendered frame."
+      "evidence": "streaming-verification.json: FFmpeg stream-copy moves moov before mdat without reencoding. All3236 decoded frame MD5 records, including timestamps, equal the original approved render. Independent ffmpeg and PyAV full decode passed;1920x1080,30fps,107.867s,H264/yuv420p. Current SHA256 ce1051276597c42b5b965ca292ddb76e905f871d60a2d39e5317399006682234."
     },
     "mathematics": {
       "passed": true,
@@ -58,7 +58,7 @@
     },
     "visual_review": {
       "passed": true,
-      "evidence": "12 final stage frames in four sheets and four sampled motion sequences inspected: stable architecture, separate lower equation band, focused row/edge highlights, causal forward and reverse pulses, final loss plot. output-verification.json records3236 decoded frames,1920x1080,30fps,107.867s. No recorded object bounds outside canvas. Final thumbnail derives from complete-network frame, not a mockup. Full public YouTube playback was blocked; only its public thumbnail was inspectable. The animation follows the visible black/CMR/color approach without claiming an exact timing match."
+      "evidence": "12 final stage frames in four sheets and four sampled motion sequences inspected: stable architecture, separate lower equation band, focused row/edge highlights, causal forward and reverse pulses, final loss plot. output-verification.json records3236 decoded frames,1920x1080,30fps,107.867s. No recorded object bounds outside canvas. Final thumbnail derives from complete-network frame, not a mockup. Full public YouTube playback was blocked; only its public thumbnail was inspectable. The animation follows the visible black/CMR/color approach without claiming an exact timing match. Rechecked hidden-activation, prediction, update, training and final stage sheets after lossless remux; all frames are identical to the original approved animation. No scene, explanation or typography changes."
     }
   }
 }

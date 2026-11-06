@@ -1,0 +1,63 @@
+{
+  "status": "passed",
+  "operation": "ffmpeg -map 0 -c copy -movflags +faststart",
+  "original_render": "tasks/pixel-pattern-mlp/runs/20261106T180342Z-8f461d",
+  "original_sha256": "8c7e725550305c739f9e4bde389024bb9d55b93d6a7ed8e3a5adb823a371aac9",
+  "optimized_sha256": "ce1051276597c42b5b965ca292ddb76e905f871d60a2d39e5317399006682234",
+  "decoded_frames_identical": true,
+  "frames_compared": 3236,
+  "framemd5_sha256": "ccd9668e210ede1ad90ac835dadd45974431ba8d6ba618ddaf310529a2d8b059",
+  "media": {
+    "format": "mp4",
+    "codec": "h264",
+    "width": 1920,
+    "height": 1080,
+    "fps": 30.0,
+    "duration": 107.866667,
+    "pixel_format": "yuv420p",
+    "bytes": 15321044
+  },
+  "mp4_boxes": [
+    {
+      "type": "ftyp",
+      "offset": 0,
+      "bytes": 32
+    },
+    {
+      "type": "moov",
+      "offset": 32,
+      "bytes": 38440
+    },
+    {
+      "type": "free",
+      "offset": 38472,
+      "bytes": 8
+    },
+    {
+      "type": "mdat",
+      "offset": 38480,
+      "bytes": 15282564
+    }
+  ],
+  "worker_integration_check": {
+    "status": "passed",
+    "scope": "Actual CLI render through updated worker; one-second scene, full media preflight and review-frame extraction.",
+    "mp4_box_order": [
+      "ftyp",
+      "moov",
+      "free",
+      "mdat"
+    ],
+    "media": {
+      "format": "mp4",
+      "codec": "h264",
+      "width": 320,
+      "height": 180,
+      "fps": 15.0,
+      "duration": 1.0,
+      "pixel_format": "yuv420p",
+      "bytes": 2702
+    },
+    "artifact_sha256": "9f4337c8287f22311ea276cc0875606440092812c4affd93658a7f7bfc8008e0"
+  }
+}

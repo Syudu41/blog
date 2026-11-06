@@ -1,7 +1,7 @@
 # Final review
 
 Approved artifact: 107.867 seconds, 1920 × 1080, 30 fps, H264/yuv420p.
-SHA256: `8c7e725550305c739f9e4bde389024bb9d55b93d6a7ed8e3a5adb823a371aac9`.
+Current web MP4 SHA256: `ce1051276597c42b5b965ca292ddb76e905f871d60a2d39e5317399006682234`.
 
 Commands:
 
@@ -21,3 +21,7 @@ Reviewed 12 final stage images in `review-frames/sheet-0.jpg` through `sheet-3.j
 The exact rendered headline and gradient LaTeX sources were recompiled with retained DVI in `/tmp/tensorquill-font-audit` to inspect font names. `font-verification.json` records source hashes and actual Computer Modern fonts. Other labels use the same templates. This video's CMR choice is the user's explicit override; website text remains unchanged.
 
 The supplied YouTube reference is *Convolutional Neural Networks*, Computational Thinking. Its public maximum-resolution thumbnail was inspected. YouTube blocked full playback and download with traffic/sign-in checks. The scene uses the visible black canvas, Computer Modern text and teal/pink numerical emphasis; no claim is made about unseen reference transitions. This example is a dense MLP, not a convolutional network.
+
+## Web streaming recheck
+
+The original approved MP4 stored its `moov` index after its video data. It was remuxed with FFmpeg `-map 0 -c copy -movflags +faststart`. No frames were re-encoded. The original and optimized files have identical FFmpeg `framemd5` output for all 3,236 frames and timestamps. The index is now ahead of the video data. `streaming-verification.json` records box offsets, hashes, codec, duration and full decode results. `output-verification.json` was regenerated from the optimized file; the numerical checks, 27 repository tests, stage images and original explanatory criteria still pass. The review hashes now refer to this exact optimized file. The renderer worker applies the same packaging to future MP4 outputs.

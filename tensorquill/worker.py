@@ -165,7 +165,9 @@ def render(request_path):
         external(["ffmpeg", "-v", "error", "-y", "-i", str(source), "-filter_complex",
                   f"fps={settings['fps']},split[a][b];[a]palettegen[p];[b][p]paletteuse", "-loop", "0", str(artifact)])
     else:
-        shutil.copyfile(source, artifact)
+        # Put the MP4 index before the video data for progressive web playback.
+        external(["ffmpeg", "-v", "error", "-y", "-i", str(source), "-map", "0",
+                  "-c", "copy", "-movflags", "+faststart", str(artifact)])
     media = inspect_media(artifact, settings)
     frames = review_images(artifact, settings, run, media)
     report = {
