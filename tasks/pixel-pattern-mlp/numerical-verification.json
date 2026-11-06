@@ -1,0 +1,19 @@
+{
+  "status": "passed",
+  "scalar_forward_max_error": 8.881784197001252e-16,
+  "finite_difference_max_error": 2.2710552882720947e-10,
+  "gradient_parameters_checked": 40,
+  "updates_replayed": 2048,
+  "test_metrics_recomputed": 7,
+  "initial_hidden": [
+    0.20962362601504114,
+    0.0,
+    0.21111973328341127,
+    0.3767047241945848
+  ],
+  "first_loss": 1.3842502539830583,
+  "after_loss": 1.3004500089026003,
+  "final_test_correct": 64,
+  "test_total": 64,
+  "scope": "Synthetic 2x2 patterns; test accuracy is not evidence about natural images."
+}
