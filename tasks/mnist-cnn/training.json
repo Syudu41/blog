@@ -19,7 +19,7 @@
   "test_index": 0,
   "target": 7,
   "prediction": 7,
-  "sample_cross_entropy": 1.0848103556782007e-05,
+  "sample_cross_entropy": 1.0921052123810965e-05,
   "history": [
     {
       "epoch": 1,
@@ -68,5 +68,5 @@
     "accuracy": 0.9688,
     "cross_entropy": 0.10121101818606257
   },
-  "trace_sha256": "e87605ee2ba6f4f3aa0ad921f4a67d93c6579de9955618b8df6b03a4eac45251"
+  "trace_sha256": "10495cd69b1ec51a77e20a38549296fb491e8bf72467f4af261e659e613f5f11"
 }

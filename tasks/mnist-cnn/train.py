@@ -83,6 +83,10 @@ def main(path):
     # Fixed index declared in advance, without searching for a favorable example.
     with torch.no_grad():
         trace = {k: v[0].numpy() for k, v in model.trace(test_x[:1]).items()}
+    # Display probabilities in float64: float32 rounds near-certain predictions
+    # enough to noticeably perturb a tiny -log(p) loss.
+    shifted = trace['logits'].astype(np.float64) - float(trace['logits'].max())
+    trace['probabilities'] = np.exp(shifted) / np.exp(shifted).sum()
     weights = {k.replace('.', '_'): v.detach().numpy() for k, v in model.state_dict().items()}
     np.savez_compressed(ROOT / 'trace.npz', **trace, **weights)
     test = evaluate(test_x, test_y)

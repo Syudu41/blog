@@ -1,5 +1,5 @@
 {
-  "trace_sha256": "e87605ee2ba6f4f3aa0ad921f4a67d93c6579de9955618b8df6b03a4eac45251",
+  "trace_sha256": "10495cd69b1ec51a77e20a38549296fb491e8bf72467f4af261e659e613f5f11",
   "max_absolute_errors": {
     "x": 0.0,
     "z1": 3.8344466268824817e-07,
@@ -10,7 +10,7 @@
     "p2": 6.891269164199798e-07,
     "flat": 6.891269164199798e-07,
     "logits": 1.0686599480891346e-06,
-    "probabilities": 7.29427038770325e-08
+    "probabilities": 4.436340184099663e-12
   },
   "independent_sample_cross_entropy": 1.0921047687517671e-05,
   "parameter_count": 4266,
