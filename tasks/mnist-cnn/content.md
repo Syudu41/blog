@@ -1,1 +1,1 @@
-Follow a handwritten digit through a trained CNN: learned filters build feature maps, pooling reduces their size, and a classifier produces ten digit probabilities. The animation uses a real MNIST test image and computed activations throughout.
+Follow an MNIST digit through convolution, pooling, flattening, and classification. Orange volumes show how receptive fields connect to output locations, while layer dimensions and computed values accompany the network.

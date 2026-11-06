@@ -1,56 +1,106 @@
 {
-  "sha256": "b252ae56d4d0c017dcfdf00e95fc8352a9ab5cc868de1a690ade3e1206a1f461",
+  "run": "20261106T171034Z-18cc16",
+  "sha256": "a5b339023089cae2e256b7ac6547f2e2f03d626ba409c1ffb657ca5a404c7370",
   "dimensions": [
     960,
     540
   ],
-  "frames": 1223,
-  "duration": 81.533,
   "fps": 15.0,
-  "bytes": 2299077,
-  "inspected_samples": 23,
-  "heatmap_pixel_95th_percentile_errors": {
-    "input-0": 1.0,
-    "scan-complete-0": 4.0,
-    "four-feature-maps-0": 5.849999999999909,
-    "four-feature-maps-1": 7.0,
-    "four-feature-maps-2": 7.0,
-    "four-feature-maps-3": 6.0,
-    "pool-maximum-0": 4.0,
-    "second-convolution-0": 4.0,
-    "second-convolution-1": 4.0,
-    "second-convolution-2": 4.0,
-    "second-convolution-3": 5.0,
-    "second-convolution-4": 5.0,
-    "second-convolution-5": 7.0,
-    "second-convolution-6": 6.0,
-    "second-convolution-7": 8.0,
-    "second-pooling-0": 4.0,
-    "second-pooling-1": 4.0,
-    "second-pooling-2": 3.5999999999999943,
-    "second-pooling-3": 3.0,
-    "second-pooling-4": 3.5999999999999943,
-    "second-pooling-5": 3.5999999999999943,
-    "second-pooling-6": 4.0,
-    "second-pooling-7": 3.0
+  "frames": 894,
+  "duration": 59.6,
+  "bytes": 2785326,
+  "inspected_samples": 27,
+  "native_layer_types": [
+    "Convolutional2DLayer",
+    "Convolutional2DLayer",
+    "MaxPooling2DLayer",
+    "Convolutional2DLayer",
+    "MaxPooling2DLayer",
+    "VGroup",
+    "FeedForwardLayer",
+    "VGroup"
+  ],
+  "native_channel_counts": [
+    1,
+    4,
+    4,
+    8,
+    8
+  ],
+  "physical_plane_sides": [
+    2.8559999999999994,
+    2.8559999999999994,
+    1.4279999999999997,
+    1.4279999999999997,
+    0.714
+  ],
+  "window_geometry_max_error": 1.7763568394002505e-15,
+  "live_readout_max_error": 0.0,
+  "header_bitmap_max_change": 0.06562576238106856,
+  "projected_filter_corner_pixel_distances": {
+    "convolution-1-motion-0.25": [
+      0.0,
+      0.0
+    ],
+    "convolution-1-motion-0.7": [
+      1.0,
+      0.0
+    ],
+    "pooling-1-motion-0.25": [
+      0.0,
+      1.0
+    ],
+    "pooling-1-motion-0.7": [
+      0.0,
+      0.0
+    ],
+    "convolution-2-motion-0.25": [
+      0.0,
+      0.0
+    ],
+    "convolution-2-motion-0.7": [
+      0.0,
+      0.0
+    ],
+    "pooling-2-motion-0.25": [
+      0.0,
+      0.0
+    ],
+    "pooling-2-motion-0.7": [
+      0.0,
+      0.0
+    ]
   },
-  "frame_bounds_passed": true,
+  "dense_winner_max_channel_error": 3.1500000000000057,
+  "projected_bounds_passed": true,
   "stages": {
-    "input": 4.133333333333335,
-    "patch-and-kernel": 9.866666666666656,
-    "convolution-arithmetic": 14.733333333333317,
-    "relu-positive": 17.86666666666665,
-    "relu-negative": 20.466666666666647,
-    "scan-start": 23.66666666666664,
-    "scan-complete": 32.86666666666662,
-    "four-feature-maps": 38.73333333333349,
-    "pool-window": 43.400000000000304,
-    "pool-maximum": 47.00000000000039,
-    "second-convolution": 54.4666666666673,
-    "second-pooling": 58.66666666666739,
-    "flatten-and-classifier": 65.33333333333427,
-    "logits": 69.93333333333415,
-    "probabilities": 74.46666666666735,
-    "prediction-and-metrics": 79.0666666666673
+    "architecture": 1.8666666666666667,
+    "convolution-1-origin": 4.600000000000002,
+    "convolution-1-start": 5.000000000000003,
+    "convolution-1": 15.599999999999968,
+    "conv1-channel-1": 17.06666666666663,
+    "conv1-channel-2": 17.46666666666663,
+    "conv1-channel-3": 17.866666666666628,
+    "four-channels": 18.533333333333292,
+    "pooling-1-origin": 20.399999999999952,
+    "pooling-1-start": 20.79999999999995,
+    "pooling-1": 25.93333333333327,
+    "convolution-2-origin": 28.59999999999993,
+    "convolution-2-start": 28.99999999999993,
+    "convolution-2": 35.600000000000065,
+    "conv2-channel-1": 36.93333333333344,
+    "conv2-channel-2": 37.06666666666678,
+    "conv2-channel-3": 37.20000000000012,
+    "conv2-channel-4": 37.33333333333346,
+    "conv2-channel-5": 37.4666666666668,
+    "conv2-channel-6": 37.600000000000136,
+    "conv2-channel-7": 37.733333333333476,
+    "eight-channels": 38.266666666666815,
+    "pooling-2-origin": 40.13333333333353,
+    "pooling-2-start": 40.53333333333353,
+    "pooling-2": 44.66666666666704,
+    "flatten": 48.20000000000048,
+    "dense": 52.46666666666727,
+    "complete-network": 57.60000000000072
   }
 }

@@ -1,124 +1,124 @@
-# MNIST CNN review evidence
+# Native ManimML CNN: final review
 
-## Computation and provenance
+The user requested a visual CNN with layers and metrics, then specifically asked
+for the ManimML/3Blue1Brown reference approach. Inspected the actual ManimML CNN
+and image-fed CNN GIFs and their native layer/filter source. The final scene uses
+ManimML Convolutional2DLayer, MaxPooling2DLayer, FeedForwardLayer and Filters.
+Upright translucent vector planes and coupled orange receptive-field volumes
+replace the mathematical slides and the unapproved tilted raster-stack experiment.
 
-The animation uses original MNIST test index 0 (target 7), declared before model
-training, with pixels divided by 255. The dataset archive SHA256 is recorded in
-training.json. Training uses original training indices 0:55000, validation
-55000:60000, seed 2026, CPU PyTorch 2.5.1, four epochs of Adam at 0.001, batch 128.
-All 4,266 weights and biases, the image and each intermediate tensor are retained
-in trace.npz. No training or update is depicted in the video.
+## Model and numerical evidence
 
-Commands:
+The trained model and frozen trace are unchanged. MNIST test image 0 has target 7;
+pixels are divided by 255. Training: original training indices 0:55000, validation
+55000:60000, seed 2026, four epochs of Adam at0.001,batch128. Original test split:
+10000 images. Trace and training metadata hashes are asserted before rendering.
 
-```sh
-.venv/render/bin/python tasks/mnist-cnn/train.py /tmp/tensorquill-mnist.npz
-.venv/render/bin/python tasks/mnist-cnn/verify_numerics.py /tmp/tensorquill-mnist.npz
-```
+Re-ran verify_numerics.py against the original dataset archive. Independent
+float64 NumPy reconstruction verifies padded cross-correlations, channel sums,
+biases, ReLU, both max pools, flattening, logits and softmax. Maximum tensor
+error from float32 inference:1.069e-6; probabilities:4.44e-12. Independently
+reconstructed full-test evaluation reproduces9688/10000 correct (96.88%) and
+mean cross-entropy0.1012110182. Sample confidence rounds to99.9989%; sample
+cross-entropy rounds to1.0921e-5. See numerical-verification.json and training.json.
 
-An independent float64 NumPy implementation reconstructs both cross-correlations
-(including zero padding, biases and channel sums), ReLU, both max pools, flatten,
-linear logits and softmax. The largest absolute tensor discrepancy from the
-float32 training framework is 1.069e-6; probability discrepancy is 4.44e-12.
-Independent sample cross-entropy is 1.09210477e-5. Exported-logit float64 display
-cross-entropy is 1.09210521e-5; both round to the displayed 1.0921e-5.
-A separately reconstructed model reproduces 9,688 correct predictions out of
-10,000 test examples (96.88%) and test mean cross-entropy 0.1012110182.
-See numerical-verification.json and training.json for actual values and splits.
+Native blue planes communicate channel geometry and operation state. They do
+not pretend to be per-pixel activation heatmaps. The input grayscale, flattened
+activation bands, live scalar responses and output probabilities use actual
+saved data. Uniform plane colors therefore carry no fabricated numerical claim.
 
-## Draft inspection and corrections
+## Draft inspection
 
-The successful 960x540, 15 fps draft was fully decoded: 1,223 frames, 81.533 s.
-Twenty-three samples covered every teaching hold, four scan positions and three
-transitions. Feature-map pixel comparisons passed for all first/second-layer
-channels and pooling outputs (95th-percentile channel error at most 8/255).
-The coding agent inspected all six draft contact sheets at 960px per frame.
+Inspected layout previews against ManimML's actual reference frames, followed by
+all seven native draft contact sheets (27 samples at960px/frame). Corrected a
+native dense-layer z-order issue before the movie: nodes are above the black
+surrounding rectangle. Reduced camera perspective so projected planes have
+safe margins, and separated the compact Flatten/Dense labels. Live readouts are
+initialized to the actual origin response, and padded windows are positioned
+correctly before they fade in. Initial and final response holds allow reading.
 
-Corrections incorporated before the final render:
-
-- Remove the kernel and multiplication symbol after revealing products, so the
-  transition does not imply applying the kernel twice.
-- Enlarge the ReLU result into two readable lines below the weighted sum.
-- Show flattening as a single-column representation of all 392 activations.
-- Give the second pooling its own heading and caption; remove the first-layer
-  context when focusing on pooling the eight second-layer channels.
-- Avoid misleading negative-zero numerical labels in rounded matrices.
-
-Manim 0.19's image camera failed with Pillow 13; environment.yml now pins the
-compatible Pillow 11.3.0. Heatmap raster dimensions are equalized for interpolation
-between different spatial resolutions while preserving nearest-neighbor pixels.
-These were rendering failures, not accepted output; successful media is reviewed
-separately below.
+Draft checks verify actual native types, channel counts, physical plane sides,
+window dimensions, stride/padding, per-channel pooling, all live responses,
+rendered orange field positions and winner-node visibility. A zero-extent
+ValueTracker point is not rendered; it was excluded from projected-object bounds.
+This was a review-record correction, not ignored clipping of a visible object.
 
 ## Final render and review
-
-Final native render command:
 
 ```sh
 TENSORQUILL_TEX_BIN=/home/lab335a/Sudarshan/Research-PhD/visualizer/.venv/tex/bin/x86_64-linux \
 python3 -m tensorquill render tasks/mnist-cnn --python .venv/render/bin/python --preset final --timeout 1500
 .venv/render/bin/python tasks/mnist-cnn/checks.py
+.venv/render/bin/python tasks/mnist-cnn/verify_numerics.py /tmp/tensorquill-mnist.npz
 ```
 
-Run 20261106T161023Z-e2dd07 exited successfully and played 88 Manim animations.
-The complete MP4 decodes to 2,469 frames, 1920x1080, 30 fps, 82.3 seconds,
-H264/yuv420p, 5,351,408 bytes. SHA256:
-`b8a718496b3f475898f5308a7a0386f1975c817ae7bf20d9453b736b55f9bc45`.
-The reviewer inspected all six final contact sheets (review-stages-1..6.png),
-23 samples at 960px per frame: all teaching holds, four moving scan positions,
-and three transitions. Also inspected the enlarged ReLU frame separately.
+Run20261106T171538Z-6a0d52 exited0,85animations. Complete media decode:
+1806frames,1920x1080,30fps,H264/yuv420p,60.2seconds,6284349bytes.
+SHA256:2d986b2ec95219c2572d4cc7e15634936064b06c7867fffed85a643ed0a3e51f.
 
-checks.py independently verifies the enlarged convolution and pooling result,
-all probability-bar values, ordering of the teaching stages, safe object bounds,
-pure black frame corners, full media decoding, and actual heatmap pixels for
-all four first-layer channels, all eight second-layer channels and pooled maps.
-The worst 95th-percentile channel discrepancy is 6/255. A once-per-second bitmap
-check of the constant title shows under 1% thresholded pixel change, confined
-to codec edge variation. All these checks passed; see review-verification.json.
-The thumbnail is extracted from the completed four-feature-map hold.
+The reviewer inspected all seven final sheets (review-stages-1..7.png), including
+27 teaching holds, motion samples and transitions, plus the640x360 thumbnail.
+The thumbnail is an actual convolution-motion frame containing the complete CNN
+and its orange receptive-field connection. It is not an unrendered concept image.
 
-### Explanatory assessment
+Actual checks in review-verification.json:
 
-The image and target establish a concrete recognition question. A receptive-field
-highlight becomes the normalized patch; learned weights produce nine products,
-then a sum with bias. The separately enlarged ReLU result follows the sum;
-a negative response elsewhere is explicitly distinguished from this selected
-positive response. The scanning input and output highlights maintain spatial
-correspondence and build the computed channel. Four maps generalize the single
-kernel operation. Pooling highlights an actual maximum, then second-convolution
-notation explicitly sums over all four channels. Eight computed channels are
-pooled before their 392 values are reshaped into a single-column display.
-Logits precede softmax, and sample loss is separate from full-test-set accuracy.
+- Native types and counts match the model:1,4,4,8,8 feature planes; ten native dense
+  nodes;392flattened activations; ten output probabilities. All eight stages stay
+  in fixed positions throughout. Shapes and operation settings remain above them.
+- Physical plane sides are2.856,2.856,1.428,1.428,0.714 units. Each pool halves the
+  preceding spatial side while retaining the same channel count.
+- Independently derived input/output window centers and sizes match recorded
+  native geometry within1.78e-15 units. Convolution uses stride1,padding1; pooling
+  uses stride2 and matching channels. Conv2 spans all four incoming planes.
+- Every live response matches its saved tensor entry exactly. Origin-frame values
+  were also inspected:0.2259 for Conv1/Pool1,0.0000 for Conv2,0.0020 for Pool2.
+  Motion samples show changing coordinates and responses, e.g. Conv1(19,11)=0.2322
+  and Pool2(4,5)=0.9594, consistent with the trace after rounding.
+- At eight motion samples, a visible orange border is found exactly at projected
+  input/output field corner pixels (0-pixel nearest distance). Native 3D lighting
+  affects intensity, so this check uses hue and geometric distance, not flat RGB.
+- Dense winner-node channel discrepancy is0.8/255. Softmax bar widths match the
+  true probabilities subject only to a subpixel minimum for near-zero bars.
+- Complete media decode, codec/dimensions/fps/file size, pure black corners and
+  projected camera bounds passed. Header bitmap variation is3.21%, attributable
+  to codec edge changes; layer positions and label content are fixed.
 
-Objects remain stable inside each explanation; caption changes fade sequentially.
-The revised ReLU is readable, labels have whitespace, and no overlays obscure the
-feature maps. All numerical annotations and equations use MathTex; prose is
-Liberation Sans. Holds provide reading time and the final prediction is held for
-five seconds. The video is an original TensorQuill inference explanation; no
-training, backpropagation, or filter-semantics claim is implied.
+## Explanatory and typography assessment
 
-A first browser review caught native paused controls obscuring the lowest
-caption. Captions were moved up to scene y=-2.85, followed by a complete new
-render, re-decoding, all numerical/color/layout checks and inspection of all 23
-current samples. This review covers the revised artifact above.
+The full native CNN is the primary visual throughout, matching the reference's
+upright plane language and moving receptive-field connections. A first-filter
+scan establishes convolution; remaining filter planes are highlighted in turn.
+Pooling's one-channel connections are visibly different from Conv2's four-channel
+volume. Smaller native planes communicate downsampling. A populated value vector,
+fan-in signals, ten native dense nodes and output bars complete the forward pass.
+Metrics and live scalar responses support the architecture without replacing it
+with derivations. Prediction, sample cross-entropy and test accuracy are distinct.
 
-Website integration is checked after the approved local publication build and
-before committing and deploying; results are in website-verification.json.
+Inspected initial/final holds and motion at960px/frame. Labels have safe projected
+margins, the native nodes remain visible, captions fade sequentially, and compact
+annotations remain above playback buttons. Mathematical labels/values use LaTeX
+including native MathTex/Integer/DecimalNumber glyphs; prose is Liberation Sans.
+Native LaTeX/font preflight passed. Black video and white website are retained.
 
-## Website verification
+Website integration is checked after approved local publication and before commit
+and deployment. Results are recorded in website-verification.json.
 
-Strict Sphinx/Furo build and published-artifact integrity check passed. All 27
-repository tests passed. Playwright/Chrome played the revised video at desktop
-and mobile sizes: the player stayed 736x414 and 358x201.375 pixels respectively
-before and during playback, with no overflow, media errors or page exceptions.
-The page remains white with Arial/Helvetica prose, the gallery card exists, and
-no download links appear. Inspected review-website.png: the raised caption sits
-above the native paused playback buttons. Fullscreen remains available for the
-technical annotations. Reproduce with:
+## Website and repository checks
+
+Strict Sphinx/Furo build and published-artifact integrity check passed. All27
+repository tests passed against the combined cleanup and native CNN revision.
+Browser QA played the actual new MP4 and waited for playback progress and settled
+seeking. The Furo article contains the revised short explanation. Desktop player
+remains736x414 and mobile358x201.375 before/during playback, with no media/page
+errors or horizontal overflow. White background and Arial/Helvetica prose remain.
+The CNN card exists and the redundant old forward-pass card is absent. Native
+nodownload controls remain; no download links appear. Inspected the updated
+review-website.png with the full native network and final metrics.
 
 ```sh
 python3 scripts/website.py build
-.venv/website/bin/python tasks/mnist-cnn/check_website.py
 .venv/website/bin/python -m unittest discover -s tests
 .venv/website/bin/python scripts/visualization_workflow.py check
+.venv/website/bin/python tasks/mnist-cnn/check_website.py
 ```

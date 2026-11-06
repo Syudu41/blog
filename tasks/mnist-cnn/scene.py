@@ -1,372 +1,264 @@
-"""An original, numerically grounded MNIST CNN explanation on a black canvas."""
+"""MNIST CNN with native ManimML layers and coupled receptive-field volumes."""
 import hashlib
 import json
 from pathlib import Path
+from types import SimpleNamespace
 
 import numpy as np
-from manim import (Scene, Group, VGroup, Text, MathTex, ImageMobject, Rectangle,
-    RoundedRectangle, Line, Arrow, Dot, FadeIn, FadeOut, Transform,
-    TransformFromCopy, Create, LaggedStart, ValueTracker, SurroundingRectangle,
-    interpolate_color, ManimColor, WHITE, BLACK, LEFT, RIGHT, UP, DOWN, config,
-    smooth, linear)
+from manim import (ThreeDScene, VGroup, Group, Text, MathTex, DecimalNumber, Integer,
+    ImageMobject, Rectangle, Polygon, Line, Dot, FadeIn, FadeOut, Create, Transform,
+    LaggedStart, MoveAlongPath, ValueTracker, AnimationGroup, interpolate_color,
+    ManimColor, WHITE, BLACK, LEFT, UP, DEGREES, config, linear, smooth)
+import manim_ml
+from manim_ml.neural_network import Convolutional2DLayer, MaxPooling2DLayer, FeedForwardLayer
+from manim_ml.neural_network.layers.convolutional_2d_to_convolutional_2d import Filters, get_rotated_shift_vectors
 
-ROOT = Path(__file__).resolve().parent
-TRACE_SHA256 = '10495cd69b1ec51a77e20a38549296fb491e8bf72467f4af261e659e613f5f11'
-TRAINING_SHA256 = '9a09dd13dd37c43fdde4c473cedd61bdb6576ed5cec6c569ac6e1b562634cce9'
-CYAN = '#55d9ec'
-AMBER = '#ffbf69'
-VIOLET = '#b59aff'
-MUTED = '#9aa8bc'
-BORDER = '#344253'
+ROOT=Path(__file__).resolve().parent
+TRACE_SHA256='10495cd69b1ec51a77e20a38549296fb491e8bf72467f4af261e659e613f5f11'
+TRAINING_SHA256='9a09dd13dd37c43fdde4c473cedd61bdb6576ed5cec6c569ac6e1b562634cce9'
+BLUE='#58c4dd';ORANGE='#ff9f43';GRAY='#a8b1bd';LINE='#536779'
 
 
-def load_trace():
-    assert hashlib.sha256((ROOT / 'trace.npz').read_bytes()).hexdigest() == TRACE_SHA256
-    return dict(np.load(ROOT / 'trace.npz'))
+def text(words,size=24,color=WHITE):
+    return Text(words,font='Liberation Sans',font_size=size,color=color)
 
 
-def prose(text, size=24, color=WHITE):
-    return Text(text, font='Liberation Sans', font_size=size, color=color)
+def tex(source,size=28,color=WHITE):
+    return MathTex(source,font_size=size,color=color)
 
 
-def math(text, size=30, color=WHITE):
-    return MathTex(text, font_size=size, color=color)
+def input_pixels(layer,values):
+    """Place true grayscale pixels on the native layer's rotated input face."""
+    corners=layer.feature_maps[0].get_corners_dict()
+    tl=corners['top_left'].get_center();tr=corners['top_right'].get_center();bl=corners['bottom_left'].get_center()
+    right=(tr-tl)/28;down=(bl-tl)/28
+    pixels=VGroup()
+    for row,col in np.argwhere(values>0):
+        origin=tl+row*down+col*right
+        color=ManimColor(np.full(3,float(values[row,col])))
+        pixels.add(Polygon(origin,origin+right,origin+right+down,origin+down,
+            stroke_width=0,fill_color=color,fill_opacity=1,shade_in_3d=False))
+    return pixels
 
 
-def rgb(values, scale=1, color=CYAN, grayscale=False):
-    values = np.clip(np.asarray(values) / max(float(scale), 1e-12), 0, 1)
-    if grayscale:
-        return np.repeat((values[..., None] * 255).astype(np.uint8), 3, axis=2)
-    base = np.array([5, 11, 18])
-    high = np.array(ManimColor(color).to_rgb()) * 255
-    return (base + values[..., None] * (high-base)).astype(np.uint8)
-
-
-def texture(values, scale=1, color=CYAN, grayscale=False):
-    pixels = rgb(values, scale, color, grayscale)
-    # Equal raster dimensions allow smooth transforms between 28/14/7-cell maps.
-    return np.repeat(np.repeat(pixels, 112//len(values), axis=0), 112//len(values), axis=1)
-
-
-class Tile(Group):
-    def __init__(self, values, width, center, scale=1, color=CYAN, grayscale=False):
-        super().__init__()
-        self.values = np.array(values)
-        self.n = len(values)
-        self.side = width
-        self.scale_value = scale
-        self.tint = color
-        self.grayscale = grayscale
-        self.image = ImageMobject(texture(values, scale, color, grayscale)).set_resampling_algorithm(0)
-        self.image.set_width(width).move_to(center)
-        self.frame = Rectangle(width=width, height=width, stroke_color=color,
-                               stroke_width=1.2).move_to(center)
-        self.add(self.image, self.frame)
-
-    def point(self, row, col):
-        return self.image.get_center() + np.array([(col/self.n-.5)*self.side,
-                                                   (.5-row/self.n)*self.side, 0])
-
-    def window(self, row, col, size, color=AMBER):
-        return Rectangle(width=self.side/self.n*size, height=self.side/self.n*size,
-            stroke_color=color, stroke_width=2.5, fill_opacity=.08, fill_color=color
-            ).move_to(self.point(row+size/2, col+size/2)).set_z_index(5)
-
-
-def matrix(values, center, side=1.85, size=23, tint=CYAN):
-    group = VGroup()
-    rows, cols = values.shape
-    for r in range(rows):
-        for c in range(cols):
-            position = np.array(center)+[(c-(cols-1)/2)*side/cols,
-                                        ((rows-1)/2-r)*side/rows, 0]
-            cell = Rectangle(width=side/cols, height=side/rows,
-                             stroke_color=BORDER, stroke_width=1,
-                             fill_color='#101923', fill_opacity=1).move_to(position)
-            display = 0.0 if abs(values[r,c]) < .005 else values[r,c]
-            label = math(f'{display:.2f}', size, AMBER if display<0 else tint).move_to(position)
-            if label.width > side/cols*.87:
-                label.scale_to_fit_width(side/cols*.87)
-            group.add(VGroup(cell, label))
-    return group
-
-
-class Visualization(Scene):
-    def mark(self, name, hold=1.0):
-        self.wait(hold/2)
-        self.stages[name] = float(self.time)
-        self.layout[name] = [dict(bounds=[float(m.get_left()[0]), float(m.get_right()[0]),
-            float(m.get_bottom()[1]), float(m.get_top()[1])]) for m in self.mobjects
-            if m.width > 0 and m.height > 0]
+class Visualization(ThreeDScene):
+    def mark(self,name,hold=1):
+        self.wait(hold/2);self.stages[name]=float(self.time)
+        layers=[]
+        for i,layer in enumerate(self.layers):
+            maps=getattr(layer,'feature_maps',[])
+            layers.append(dict(name=self.names[i],type=type(layer).__name__,shape=self.shapes[i],
+                center=layer.get_center().tolist(),maps=len(maps),nodes=[n.get_center().tolist() for n in getattr(layer,'node_group',[])],
+                map_corners=[{k:v.get_center().tolist() for k,v in m.get_corners_dict().items()} for m in maps],
+                bounds=[float(layer.get_left()[0]),float(layer.get_right()[0]),float(layer.get_bottom()[1]),float(layer.get_top()[1])]))
+        projected=[]
+        for m in self.mobjects:
+            points=m.get_all_points()
+            if len(points) and (m.width>0 or m.height>0):
+                p=self.camera.project_points(points)
+                projected.append([float(p[:,0].min()),float(p[:,0].max()),float(p[:,1].min()),float(p[:,1].max())])
+        self.layouts[name]=dict(layers=layers,bounds=projected)
         self.wait(hold/2)
 
-    def change(self, number, title, caption):
-        heading = prose(title, 26).move_to([-6.45, 2.63, 0], aligned_edge=LEFT)
-        footer = prose(caption, 21, MUTED).move_to([0, -2.85, 0])
-        if footer.width > 12.7:
-            footer.scale_to_fit_width(12.7)
-        self.play(FadeOut(self.heading), FadeOut(self.footer), run_time=.22)
-        self.heading, self.footer = heading, footer
-        self.play(FadeIn(heading, shift=UP*.06), FadeIn(footer),
-                  self.progress.animate.stretch_to_fit_width(number*1.97).move_to(
-                      [-5.91+number*.985, -3.8, 0]), run_time=.45)
+    def say(self,caption,metric):
+        new=text(caption,21,GRAY).move_to([0,-2.92,0])
+        if new.width>12.7:new.scale_to_fit_width(12.7)
+        value=tex(metric,27,ORANGE).move_to([0,2.98,0])
+        if value.width>12.8:value.scale_to_fit_width(12.8)
+        self.play(FadeOut(self.caption),FadeOut(self.metric),run_time=.18)
+        self.caption,self.metric=new,value
+        self.play(FadeIn(new),FadeIn(value),run_time=.32)
 
-    def clear_content(self):
-        keep = [self.title, self.brand, self.rule, self.heading, self.footer,
-                self.track, self.progress]
-        leaving = [m for m in self.mobjects if m not in keep]
-        if leaving:
-            self.play(*(FadeOut(m) for m in leaving), run_time=.55)
+    def clear_readout(self):
+        if self.readout:
+            self.play(FadeOut(self.readout),run_time=.25)
+        self.readout=VGroup()
+
+    def light(self,index,color=BLUE):
+        layer=self.layers[index]
+        if hasattr(layer,'feature_maps'):
+            self.play(*(m.animate.set_color(color) for m in layer.feature_maps),run_time=.45)
+        else:self.play(layer.animate.set_color(color),run_time=.45)
+
+    def scan(self,source_index,target_index,key,channel,seconds,name,pool=False):
+        source=self.layers[source_index];target=self.layers[target_index]
+        if pool:
+            a=SimpleNamespace(feature_maps=VGroup(source.feature_maps[channel]),cell_width=source.cell_width)
+            b=SimpleNamespace(feature_maps=VGroup(target.feature_maps[channel]),cell_width=target.cell_width,
+                filter_size=(2,2),filter_color=ORANGE,padding=(0,0))
+            volume=Filters(a,b,cell_width=source.cell_width,show_grid_lines=True,stroke_width=1.6)
+        else:
+            volume=Filters(source,target,cell_width=source.cell_width,show_grid_lines=True,
+                stroke_width=1.6,output_feature_map_to_connect=channel)
+        volume.add(volume.input_rectangles,volume.connective_lines,volume.output_rectangles)
+        volume.set_z_index(6)
+        bases_in=[m.get_center().copy() for m in volume.input_rectangles]
+        bases_out=[m.get_center().copy() for m in volume.output_rectangles]
+        right,down=get_rotated_shift_vectors(source)
+        out_right,out_down=get_rotated_shift_vectors(target)
+        n=self.data[key].shape[1];stride=2 if pool else 1;padding=0 if pool else 1
+        for window,base in zip(volume.input_rectangles,bases_in):window.move_to(base-padding*(right+down))
+        volume.connective_lines.become(volume.make_connective_lines())
+        route=[(r,c) for r in range(n) for c in (range(n) if r%2==0 else range(n-1,-1,-1))]
+        tracker=ValueTracker(0)
+        labels=VGroup(tex(f'c={channel}',24,ORANGE).move_to([-3.6,-2.05,0]),
+            tex('i=',24,GRAY).move_to([-2,-2.05,0]),tex('j=',24,GRAY).move_to([-.5,-2.05,0]),
+            tex('a=',24,BLUE).move_to([1.15,-2.05,0]))
+        row_number=Integer(0,font_size=25,color=WHITE).move_to([-1.45,-2.05,0])
+        col_number=Integer(0,font_size=25,color=WHITE).move_to([.05,-2.05,0])
+        number=DecimalNumber(float(self.data[key][channel,0,0]),num_decimal_places=4,font_size=29,color=BLUE).move_to([2.35,-2.05,0])
+        self.readout=VGroup(labels,row_number,col_number,number)
+        self.play(FadeIn(self.readout),FadeIn(volume),run_time=.45)
+        self.mark(name+'-origin',.9)
+        self.stages[name+'-start']=float(self.time)
+        def update(m):
+            f=float(np.clip(tracker.get_value(),0,len(route)-1));i=int(f);j=min(i+1,len(route)-1);t=f-i
+            r,c=np.array(route[i])*(1-t)+np.array(route[j])*t
+            shift=(stride*r-padding)*down+(stride*c-padding)*right
+            for window,base in zip(m.input_rectangles,bases_in):window.move_to(base+shift)
+            for window,base in zip(m.output_rectangles,bases_out):window.move_to(base+r*out_down+c*out_right)
+            m.connective_lines.become(m.make_connective_lines())
+            ir,ic=route[i];value=float(self.data[key][channel,ir,ic])
+            row_number.set_value(ir).move_to([-1.45,-2.05,0]);col_number.set_value(ic).move_to([.05,-2.05,0])
+            number.set_value(value).move_to([2.35,-2.05,0])
+            # Runtime positions and values are retained for independent geometry/media review.
+            self.trace_samples.append(dict(time=float(self.time),scan=name,key=key,channel=channel,
+                row=ir,col=ic,value=value,input_centers=[x.get_center().tolist() for x in m.input_rectangles],
+                output_centers=[x.get_center().tolist() for x in m.output_rectangles],
+                input_corners=[{k:v.get_center().tolist() for k,v in w.get_corners_dict().items()} for w in m.input_rectangles],
+                output_corners=[{k:v.get_center().tolist() for k,v in w.get_corners_dict().items()} for w in m.output_rectangles],
+                input_base=[x.tolist() for x in bases_in],output_base=[x.tolist() for x in bases_out],
+                position=[float(r),float(c)],input_step_right=right.tolist(),input_step_down=down.tolist(),
+                output_step_right=out_right.tolist(),output_step_down=out_down.tolist(),stride=stride,padding=padding))
+        # Flag the changing number glyphs so Cairo refreshes them during filter motion.
+        for value in (row_number,col_number,number):value.add_updater(lambda m:None)
+        volume.add_updater(update);self.add(tracker)
+        self.play(tracker.animate.set_value(len(route)-1),run_time=seconds,rate_func=linear)
+        volume.clear_updaters()
+        for value in (row_number,col_number,number):value.clear_updaters()
+        self.mark(name,1.2)
+        self.play(FadeOut(volume),run_time=.35);self.remove(tracker)
+        self.clear_readout()
+
+    def save_evidence(self):
+        run=Path(config.media_dir).parent
+        evidence=dict(trace_sha256=TRACE_SHA256,training_sha256=TRAINING_SHA256,
+            parameter_counts=[0,40,0,296,0,0,3930,0],
+            camera=dict(focal_distance=float(self.camera.get_focal_distance()),rotation_matrix=self.camera.get_rotation_matrix().tolist()),
+            probabilities=[dict(class_id=k,p=p,width=float(bar.width),center=bar.get_center().tolist()) for k,(bar,p,y) in enumerate(self.output_bars)],
+            samples=self.trace_samples,layer_style='native ManimML vector feature maps and Filters',
+            color_meaning='blue planes depict layers; orange volumes depict receptive fields, not fabricated activations')
+        for name,value in [('stages.json',self.stages),('layout.json',self.layouts),('detail.json',evidence)]:
+            (run/name).write_text(json.dumps(value,indent=2)+'\n')
 
     def construct(self):
-        self.camera.background_color = BLACK
-        d = load_trace()
-        assert hashlib.sha256((ROOT/'training.json').read_bytes()).hexdigest() == TRAINING_SHA256
-        metadata = json.loads((ROOT/'training.json').read_text())
-        self.stages = {}
-        self.layout = {}
-        self.title = prose('MNIST / inside a convolutional network', 32)
-        self.title.move_to([-6.45, 3.42, 0], aligned_edge=LEFT)
-        self.brand = prose('TensorQuill', 17, MUTED).move_to([5.83, 3.43, 0])
-        self.rule = Line([-6.45, 2.98, 0], [6.45, 2.98, 0], color=BORDER, stroke_width=1)
-        self.track = Line([-5.91, -3.8, 0], [5.91, -3.8, 0], color=BORDER, stroke_width=2)
-        self.progress = Rectangle(width=.02, height=.025, fill_color=CYAN,
-                                  fill_opacity=1, stroke_width=0).move_to([-5.9,-3.8,0])
-        self.heading = VGroup()
-        self.footer = VGroup()
-        self.add(self.title, self.brand, self.rule, self.track, self.progress)
-        self.change(1, '01 / A real image, a fixed model', 'Frozen learned weights. One held-out image. A complete forward pass.')
-        image = Tile(d['x'][0], 3.65, [-3.65,-.15,0], color=WHITE, grayscale=True)
-        input_shape = math(r'1\times28\times28', 30, CYAN).move_to([-3.65,-2.4,0])
-        question = prose('Which digit is this?', 35).move_to([2.5,1.17,0])
-        intro = VGroup(math(r'x_{ij}=\mathrm{pixel}_{ij}/255',31).move_to([2.5,.25,0]),
-                       math(r'y=7',34,AMBER).move_to([2.5,-.65,0]),
-                       prose('Held-out MNIST image',20,MUTED).move_to([2.5,-1.48,0]))
-        self.play(FadeIn(image, shift=UP*.1), FadeIn(input_shape), run_time=1.1)
-        self.play(FadeIn(question), FadeIn(intro), run_time=.8)
-        self.mark('input', 3.0)
+        self.camera.background_color=BLACK
+        self.set_camera_orientation(focal_distance=100)
+        assert hashlib.sha256((ROOT/'trace.npz').read_bytes()).hexdigest()==TRACE_SHA256
+        assert hashlib.sha256((ROOT/'training.json').read_bytes()).hexdigest()==TRAINING_SHA256
+        self.data=d=dict(np.load(ROOT/'trace.npz'));self.meta=json.loads((ROOT/'training.json').read_text())
+        self.stages={};self.layouts={};self.trace_samples=[];self.readout=VGroup()
+        manim_ml.config.three_d_config.rotation_angle=65*DEGREES
+        self.names=['Input','Conv 1 + ReLU','Pool 1','Conv 2 + ReLU','Pool 2','Flatten','Dense','Softmax']
+        self.shapes=[[1,28,28],[4,28,28],[4,14,14],[8,14,14],[8,7,7],[392],[10],[10]]
+        cell=.102;spacing=.16
+        style=dict(cell_width=cell,filter_spacing=spacing,color=BLUE,fill_opacity=.12,stroke_width=1.6)
+        native=[Convolutional2DLayer(1,28,3,**style),Convolutional2DLayer(4,28,3,**style),
+            MaxPooling2DLayer(kernel_size=2,stride=2,**{k:v for k,v in style.items() if k!='fill_opacity'}),
+            Convolutional2DLayer(8,14,3,**style),
+            MaxPooling2DLayer(kernel_size=2,stride=2,**{k:v for k,v in style.items() if k!='fill_opacity'})]
+        for i,layer in enumerate(native):layer.construct_layer(native[i-1] if i else None,native[i+1] if i<4 else None)
+        xs=[-6.0,-4.1,-2.15,.1,2.35,3.85,4.85,6.05]
+        for layer,x in zip(native,xs):layer.move_to([x,-.08,0])
+        for layer in native:
+            for plane in layer.feature_maps:
+                # Invisible grid strokes do not need hundreds of renderable line objects.
+                rectangle=plane.exterior_rectangle if hasattr(plane,'exterior_rectangle') else plane
+                rectangle[1].set_opacity(0)
+        native[0].feature_maps[0].exterior_rectangle.rectangle.set_fill(BLACK,opacity=1)
+        self.pixels=input_pixels(native[0],d['x'][0]);native[0].feature_maps[0].add(self.pixels)
+        flat=VGroup(Rectangle(width=.12,height=2.5,stroke_color=BLUE,stroke_width=1.5).move_to([xs[5],-.08,0]))
+        self.feature_bands=VGroup()
+        maximum=float(d['p2'].max())
+        for i,value in enumerate(d['flat']):
+            color=interpolate_color(ManimColor('#101923'),ManimColor(BLUE),float(value)/maximum)
+            self.feature_bands.add(Line([xs[5]-.043,1.16-i*2.48/392,0],[xs[5]+.043,1.16-i*2.48/392,0],color=color,stroke_width=.6))
+        dense=FeedForwardLayer(10,node_radius=.073,node_spacing=.25,node_color=BLUE,
+            rectangle_color=WHITE,rectangle_fill_color=BLACK,rectangle_stroke_width=1.4,node_stroke_width=1.7)
+        dense.construct_layer(None,None);dense.move_to([xs[6],-.08,0]);dense.node_group.set_z_index(3)
+        output=VGroup();self.output_bars=[]
+        for k,p in enumerate(d['probabilities']):
+            y=1.045-k*.25
+            label=tex(str(k),18,GRAY).move_to([5.6,y,0])
+            rail=Line([5.82,y,0],[6.7,y,0],color=LINE,stroke_width=1)
+            bar=Rectangle(width=.002,height=.095,stroke_width=0,fill_color=BLUE,fill_opacity=1).move_to([5.821,y,0])
+            output.add(label,rail,bar);self.output_bars.append((bar,float(p),y))
+        self.layers=[*native,flat,dense,output]
+        headers=VGroup();settings=[r'x/255',r'3\times3,\ s=1,\ p=1',r'2\times2,\ s=2',r'3\times3,\ s=1,\ p=1',r'2\times2,\ s=2',r'0\ \mathrm{params}',r'\mathrm{linear}',r'0\ \mathrm{params}']
+        for i,(name,shape,x,spec) in enumerate(zip(self.names,self.shapes,xs,settings)):
+            label=text(name,21).move_to([x,2.45,0])
+            limit=.88 if i>=5 else 1.9
+            if label.width>limit:label.scale_to_fit_width(limit)
+            dim=tex(r'\times'.join(map(str,shape)),25,BLUE).move_to([x,2.05,0])
+            if dim.width>1.85:dim.scale_to_fit_width(1.85)
+            setting=tex(spec,19,GRAY).move_to([x,1.67,0])
+            limit=1.05 if i>=5 else 1.9
+            if setting.width>limit:setting.scale_to_fit_width(limit)
+            headers.add(label,dim,setting)
+        title=text('MNIST / through a convolutional network',32).move_to([-6.5,3.58,0],aligned_edge=LEFT)
+        self.add(title,text('TensorQuill',16,GRAY).move_to([5.9,3.58,0]),headers,*self.layers)
+        self.caption=VGroup();self.metric=VGroup()
+        self.say('Orange volumes connect receptive fields to their output locations.',r'4266\ \mathrm{learned\ parameters}\qquad y=7')
+        if config.save_last_frame:
+            self.add(self.feature_bands)
+            for k,node in enumerate(reversed(dense.node_group)):node.set_fill(BLUE,opacity=.85 if k==int(d['logits'].argmax()) else .12)
+            for bar,p,y in self.output_bars:bar.stretch_to_fit_width(max(.002,.88*p)).move_to([5.82+max(.002,.88*p)/2,y,0])
+            self.final_summary(animate=False);self.mark('complete-network',.1);self.save_evidence();return
+        self.mark('architecture',2.7)
+        self.say('Each filter reuses its weights across the image.',r'\mathrm{Conv\ 1:}\quad40\ \mathrm{params}\qquad a_{\max}='+f'{float(d["a1"].max()):.4f}')
+        self.scan(0,1,'a1',0,10.0,'convolution-1')
+        # The first filter's detailed scan establishes the operation; other filters
+        # are highlighted in turn without pretending they share the same values.
+        for channel in (1,2,3):
+            native[1].feature_maps[channel].set_color(ORANGE)
+            self.mark(f'conv1-channel-{channel}',.45)
+            native[1].feature_maps[channel].set_color(BLUE)
+        self.mark('four-channels',1)
+        self.say('Pool each channel independently. A local maximum becomes one output.',
+            r'\mathrm{Pool\ 1:}\quad28\times28\to14\times14\qquad\max(p_{0,:,:})='+f'{float(d["p1"][0,12,5]):.4f}')
+        self.scan(1,2,'p1',0,4.5,'pooling-1',pool=True)
+        self.say('This receptive field spans all four incoming channels.',
+            r'\mathrm{Conv\ 2:}\quad296\ \mathrm{params}\qquad a_{\max}='+f'{float(d["a2"].max()):.4f}')
+        self.scan(2,3,'a2',0,6.0,'convolution-2')
+        for channel in range(1,8):
+            native[3].feature_maps[channel].set_color(ORANGE)
+            self.mark(f'conv2-channel-{channel}',.23)
+            native[3].feature_maps[channel].set_color(BLUE)
+        self.mark('eight-channels',1)
+        self.say('The channel count stays eight; each spatial side is halved.',
+            r'\mathrm{Pool\ 2:}\quad8\times14\times14\to8\times7\times7')
+        self.scan(3,4,'p2',0,3.5,'pooling-2',pool=True)
+        self.say('Unfold the pooled stack into one feature vector.',r'\mathrm{Flatten:}\quad8\cdot7\cdot7=392\ \mathrm{values}')
+        self.play(FadeIn(self.feature_bands),run_time=.9);self.mark('flatten',1.6)
+        self.say('Every class score combines the same pooled feature vector.',
+            r'\mathrm{Dense:}\quad392\times10+10=3930\ \mathrm{params}\qquad\ell_7='+f'{float(d["logits"][7]):.4f}')
+        fan=VGroup(*(Line(flat.get_right(),node.get_left(),color=GRAY,stroke_width=.7) for node in dense.node_group))
+        self.add(fan);dots=VGroup(*(Dot(edge.get_start(),radius=.025,color=ORANGE) for edge in fan));self.add(dots)
+        self.play(LaggedStart(*(MoveAlongPath(dot,edge) for dot,edge in zip(dots,fan)),lag_ratio=.05),run_time=1.5)
+        self.remove(dots,*dots)
+        self.play(*(node.animate.set_fill(BLUE,opacity=.85 if k==int(d['logits'].argmax()) else .12) for k,node in enumerate(reversed(dense.node_group))),run_time=.6)
+        self.mark('dense',1.6)
+        self.say('Normalize the logits into digit probabilities.',r'p_7='+f'{float(d["probabilities"][7])*100:.4f}'+r'\%\qquad\hat y=7')
+        self.play(*(bar.animate.stretch_to_fit_width(max(.002,.88*p)).move_to([5.82+max(.002,.88*p)/2,y,0]) for bar,p,y in self.output_bars),run_time=1)
+        self.final_summary();self.mark('complete-network',4.0);self.save_evidence()
 
-        self.clear_content()
-        self.change(2, '02 / One kernel, one receptive field', 'Patch and weights are displayed rounded; calculations retain full precision.')
-        channel = 0
-        row, col = np.unravel_index(np.argmax(d['a1'][channel,2:-2,2:-2]),(24,24))
-        row, col = int(row+2), int(col+2)
-        patch = d['x'][0,row-1:row+2,col-1:col+2]
-        weights = d['conv1_weight'][channel,0]
-        z = float(d['z1'][channel,row,col])
-        bias = float(d['conv1_bias'][channel])
-        self.detail = dict(channel=channel,row=row,col=col,patch=patch.tolist(),
-                           kernel=weights.tolist(),bias=bias,z=z)
-        image = Tile(d['x'][0], 2.8, [-4.8,.12,0], color=WHITE, grayscale=True)
-        window = image.window(row-1,col-1,3)
-        pixels = matrix(patch,[-1.47,.3,0])
-        kernel = matrix(weights,[1.45,.3,0])
-        names = VGroup(prose('Input patch',21).move_to([-1.47,1.7,0]),
-                       prose('Learned kernel',21).move_to([1.45,1.7,0]),
-                       math(r'K_0',24,AMBER).move_to([1.45,2.12,0]),
-                       math(r'\odot',37,MUTED).move_to([0,.3,0]))
-        output_box = RoundedRectangle(width=2.15,height=1.9,corner_radius=.12,
-                            stroke_color=CYAN,stroke_width=1.3).move_to([4.85,.3,0])
-        output = VGroup(prose('Weighted sum',20,MUTED).move_to([4.85,.85,0]),
-                        math(f'z={z:.4f}',29,CYAN).move_to([4.85,.2,0]))
-        arrow = Arrow([2.6,.3,0],[3.6,.3,0],buff=.05,color=AMBER,stroke_width=2)
-        self.play(FadeIn(image),Create(window),run_time=.7)
-        self.play(TransformFromCopy(window,pixels),FadeIn(kernel),FadeIn(names),run_time=1.1)
-        self.mark('patch-and-kernel',2.2)
-        products = matrix(patch*weights,[0,.3,0],tint=CYAN)
-        product_name=prose('Elementwise products',20).move_to([0,1.7,0])
-        self.play(Transform(pixels,products),Transform(names[0],product_name),
-                  FadeOut(kernel),FadeOut(names[1]),FadeOut(names[2]),FadeOut(names[3]),run_time=1.1)
-        equation=math(r'z_{0,'+str(row)+','+str(col)+r'}=\sum_{u,v}x_{'+str(row)+r'+u-1,'+str(col)+r'+v-1}K_{0,u,v}+b_0',27)
-        equation.move_to([0,-1.8,0])
-        evaluated=math(r'\sum(x\odot K_0)'+f'{bias:+.4f}={z:.4f}',29,CYAN).move_to([0,-2.4,0])
-        self.play(FadeIn(equation),FadeIn(evaluated),Create(arrow),Create(output_box),FadeIn(output),run_time=.9)
-        self.mark('convolution-arithmetic',3.5)
-        relu=VGroup(math(r'\mathrm{ReLU}(z)',28,MUTED).move_to([4.85,-1.12,0]),
-                    math(f'a={z:.4f}',30,CYAN).move_to([4.85,-1.75,0]))
-        self.play(FadeIn(relu),run_time=.6)
-        self.mark('relu-positive',1.7)
-        negative=float(d['z1'][channel].min())
-        negative_note=math(r'\mathrm{Elsewhere:}\quad z='+f'{negative:.4f}'+r'\quad\xrightarrow{\mathrm{ReLU}}\quad0',28,AMBER).move_to([0,-2.4,0])
-        self.play(Transform(evaluated,negative_note),run_time=.7)
-        self.mark('relu-negative',2.2)
-
-        self.clear_content()
-        self.change(2,'02 / Shared weights build a feature map', 'Stride one, zero padding one. The same learned kernel is reused at every location.')
-        image=Tile(d['x'][0],3.65,[-4.15,-.05,0],color=WHITE,grayscale=True)
-        feature=Tile(np.zeros((28,28)),3.65,[4.15,-.05,0],scale=float(d['a1'].max()))
-        labels=VGroup(prose('Input',23).move_to([-4.15,2.05,0]),
-                      prose('Activation / channel',23).move_to([3.8,2.05,0]),math('0',24,CYAN).move_to([5.55,2.05,0]),
-                      math(r'1\times28\times28',25,MUTED).move_to([-4.15,-2.35,0]),
-                      math(r'28\times28',25,CYAN).move_to([4.15,-2.35,0]))
-        icon=matrix(weights,[0,.65,0],side=1.25,size=17)
-        kernel_label=math(r'K_0',28,AMBER).move_to([0,1.65,0])
-        operation=math(r'\sum(x\odot K_0)+b_0',23).move_to([0,-.55,0])
-        operation2=math(r'\downarrow\ \mathrm{ReLU}',25,CYAN).move_to([0,-1.17,0])
-        self.play(FadeIn(image),FadeIn(feature),FadeIn(labels),FadeIn(icon),FadeIn(kernel_label),FadeIn(operation),FadeIn(operation2),run_time=.8)
-        positions=[(r,c) for r in range(28) for c in (range(28) if r%2==0 else range(27,-1,-1))]
-        tracker=ValueTracker(0)
-        def current():
-            f=np.clip(tracker.get_value(),0,783);a=int(f);b=min(783,a+1);t=f-a
-            return (1-t)*np.array(positions[a])+t*np.array(positions[b])
-        scan=image.window(-1,-1,3)
-        scan.add_updater(lambda m:m.become(image.window(*(current()-1),3)))
-        cursor=Rectangle(width=3.65/28,height=3.65/28,color=AMBER,stroke_width=2).set_z_index(6)
-        cursor.add_updater(lambda m:m.move_to(feature.point(*(current()+.5))))
-        reveal=np.zeros((28,28))
-        def update_feature(m):
-            count=int(tracker.get_value())+1
-            reveal[:]=0
-            for r,c in positions[:count]:reveal[r,c]=d['a1'][0,r,c]
-            new=ImageMobject(texture(reveal,float(d['a1'].max()))).set_resampling_algorithm(0)
-            new.set_width(3.65).move_to(feature.image)
-            m.become(new)
-        feature.image.add_updater(update_feature)
-        self.add(scan,cursor)
-        self.stages['scan-start']=float(self.time)
-        self.play(tracker.animate.set_value(783),run_time=8.5,rate_func=linear)
-        for obj in (scan,cursor,feature.image):obj.clear_updaters()
-        self.mark('scan-complete',1.4)
-        self.play(FadeOut(scan),FadeOut(cursor),run_time=.35)
-
-        self.clear_content()
-        self.change(2,'02 / Four filters, four activation maps', 'Each channel is computed with its own learned kernel; all maps share one brightness scale.')
-        maps=[]
-        for c,x in enumerate((-4.8,-1.6,1.6,4.8)):
-            tile=Tile(d['a1'][c],2.35,[x,.25,0],scale=float(d['a1'].max()))
-            label=math(f'c={c}',25,CYAN).move_to([x,1.9,0])
-            maps.append(tile)
-            self.play(FadeIn(tile,shift=UP*.12),FadeIn(label),run_time=.45)
-        dimension=math(r'4\times28\times28',32,CYAN).move_to([0,-1.6,0])
-        legend=prose('Heatmaps: black = zero; brighter = stronger activation',19,MUTED).move_to([0,-2.35,0])
-        self.play(FadeIn(dimension),FadeIn(legend),run_time=.5)
-        self.mark('four-feature-maps',2.2)
-
-        self.clear_content()
-        self.change(3,'03 / Pool locally, preserve the strongest response', 'Each non-overlapping window becomes one value. Channels remain separate.')
-        source=Tile(d['a1'][0],3.45,[-4.55,.1,0],scale=float(d['a1'].max()))
-        pr,pc=row//2,col//2
-        selected=source.window(pr*2,pc*2,2)
-        pool_values=d['a1'][0,pr*2:pr*2+2,pc*2:pc*2+2]
-        numbers=matrix(pool_values,[-.45,.35,0],side=1.9,size=28)
-        dest=Tile(d['p1'][0],2.45,[4.55,.1,0],scale=float(d['a1'].max()))
-        dest_window=dest.window(pr,pc,1)
-        desc=VGroup(math(r'28\times28',27,MUTED).move_to([-4.55,-2.12,0]),
-                    math(r'2\times2',25,AMBER).move_to([-.45,1.9,0]),
-                    math(r'14\times14',27,CYAN).move_to([4.55,-1.64,0]))
-        arrow=Arrow([.9,.35,0],[3.15,.35,0],buff=.12,color=AMBER,stroke_width=2)
-        self.play(FadeIn(source),Create(selected),FadeIn(desc),run_time=.65)
-        self.play(TransformFromCopy(selected,numbers),run_time=.85)
-        self.mark('pool-window',1.5)
-        winner=int(pool_values.argmax())
-        highlight=SurroundingRectangle(numbers[winner],buff=.03,color=AMBER,stroke_width=2)
-        result=math(r'\max='+f'{float(pool_values.max()):.4f}',30,CYAN).move_to([-.45,-1.35,0])
-        self.play(Create(highlight),FadeIn(result),Create(arrow),run_time=.7)
-        self.play(FadeIn(dest),TransformFromCopy(highlight,dest_window),run_time=.9)
-        self.mark('pool-maximum',2.5)
-        self.detail.update(pool_row=pr,pool_col=pc,pool_values=pool_values.tolist())
-
-        self.clear_content()
-        self.change(4,'04 / Combine channels, learn richer responses', 'Each output channel sums across all four input channels, then applies ReLU.')
-        first=[];second=[]
-        for c in range(4):
-            x=-5.25+(c%2)*1.55;y=.83-(c//2)*1.8
-            tile=Tile(d['p1'][c],1.28,[x,y,0],scale=float(d['a1'].max()))
-            first.append(tile)
-        for c in range(8):
-            x=.5+(c%4)*1.78;y=.83-(c//4)*1.8
-            tile=Tile(d['a2'][c],1.28,[x,y,0],scale=float(d['a2'].max()),color=VIOLET)
-            second.append(tile)
-        formula=math(r'z_{k,i,j}=b_k+\sum_{c=0}^{3}\sum_{u,v}K_{k,c,u,v}\,p_{c,i+u-1,j+v-1}',25).move_to([.4,1.97,0])
-        arrow=Arrow([-2.8,0,0],[-.6,0,0],buff=.12,color=AMBER,stroke_width=2)
-        name=math(r'3\times3',26,AMBER).move_to([-1.72,.6,0])
-        shapes=VGroup(math(r'4\times14\times14',27,CYAN).move_to([-4.48,-2.3,0]),
-                      math(r'8\times14\times14',27,VIOLET).move_to([3.17,-2.3,0]))
-        self.play(*(FadeIn(t) for t in first),FadeIn(formula),FadeIn(shapes[0]),run_time=.8)
-        self.play(Create(arrow),FadeIn(name),run_time=.65)
-        self.play(LaggedStart(*(FadeIn(t,shift=RIGHT*.15) for t in second),lag_ratio=.13),FadeIn(shapes[1]),run_time=2)
-        self.mark('second-convolution',3.0)
-        pooled=[]
-        for c,tile in enumerate(second):
-            pooled.append(Tile(d['p2'][c],1.28,tile.get_center(),scale=float(d['a2'].max()),color=VIOLET))
-        newshape=math(r'8\times7\times7',27,VIOLET).move_to(shapes[1])
-        poolnote=math(r'\mathrm{MaxPool}\ (2\times2,\ s=2)',28,VIOLET).move_to([1,1.97,0])
-        self.play(FadeOut(formula),FadeOut(name),FadeOut(arrow),
-                  *(FadeOut(t) for t in first),FadeOut(shapes[0]),run_time=.35)
-        self.change(4,'04 / Reduce spatial size, retain eight channels',
-                    'Max pooling halves each spatial dimension independently in every channel.')
-        pooling_explanation=VGroup(math(r'14\times14\ \longrightarrow\ 7\times7',28,VIOLET).move_to([-4.3,.5,0]),
-            prose('One maximum per window',20,MUTED).move_to([-4.3,-.5,0]))
-        self.play(FadeIn(pooling_explanation),run_time=.4)
-        self.play(*(Transform(t,p) for t,p in zip(second,pooled)),Transform(shapes[1],newshape),FadeIn(poolnote),run_time=1.3)
-        self.mark('second-pooling',2.0)
-
-        self.clear_content()
-        self.change(5,'05 / Flatten spatial responses into a feature vector', 'Flattening changes the shape, not the values. The classifier learns a weight for every feature.')
-        tiles=[]
-        for c in range(8):
-            x=-5+(c%4)*1.32;y=.7-(c//4)*1.45
-            tiles.append(Tile(d['p2'][c],1.05,[x,y,0],scale=float(d['a2'].max()),color=VIOLET))
-        shape=math(r'8\times7\times7',30,VIOLET).move_to([-3.03,-2.12,0])
-        feature_strip=ImageMobject(rgb(d['flat'].reshape(392,1),float(d['a2'].max()),VIOLET)).set_resampling_algorithm(0)
-        feature_strip.set_height(3.6).stretch_to_fit_width(.45).move_to([.8,-.1,0])
-        strip_border=SurroundingRectangle(feature_strip,buff=.03,color=VIOLET,stroke_width=1)
-        arrow=Arrow([-1.1,0,0],[.3,0,0],buff=.1,color=AMBER,stroke_width=2)
-        flatlabel=math(r'f\in\mathbb R^{392}',30,VIOLET).move_to([.8,-2.38,0])
-        dense=VGroup(math(r'\ell=Wf+b',34).move_to([4.1,.8,0]),
-                     math(r'W\in\mathbb R^{10\times392}',28,MUTED).move_to([4.1,-.1,0]),
-                     math(r'\ell\in\mathbb R^{10}',30,CYAN).move_to([4.1,-1.03,0]))
-        self.play(*(FadeIn(t) for t in tiles),FadeIn(shape),run_time=.7)
-        self.play(Create(arrow),FadeIn(feature_strip),Create(strip_border),FadeIn(flatlabel),run_time=1.3)
-        self.play(FadeIn(dense),run_time=.8)
-        self.mark('flatten-and-classifier',3.0)
-
-        self.clear_content()
-        self.change(6,'06 / Ten logits become a prediction', 'Softmax probabilities describe this image. Test accuracy summarizes the full held-out test set.')
-        thumbnail=Tile(d['x'][0],1.65,[-4.9,.8,0],color=WHITE,grayscale=True)
-        prediction=VGroup(prose('Prediction',24,MUTED).move_to([-4.9,-.5,0]),
-                          math('7',70,CYAN).move_to([-4.9,-1.35,0]),
-                          math(r'y=7',26,AMBER).move_to([-4.9,-2.27,0]))
-        table_header=VGroup(prose('Digit',18,MUTED).move_to([-2.6,1.9,0]),
-                            prose('Logit',18,MUTED).move_to([-1.35,1.9,0]),
-                            prose('Probability',18,MUTED).move_to([1.0,1.9,0]))
-        rows=VGroup();bars=VGroup();labels=VGroup()
-        probability_positions=[]
-        for c in range(10):
-            y=1.43-c*.385
-            color=CYAN if c==7 else MUTED
-            rows.add(math(str(c),23,color).move_to([-2.6,y,0]),
-                     math(f'{float(d["logits"][c]):.2f}',22,color).move_to([-1.35,y,0]))
-            track=Line([-.25,y,0],[2.0,y,0],stroke_color='#24303d',stroke_width=10)
-            p=float(d['probabilities'][c])
-            bar=Rectangle(width=max(.001,2.25*p),height=.095,fill_opacity=1,
-                          fill_color=CYAN if c==7 else '#5a6b82',stroke_width=0)
-            bar.move_to([-.25+max(.001,2.25*p)/2,y,0])
-            bars.add(VGroup(track,bar))
-            if c==7:
-                text=f'{100*p:.4f}'+r'\%'
-            else:
-                exponent=int(np.floor(np.log10(p)));mantissa=p/10**exponent
-                text=f'{mantissa:.2f}'+r'\times10^{'+str(exponent)+'}'
-            labels.add(math(text,20,color).move_to([3.0,y,0]))
-            probability_positions.append(dict(class_id=c,p=p,bar_length=2.25*p))
-        softmax=math(r'p_k=\frac{e^{\ell_k}}{\sum_j e^{\ell_j}}',28).move_to([5.2,1.17,0])
-        loss=float(-np.log(d['probabilities'][7]))
-        loss_label=VGroup(prose('Sample cross-entropy',18,MUTED).move_to([5.2,-.15,0]),
-                         math(r'-\log p_7',28).move_to([5.2,-.68,0]),
-                         math(r'\approx'+f'{loss/1e-5:.4f}'+r'\times10^{-5}',25,CYAN).move_to([5.2,-1.22,0]))
-        metrics=VGroup(prose('Test accuracy',18,MUTED).move_to([5.2,-1.95,0]),
-                       math(f'{metadata["test"]["accuracy"]*100:.2f}'+r'\%',31,CYAN).move_to([5.2,-2.43,0]))
-        self.play(FadeIn(thumbnail),FadeIn(table_header),FadeIn(rows),run_time=.8)
-        self.mark('logits',2.0)
-        self.play(FadeIn(softmax),LaggedStart(*(FadeIn(b) for b in bars),lag_ratio=.07),FadeIn(labels),run_time=1.6)
-        self.play(FadeIn(prediction),run_time=.7)
-        self.mark('probabilities',2.5)
-        self.play(FadeIn(loss_label),FadeIn(metrics),run_time=.9)
-        self.mark('prediction-and-metrics',5.0)
-        run=Path(config.media_dir).parent
-        (run/'stages.json').write_text(json.dumps(self.stages,indent=2)+'\n')
-        (run/'layout.json').write_text(json.dumps(self.layout,indent=2)+'\n')
-        (run/'detail.json').write_text(json.dumps(dict(**self.detail,probability_bars=probability_positions,
-            display_scales=dict(a1=float(d['a1'].max()),a2=float(d['a2'].max())),
-            sample_loss=loss,trace_sha256=TRACE_SHA256),indent=2)+'\n')
+    def final_summary(self,animate=True):
+        meta=self.meta
+        summary=VGroup(text('Prediction',18,GRAY).move_to([-4.1,-1.95,0]),
+            tex(r'7\quad(99.9989\%)',30,BLUE).move_to([-4.1,-2.38,0]),
+            text('Cross-entropy',18,GRAY).move_to([0,-1.95,0]),
+            tex(r'1.0921\times10^{-5}',29,BLUE).move_to([0,-2.38,0]),
+            text('Test accuracy',18,GRAY).move_to([4.1,-1.95,0]),
+            tex(f'{meta["test"]["accuracy"]*100:.2f}'+r'\%',30,BLUE).move_to([4.1,-2.38,0]))
+        if animate:self.play(FadeIn(summary),run_time=.8)
+        else:self.add(summary)

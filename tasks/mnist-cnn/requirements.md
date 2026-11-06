@@ -1,59 +1,78 @@
-# MNIST: inside a convolutional network
+# MNIST CNN: ManimML layer and receptive-field representation
 
-Audience: technical and ML viewers. Requested: a polished CNN animation on a black
-video background, with correct numbers and a short website description.
+The user rejected the mathematical slide layout and the subsequent tilted raster
+thumbnail stacks. The requested reference is ManimML's actual CNN showcase.
+Use its native vector Convolutional2DLayer, MaxPooling2DLayer, FeedForwardLayer
+and Filters objects: upright translucent channel planes, moving gridded input
+windows, and orange connective volumes ending at corresponding output locations.
+The complete CNN must be the dominant, persistent visual, with readable shapes,
+settings and measured metrics above it. Black video background; short page prose.
 
 ## Mathematical contract
 
-Real MNIST test image at fixed index 0. Normalize pixels by 255. Train on original
-training indices 0:55000, validate on 55000:60000, and evaluate once on the original
-10000-image test split. Fixed seed 2026, four epochs of Adam, learning rate 0.001,
-batch size 128. No training or weight update is depicted in this inference video.
+Keep the immutable trained trace (trace.npz SHA256
+10495cd69b1ec51a77e20a38549296fb491e8bf72467f4af261e659e613f5f11).
+MNIST test index0,target7,pixels/255. The original training split is0:55000,
+validation55000:60000,test10000images. Seed2026,Adam learning rate0.001,
+batch128,four epochs; all weights are frozen during this inference animation.
 
-Architecture (channel, height, width; batch omitted):
-1x28x28 -> Conv(1,4,3,padding=1,stride=1) -> ReLU -> 4x28x28 ->
-MaxPool(2,stride=2) -> 4x14x14 -> Conv(4,8,3,padding=1,stride=1) -> ReLU ->
-8x14x14 -> MaxPool(2,stride=2) -> 8x7x7 -> flatten 392 -> linear 10 -> softmax.
-Convolutions use cross-correlation, the framework convention; kernels are not
-flipped. The second convolution sums over all four input channels. Cross-entropy
-is computed from logits; softmax is displayed to explain predictions.
+Architecture, channels/height/width with batch omitted:
 
-All feature maps, example kernel/patch values, pooled values, logits, probabilities
-and loss must come from trace.npz. Record the trained model, provenance, split,
-metrics and hashes. No invented metrics or illustrative replacement features.
-Use a shared zero-to-layer-maximum display scale across each post-ReLU layer;
-disclose that heatmap brightness is normalized for display. Input remains grayscale.
+- Input1x28x28.
+- Conv1+ReLU:4filters,3x3,stride1,zero padding1;4x28x28,40parameters.
+- Pool1:2x2,stride2,per channel;4x14x14,0parameters.
+- Conv2+ReLU:8filters spanning all4incoming channels,3x3,stride1,padding1;
+  8x14x14,296parameters.
+- Pool2:2x2,stride2,per channel;8x7x7,0parameters.
+- Flatten392values,0parameters; preserve channel/row/column order.
+- Dense392to10logits,3930parameters including biases.
+- Softmax10probabilities,0learned parameters.
 
-## Storyboard and visual progression
+Use cross-correlation, not a flipped mathematical convolution. The live coordinate
+and activation readout must come from the saved trace. Convolution input windows
+start at output index minus one for padding; pooling windows start at twice the
+output index. A second-convolution filter spans all four source planes; a pooling
+window maps one source plane to the matching output plane, never across channels.
+Record actual runtime window centers/corners and values for independent checks.
 
-1. Establish the question with a large real handwritten image, input dimensions,
-   normalization and target. Let viewers inspect the image.
-2. Focus on one actual receptive field. Enlarge the normalized patch and one
-   learned kernel. Reveal their elementwise products, sum and bias, then ReLU.
-3. Return to the image and build one computed activation map with a moving
-   receptive field and corresponding output position. Show zero padding and
-   shared weights, then extend from one channel to all four actual feature maps.
-4. Show one 2x2 activation window and its exact maximum. Animate spatial
-   reduction and reveal all four pooled maps, preserving channel identity.
-5. Show the second convolution's four-channel sum and eight computed maps,
-   then the second pooling and flattening into 392 features.
-6. Connect features to ten logits, then probability bars, class, target, sample
-   cross-entropy and measured test accuracy. End on a clean readable hold.
+Blue translucent planes communicate layer/channel geometry and processing state;
+they do not claim a synthetic per-pixel activation heatmap. Input grayscale comes
+from the real image; flattening retains all392actual activations; the ten output
+bars use actual probabilities. Layer maxima, selected responses, parameter counts,
+class, cross-entropy and full-test accuracy must be independently verified.
+Keep sample confidence/loss distinct from dataset accuracy.
 
-Use stable positions within each explanation, smooth transforms and purposeful
-highlights. One expanded numerical operation at a time. No graphs over neurons,
-no decorative signal that claims a numerical result. Use cyan for activations,
-amber for the selected receptive field, and violet for the second convolution.
-All math including dimensions/numerical labels uses LaTeX; prose uses Liberation
-Sans (Arial family). Pure black background, high contrast, safe frame margins.
-Render a draft for inspection, then final 1920x1080 at 30 fps, H264/yuv420p, useful
-thumbnail, under 30 MB. Review holds and transitions at 960px width and the built
-website. Publish only after numerical, media, typography and visual checks pass.
+## Storyboard and visual review
 
-## References
+1. Start with all eight stages and an actual grayscale digit on the native input
+   plane. Define orange receptive fields and coupled output locations.
+2. Focus Conv1: hold an initial padded window with its correct numeric response,
+   then smoothly scan the native input-to-output filter volume across one channel.
+   Highlight the remaining output channels to generalize to all four filters.
+3. Focus Pool1: move a2x2window to its matching output pixel, showing per-channel
+   spatial reduction and the actual response. Keep all four channel planes.
+4. Focus Conv2: the orange volume spans all four incoming planes and reaches one
+   of eight output planes. Scan one filter, then highlight the remaining filters.
+5. Focus Pool2: reduce spatial dimensions independently, retaining eight channels.
+6. Unfold the392pooled activations into a vector; send signals along fan-in lines
+   to ten native dense neurons; highlight the winning score.
+7. Grow the actual softmax bars. Hold the entire CNN with prediction confidence,
+   cross-entropy and test accuracy below it; retain all layer shapes/settings above.
 
-- Visual pacing reference: https://www.3blue1brown.com/lessons/neural-networks/
-  (its digit classifier is fully connected; this task is an actual CNN).
-- Dataset: https://www.tensorflow.org/datasets/catalog/mnist
-- Computation: https://docs.pytorch.org/docs/2.5/generated/torch.nn.Conv2d.html
-- Local explanatory rubric: ../../docs/visual-standards.md
+Keep the full architecture in fixed positions throughout; remove the separate
+thumbnail-gallery strips and full-screen derivations. Use stable camera framing,
+spaced upright vector planes, native receptive-field connections and smooth
+transitions. Inspect native layer visibility, padding/stride/channel geometry,
+readout updates, initial/final holds and actual motion frames. All math uses
+LaTeX, prose Liberation Sans. Validate projected camera bounds, not only3D source
+bounds. Captions must clear native playback buttons. Deliver1080p30H264/yuv420p
+MP4 under30MB and a full-network thumbnail; re-review before website publication.
+
+## Inspected references
+
+- ManimML CNN GIF: https://github.com/helblazer811/ManimML/blob/main/assets/readme/convolutional_neural_network.gif
+- Image-fed CNN: https://github.com/helblazer811/ManimML/blob/main/assets/readme/convolutional_neural_network_with_an_image.gif
+- Native primitives: https://github.com/helblazer811/ManimML#convolutional-neural-networks
+- Focus/causal pacing: https://www.3blue1brown.com/lessons/neural-networks/
+  (this digit example is fully connected; the present task is a CNN).
+- Review rubric: ../../docs/visual-standards.md.

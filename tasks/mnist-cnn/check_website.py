@@ -5,6 +5,7 @@ from playwright.sync_api import sync_playwright
 
 root=Path(__file__).resolve().parents[2]
 report={}
+final_time=json.loads((root/'tasks/mnist-cnn/stages.json').read_text())['complete-network']
 with sync_playwright() as p:
     browser=p.chromium.launch(executable_path='/usr/bin/google-chrome',headless=True,args=['--no-sandbox'])
     for name,width,height in [('desktop',1280,1000),('mobile',390,844)]:
@@ -13,10 +14,11 @@ with sync_playwright() as p:
         page.on('pageerror',lambda e:errors.append(str(e)))
         page.goto((root/'_site/samples/mnist-cnn/index.html').as_uri())
         page.wait_for_function('document.querySelector("video").readyState >= 1')
+        assert 'Orange volumes show' in page.get_by_role('main').inner_text()
         video=page.locator('video')
         initial=video.bounding_box()
         page.eval_on_selector('video','v => { v.muted=true; return v.play(); }')
-        page.wait_for_timeout(800)
+        page.wait_for_function('document.querySelector("video").currentTime > 0.25',timeout=12000)
         assert page.eval_on_selector('video','v => v.currentTime')>0
         playing=video.bounding_box()
         assert initial['width']==playing['width'] and initial['height']==playing['height']
@@ -29,8 +31,9 @@ with sync_playwright() as p:
         report[name]=dict(initial=initial,playing=playing,errors=errors,
                           page_background=page.evaluate('getComputedStyle(document.body).backgroundColor'),
                           font=page.evaluate('getComputedStyle(document.body).fontFamily'))
-        page.eval_on_selector('video','v => {v.pause();v.currentTime=38;}')
-        page.wait_for_timeout(300)
+        page.eval_on_selector('video','(v,time) => {v.pause();v.currentTime=time;}',final_time)
+        page.wait_for_function('(t) => {const v=document.querySelector("video");return !v.seeking && v.readyState>=2 && Math.abs(v.currentTime-t)<0.1;}',arg=final_time,timeout=12000)
+        page.wait_for_timeout(100)
         if name=='desktop':
             page.screenshot(path=str(root/'tasks/mnist-cnn/review-website.png'),full_page=True)
         page.close()
@@ -38,6 +41,7 @@ with sync_playwright() as p:
     gallery.goto((root/'_site/samples/index.html').as_uri())
     link=gallery.locator('.sd-card a[href="mnist-cnn/"]')
     assert link.count()>0,'CNN gallery card missing'
+    assert gallery.locator('.sd-card a[href="manimml-forward-pass/"]').count()==0
     report['gallery_card_present']=True
     browser.close()
 (root/'tasks/mnist-cnn/website-verification.json').write_text(json.dumps(report,indent=2)+'\n')

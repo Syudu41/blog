@@ -2,55 +2,59 @@
   "status": "passed",
   "reviewer": "TensorQuill coding agent",
   "hashes": {
-    "content.md": "af3bffdabcfc9d22fde6dc8b4baf1e42ebe67b35eee93c2c6cae4e165f43b145",
-    "output/thumbnail.png": "a89d459a9f1889c5d98f0cf3c805d976563753f108451d3108795fc3ead2a6bd",
-    "output/visualization.mp4": "b8a718496b3f475898f5308a7a0386f1975c817ae7bf20d9453b736b55f9bc45",
-    "requirements.md": "fe246cd0ae05d0f5906693ff48a260a653c702efff3b5f375c2e852e8e4b9a75",
-    "scene.py": "85c409648324ffb579b1e2c351f79422ce1634bbbd1358ad813d8ba3159f2e85",
-    "task.json": "cf668978d3a212afcdb6805c292f8638b756e597933f3ee71c3ef343fdfec9e5"
+    "content.md": "22a8308af013081369b66da7b7fdaf686787e229ce842e26d1b3be3790a687ee",
+    "output/thumbnail.png": "cceff34e71e3458903c4b5daf8b76ba759d7894f40d9553dd0cc4f13e1b32c33",
+    "output/visualization.mp4": "2d986b2ec95219c2572d4cc7e15634936064b06c7867fffed85a643ed0a3e51f",
+    "requirements.md": "d09c721127976ebe0af427f04a1c09a4afb0cf173b5e12edfee452c709953767",
+    "scene.py": "3d4ea6d4a1827ac6f16646049597612faf147f4374499f6d39128f2afddbbae5",
+    "task.json": "60cc9bcb51a2972836c8234cb7c82cf220ff93099f9e42894abe7a1de355801f"
   },
   "requirements": {
     "real-model": {
       "passed": true,
-      "evidence": "Real fixed MNIST test image 0, target 7, frozen 4266-parameter trained CNN. Independent NumPy reconstruction and separate full-test evaluation reproduce the trace and 9688/10000 correct. See training.json, numerical-verification.json and review-evidence.md. Revised-caption render rechecked: all 23 final samples inspected again; captions are higher to clear native player controls."
+      "evidence": "Frozen trace and training hashes asserted; independent NumPy reconstruction and separate full-test evaluation pass. Live responses exactly match trace entries; parameter total4266,confidence99.9989%,cross-entropy1.0921e-5,test accuracy9688/10000. Blue planes are explicitly schematic geometry/state, not invented heatmaps. See numerical-verification.json and review-evidence.md."
     },
-    "convolution": {
+    "native-layers": {
       "passed": true,
-      "evidence": "Inspected final patch, products, sum/bias and positive/negative ReLU holds, plus four scan positions and completed scan. checks.py independently verifies selected convolution and spatial map pixels. Shared 3x3 kernel and padding/stride are stated. Revised-caption render rechecked: all 23 final samples inspected again; captions are higher to clear native player controls."
+      "evidence": "Actual runtime types are native ManimML Convolutional2DLayer/MaxPooling2DLayer/FeedForwardLayer. Counts1/4/4/8/8 and ten dense nodes verified; pooling halves physical plane sides. Inspected all27 final samples: upright vector planes, complete persistent architecture, vector, dense fan-in and output bars. No tilted raster-card stacks or gallery strips."
     },
-    "pooling-and-classification": {
+    "receptive-fields": {
       "passed": true,
-      "evidence": "Inspected all four first maps, exact 2x2 maximum 1.3374, all eight second-convolution maps, channel-sum equation, pooling, 392-element vector, ten logits/probabilities and separate sample cross-entropy/test accuracy. Numeric and rendered pixel checks pass. Revised-caption render rechecked: all 23 final samples inspected again; captions are higher to clear native player controls."
+      "evidence": "Native Filters volumes connect gridded input windows to the correct output cell. Independent center/size checks give max error1.78e-15; Conv2 spans four inputs, pooling one matching channel. Live scalar error0. Orange borders found at projected corner pixels in all8 motion samples. See detail.json and review-verification.json."
+    },
+    "metrics": {
+      "passed": true,
+      "evidence": "Inspected native labels and live readouts against trace: tensor shapes/settings above layers, parameter counts40/296/3930,total4266,correct maxima3.1073/8.4863,pooling c0max1.3374,logit7=12.3500,confidence99.9989%,sample cross-entropy1.0921e-5,test96.88%. All mathematical annotations use LaTeX."
     },
     "presentation": {
       "passed": true,
-      "evidence": "Inspected all 23 final samples at 960px width and thumbnail: black canvas, separated equations and maps, readable enlarged ReLU, smooth scan/transform samples, sequential captions and clear final hold. Full 1080p30 H264 decode passes; short content.md. Revised-caption render rechecked: all 23 final samples inspected again; captions are higher to clear native player controls."
+      "evidence": "Final full decode passes:1806frames,1080p30,H264/yuv420p,60.2s,6284349bytes. Inspected27 holds/motion/transitions and actual640x360 full-network thumbnail. Black background,native vector geometry,Arial-family prose,readable960px annotations,safe projected bounds and reading holds. Browser integration is recorded separately before deployment. Desktop/mobile browser QA passed: stable736x414/358x201.375 players,actual playback and settled final-frame seek,no errors/overflow; updated page screenshot inspected. See website-verification.json."
     }
   },
   "checks": {
     "render_success": {
       "passed": true,
-      "evidence": "Native final render 20261106T161023Z-e2dd07 exited 0, 88 animations, Manim 0.19.0; exact command and environment documented in review-evidence.md and the run result. Revised-caption render rechecked: all 23 final samples inspected again; captions are higher to clear native player controls."
+      "evidence": "Native final render20261106T171538Z-6a0d52 exited0,85animations,Manim0.19.0 and ManimML0.0.24. Exact command and observations in review-evidence.md."
     },
     "output_integrity": {
       "passed": true,
-      "evidence": "Full decode: 2469 frames, 1920x1080, 30fps, H264/yuv420p, 82.3s, 5351408 bytes. SHA256 and 23 sampled stages in review-verification.json; useful 640x360 thumbnail from four-feature-map hold. Revised-caption render rechecked: all 23 final samples inspected again; captions are higher to clear native player controls."
+      "evidence": "Complete decode1806frames,1920x1080,30fps,H264/yuv420p,60.2s,6284349bytes. SHA2562d986b2ec95219c2572d4cc7e15634936064b06c7867fffed85a643ed0a3e51f. Actual convolution-motion thumbnail inspected; checks.py output in review-verification.json."
     },
     "mathematics": {
       "passed": true,
-      "evidence": "Independent float64 NumPy CNN reconstruction: max absolute tensor discrepancy 1.069e-6, probabilities 4.44e-12. Exact patch/pooling and all bars checked. Separately reconstructed model reproduces 9688/10000 test predictions. See numerical-verification.json and review-evidence.md. Revised-caption render rechecked: all 23 final samples inspected again; captions are higher to clear native player controls."
+      "evidence": "Independent float64 model reconstruction and full10000-image evaluation pass. All recorded live responses match tensors exactly. Native field sizes/centers independently validated to1.78e-15 for padding,stride and channel mapping. Actual probability bar widths checked. See numerical-verification.json,detail.json,review-verification.json."
     },
     "latex_and_fonts": {
       "passed": true,
-      "evidence": "Native LaTeX smoke test passed. Scene math helper consistently uses MathTex for numeric values, dimensions and formulas; all inspected final samples have LaTeX math and Liberation Sans prose. Render environment font availability passed. Revised-caption render rechecked: all 23 final samples inspected again; captions are higher to clear native player controls."
+      "evidence": "Native LaTeX smoke test/font preflight passed. Inspected native MathTex/Integer/DecimalNumber values and all shape/settings labels; prose uses installed Liberation Sans. Source mathematical annotations consistently use LaTeX."
     },
     "layout": {
       "passed": true,
-      "evidence": "All recorded teaching-stage object bounds lie within safe 14.222x8 scene margins. Inspected all final contact sheets at 960px per frame: no clipping or obstructing overlays, separated ReLU result and sequential captions. Constant-title pixel comparison passes. Revised-caption render rechecked: all 23 final samples inspected again; captions are higher to clear native player controls. Browser QA passed: desktop 736x414 and mobile 358x201.375 remain fixed during playback, with no overflow or errors; revised paused captions inspected above controls. See website-verification.json and review-website.png."
+      "evidence": "Actual projected camera bounds pass,not just3D source bounds. Layer positions remain fixed; layer-label bitmap changes only3.21% at codec edges. Native dense nodes are above their background rectangle; winning-node color error0.8/255. All27 final samples and thumbnail inspected. Browser playback dimensions remain fixed on desktop/mobile; white Arial-family page and full native network inspected in review-website.png."
     },
     "visual_review": {
       "passed": true,
-      "evidence": "Inspected 23 final samples including four scan positions and three transitions; causal progression reviewed against requirements.md and docs/visual-standards.md. All four/eight computed channels and both pooling stages remain identifiable. Worst heatmap 95th-percentile channel error 6/255. Detailed assessment in review-evidence.md. Revised-caption render rechecked: all 23 final samples inspected again; captions are higher to clear native player controls."
+      "evidence": "Inspected actual ManimML reference GIFs,layout previews,draft motion and all7 final sheets/27samples. Upright native planes and coupled volumes now dominate; first/second convolutions,pooling,flatten,dense and output remain in one visible architecture.8 motion samples show projected orange field corners at0pixel distance. See review-evidence.md."
     }
   }
 }

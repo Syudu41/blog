@@ -1,7 +1,7 @@
 ---
 title: 'MNIST: inside a convolutional network'
-description: Follow a handwritten digit through learned filters, pooling and classification.
-alt: A real MNIST digit passes through computed convolutional feature maps, ReLU, pooling and a ten-class prediction on a black background.
+description: Watch a digit pass through native CNN layers and moving receptive fields.
+alt: A native ManimML CNN with upright translucent channel planes, orange receptive-field volumes, pooling layers, a 392-value vector, ten dense neurons and softmax probabilities. Layer shapes and measured values accompany the network.
 task: mnist-cnn
 order: 50
 media: assets/mnist-cnn/visualization.mp4
@@ -10,4 +10,4 @@ width: 1920
 height: 1080
 ---
 
-Follow a handwritten digit through a trained CNN: learned filters build feature maps, pooling reduces their size, and a classifier produces ten digit probabilities. The animation uses a real MNIST test image and computed activations throughout.
+Follow an MNIST digit through convolution, pooling, flattening, and classification. Orange volumes show how receptive fields connect to output locations, while layer dimensions and computed values accompany the network.
