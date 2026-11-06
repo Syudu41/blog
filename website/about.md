@@ -1,5 +1,9 @@
 # About
 
-TensorQuill explores how clear, carefully paced visualizations can explain machine learning. Built with Manim and ManimML, it draws inspiration from [3Blue1Brown’s visual explanations](https://www.3blue1brown.com/) and the Manim Community Gallery, with examples intended for research and presentations.
+I'm **Sudarshan Balaji**, and this is my personal blog.
 
-Author: Sudarshan Balaji.
+I write to make ideas clearer, working through machine learning, mathematics, and research with explanations, calculations, and visual examples.
+
+## What I share
+
+This blog is a place for notes, questions, and ideas I want to explore more deeply. The [sample visualizations](samples/index.md) bring some of those concepts to life, with explanations that connect the pictures to the mathematics.

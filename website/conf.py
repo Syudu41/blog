@@ -5,15 +5,17 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent / "_ext"))
 
-project = "TensorQuill"
+project = "Sudarshan's Blog"
+author = "Sudarshan Balaji"
+copyright = "2026, Sudarshan Balaji"
 extensions = ["myst_parser", "sphinx_design", "sphinx.ext.mathjax", "gallery"]
 source_suffix = {".md": "markdown"}
 root_doc = "index"
 exclude_patterns = ["_build", "_ext", "_static", "_templates"]
 myst_enable_extensions = ["colon_fence", "dollarmath", "amsmath"]
 html_theme = "furo"
-html_title = "TensorQuill"
-html_baseurl = "https://syudu41.github.io/visualizer/"
+html_title = "Sudarshan's Blog"
+html_baseurl = "https://syudu41.github.io/blog/"
 html_static_path = ["_static"]
 html_css_files = ["website.css"]
 templates_path = ["_templates"]

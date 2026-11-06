@@ -24,4 +24,4 @@ The weights are chosen for clarity, rather than learned during the animation. Th
 | $(1,0)$ | $1$ | $0.9933$ |
 | $(1,1)$ | $0$ | $0.0067$ |
 
-The video follows only $(1,0)$. All four cases are checked to verify that the chosen network implements XOR. The visual style draws inspiration from [ManimML’s animated logo](https://github.com/helblazer811/ManimML).
+The video follows only $(1,0)$. All four cases are checked to verify that the chosen network implements XOR.

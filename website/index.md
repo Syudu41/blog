@@ -1,6 +1,8 @@
-# TensorQuill
+# Sudarshan's Blog
 
-TensorQuill is a Manim-based visualization project for machine learning research. It will generate images, GIFs, and videos using ManimML, with inspiration from the Manim Gallery.
+Notes on machine learning, mathematics, and research, by **Sudarshan Balaji**.
+
+I use this space to work through ideas, explain what I learn, and share visual explorations. Browse the [sample visualizations](samples/index.md), or [read more about me](about.md).
 
 ```{toctree}
 :hidden:
