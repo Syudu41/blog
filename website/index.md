@@ -8,5 +8,5 @@ I use this space to work through ideas, explain what I learn, and share visual e
 :hidden:
 
 samples/index
-about
+About <about>
 ```
