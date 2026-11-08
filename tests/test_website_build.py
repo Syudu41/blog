@@ -99,6 +99,24 @@ class WebsiteBuildTests(unittest.TestCase):
             self.assertIn('dataset.theme = "light"', video)
             self.assertTrue((output / "searchindex.js").is_file())
             self.assertTrue((output / ".nojekyll").is_file())
+            # New dated Markdown posts are discovered and ordered without an index edit.
+            posts = root / "website/posts"
+            older = posts / "2090-01-01-fixture-older.md"
+            newer = posts / "2091-01-01-fixture-newer.md"
+            older.write_text("# Older post fixture\n\nA temporary test post.\n")
+            newer.write_text("# Newer post fixture\n\nInline math: $x^2$.\n")
+            added_posts = subprocess.run(command, capture_output=True, text=True)
+            self.assertEqual(added_posts.returncode, 0, added_posts.stdout + added_posts.stderr)
+            post_index = (output / "posts/index.html").read_text()
+            self.assertLess(post_index.index("2091-01-01-fixture-newer/"),
+                            post_index.index("2090-01-01-fixture-older/"))
+            self.assertTrue((output / "posts/2091-01-01-fixture-newer/index.html").is_file())
+            older.unlink()
+            newer.unlink()
+            removed_posts = subprocess.run(command, capture_output=True, text=True)
+            self.assertEqual(removed_posts.returncode, 0, removed_posts.stdout + removed_posts.stderr)
+            self.assertNotIn("fixture-newer/", (output / "posts/index.html").read_text())
+            self.assertNotIn("fixture-older/", (output / "posts/index.html").read_text())
             # Editing the authored Markdown updates the player page and card
             # without changing the immutable render task or review.
             page_path = root / "website/samples/video-fixture.md"
