@@ -8,5 +8,5 @@ Notes and explanations on machine learning, mathematics, and research, with the 
 :glob:
 :reversed:
 
-[0-9]*
+*
 ```

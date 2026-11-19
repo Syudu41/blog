@@ -99,8 +99,22 @@ class WebsiteBuildTests(unittest.TestCase):
             self.assertIn('dataset.theme = "light"', video)
             self.assertTrue((output / "searchindex.js").is_file())
             self.assertTrue((output / ".nojekyll").is_file())
-            # New dated Markdown posts are discovered and ordered without an index edit.
+            # A post, images and downloadable assets need no configuration edits.
             posts = root / "website/posts"
+            assets = posts / "assets" / "fixture"
+            assets.mkdir(parents=True)
+            (assets / "plot.svg").write_text(svg)
+            (assets / "data.csv").write_text("x,y\n1,2\n")
+            # Asset Markdown must not become a separate website page.
+            (assets / "notes.md").write_text("This is a downloadable source file.\n")
+            plain = posts / "plain-title.md"
+            plain.write_text(
+                "# Plain filename fixture\n\n"
+                "![Test plot](assets/fixture/plot.svg)\n\n"
+                "[Download data](assets/fixture/data.csv)\n\n"
+                "{download}`Download notes <assets/fixture/notes.md>`\n\n"
+                "```python\nprint('hello')\n```\n"
+            )
             older = posts / "2090-01-01-fixture-older.md"
             newer = posts / "2091-01-01-fixture-newer.md"
             older.write_text("# Older post fixture\n\nA temporary test post.\n")
@@ -111,12 +125,40 @@ class WebsiteBuildTests(unittest.TestCase):
             self.assertLess(post_index.index("2091-01-01-fixture-newer/"),
                             post_index.index("2090-01-01-fixture-older/"))
             self.assertTrue((output / "posts/2091-01-01-fixture-newer/index.html").is_file())
+            self.assertIn("plain-title/", post_index)
+            self.assertTrue((output / "posts/plain-title/index.html").is_file())
+            self.assertFalse((output / "posts/assets/fixture/notes/index.html").exists())
+            for page in output.rglob("*.html"):
+                parser = LocalLinks(page)
+                parser.feed(page.read_text())
+                for target in parser.targets:
+                    self.assertTrue(target.is_file(), f"Broken local link in {page}: {target}")
+            self.assertTrue(any(path.read_text() == "x,y\n1,2\n" for path in (output / "_downloads").rglob("data.csv")))
+            # A bad edit must fail and leave the last successful preview available.
+            before = (output / "posts/plain-title/index.html").read_bytes()
+            plain.write_text("# Broken post\n\n![Missing figure](assets/missing.png)\n")
+            broken = subprocess.run(command, capture_output=True, text=True)
+            self.assertNotEqual(broken.returncode, 0)
+            self.assertEqual((output / "posts/plain-title/index.html").read_bytes(), before)
+            plain.unlink()
+            shutil.rmtree(assets)
             older.unlink()
             newer.unlink()
             removed_posts = subprocess.run(command, capture_output=True, text=True)
             self.assertEqual(removed_posts.returncode, 0, removed_posts.stdout + removed_posts.stderr)
             self.assertNotIn("fixture-newer/", (output / "posts/index.html").read_text())
             self.assertNotIn("fixture-older/", (output / "posts/index.html").read_text())
+            self.assertFalse((output / "posts/plain-title").exists())
+            self.assertFalse((output / "posts/2091-01-01-fixture-newer").exists())
+            self.assertFalse(list((output / "_downloads").rglob("data.csv")))
+            # Custom output must never erase authored files or source directories.
+            protected = root / "notes"
+            protected.mkdir()
+            (protected / "keep.md").write_text("Keep my notes.")
+            for target in (protected, root, root / "website", root / "website/posts"):
+                refused = subprocess.run(command[:-1] + [str(target)], capture_output=True, text=True)
+                self.assertNotEqual(refused.returncode, 0)
+            self.assertEqual((protected / "keep.md").read_text(), "Keep my notes.")
             # Editing the authored Markdown updates the player page and card
             # without changing the immutable render task or review.
             page_path = root / "website/samples/video-fixture.md"

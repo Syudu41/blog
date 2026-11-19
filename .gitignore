@@ -3,3 +3,5 @@ __pycache__/
 .venv/
 tasks/*/runs/
 /media/
+.website-build-*/
+.DS_Store
