@@ -1,1 +1,0 @@
-GitHub and YouTube icons are from [Simple Icons](https://github.com/simple-icons/simple-icons), distributed under [CC0](https://github.com/simple-icons/simple-icons/blob/develop/LICENSE.md). Brand names and marks belong to their respective owners.
