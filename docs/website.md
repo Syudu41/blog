@@ -1,6 +1,34 @@
-# Edit and build the website
+# Website editing guide
 
-Edit Markdown in `website/`. You do not need Manim or a coding agent to change a page's text, card title, or summary.
+For the everyday write → preview → publish steps and one-time setup, see the [README](../Readme.md). Blog posts are ordinary MyST Markdown files; Manim is only needed to create new visualizations.
+
+## Posts and assets
+
+Keep one post per `.md` file directly in `website/posts/`, starting with a `# Title`. All posts are discovered automatically and sorted by filename in reverse order. Use `YYYY-MM-DD-title.md` for chronological ordering. Dates are a naming convention, not a publication schedule. Keep drafts outside `website/`.
+
+Keep each post's assets in `website/posts/assets/<post-name>/`. This directory is excluded from page discovery, so a Markdown download or supporting notes will not become an extra page. Referenced images and downloads are copied automatically by Sphinx; commit their source files with the post.
+
+```markdown
+![A useful description](assets/my-post/figure.png)
+
+[Download data](assets/my-post/data.csv)
+
+{download}`Download Markdown notes <assets/my-post/notes.md>`
+```
+
+Use the explicit `{download}` role for a Markdown source download, since an ordinary link to `.md` normally means another website page. Use relative Markdown links for other posts, for example `[Earlier post](2026-11-08-why-cross-entropy-penalizes-confident-mistakes.md)`.
+
+Use fenced code blocks for syntax highlighting:
+
+````markdown
+```python
+print("Hello")
+```
+````
+
+Use `$...$` for inline LaTeX mathematics and `$$...$$` for display mathematics. Use lowercase filenames with hyphens and relative asset paths. A missing image, download, or page reference fails the strict website build.
+
+## Build and preview
 
 From the repository root:
 
@@ -11,14 +39,9 @@ python3 scripts/website.py preview
 
 The preview command builds first and serves http://localhost:8000/. Keep it running; after another edit, run `build` in a second terminal and refresh the browser. Press Ctrl+C to stop. Use `preview --port 8001` if port 8000 is occupied.
 
-The helper uses `.venv/website` when available. For a new installation, install the website dependencies once:
+The helper uses `.venv/website` when available, otherwise the current Python installation. Each build starts fresh, so removed or renamed posts and assets disappear from output. Failed builds leave the previous successful output in place. `_site/` is generated and ignored by Git. `build --output /path/to/output` can select another output directory; the helper refuses to overwrite a nonempty directory without its generated `.nojekyll` marker.
 
-```sh
-python3 -m venv .venv/website
-.venv/website/bin/python -m pip install -r website/requirements.txt
-```
-
-Commit completed changes and push to `main`. GitHub Actions uses the same build command to deploy the website.
+Commit completed changes and push to `main`. GitHub Actions runs the tests and the same build command before deploying to GitHub Pages. Pull requests run checks and build without deploying. Documentation-only edits do not trigger deployment.
 
 ## Edit a visualization page or card
 

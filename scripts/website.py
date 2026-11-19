@@ -31,6 +31,7 @@ def build(python, output):
         if output.exists():
             shutil.rmtree(output)
         staged.rename(output)
+    print(f'Built website: {output}', flush=True)
 
 
 def main():
