@@ -33,6 +33,40 @@ class LocalLinks(HTMLParser):
                     self.targets.append(target)
 
 
+class SiteNavigation(HTMLParser):
+    """Read the visible site menu independently of article section outlines."""
+
+    def __init__(self, page):
+        super().__init__()
+        self.page = page
+        self.in_menu = False
+        self.anchor = None
+        self.links = []
+
+    def handle_starttag(self, tag, attrs):
+        attrs = dict(attrs)
+        if tag == 'nav' and attrs.get('aria-label') == 'Site navigation':
+            self.in_menu = True
+        if self.in_menu and tag == 'a':
+            self.anchor = [attrs['href'], '']
+
+    def handle_data(self, data):
+        if self.anchor is not None:
+            self.anchor[1] += data
+
+    def handle_endtag(self, tag):
+        if tag == 'a' and self.anchor is not None:
+            href, label = self.anchor
+            path = unquote(urlsplit(href).path)
+            target = (self.page.parent / path).resolve() if path else self.page.resolve()
+            if target.is_dir():
+                target /= 'index.html'
+            self.links.append((label.strip(), target))
+            self.anchor = None
+        if tag == 'nav':
+            self.in_menu = False
+
+
 @unittest.skipUnless(importlib.util.find_spec("sphinx"), "Install website/requirements.txt for website integration tests")
 class WebsiteBuildTests(unittest.TestCase):
     def test_reviewed_image_video_math_and_legacy_urls(self):
@@ -79,11 +113,28 @@ class WebsiteBuildTests(unittest.TestCase):
                                      '--keep-going', '-n', str(root / 'website'), str(output)],
                                     capture_output=True, text=True)
             self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
+            expected_menu = [
+                ('Home', output / 'index.html'),
+                ('Blog posts', output / 'posts/index.html'),
+                ('Paper reviews', output / 'paper-reviews/index.html'),
+                ('Visualizations', output / 'samples/index.html'),
+                ('About', output / 'about/index.html'),
+            ]
             for page in output.rglob("*.html"):
                 parser = LocalLinks(page)
                 parser.feed(page.read_text())
                 for target in parser.targets:
                     self.assertTrue(target.is_file(), f"Broken local link in {page}: {target}")
+                if page.name != 'samples.html':
+                    navigation = SiteNavigation(page)
+                    navigation.feed(page.read_text())
+                    self.assertEqual(navigation.links, expected_menu, f'Inconsistent site menu: {page}')
+            about = (output / 'about/index.html').read_text()
+            self.assertIn('aria-label="Breadcrumb"', about)
+            self.assertIn('class="prev-page"', about)
+            about_article = about.split('<article', 1)[1].split('</article>', 1)[0]
+            for link in ('../posts/', '../paper-reviews/', '../samples/'):
+                self.assertIn(f'href="{link}"', about_article)
             gallery = (output / "samples/index.html").read_text()
             expected_cards = len(gallery_entries(root / "website/samples"))
             self.assertEqual(gallery.count('class="sd-card-title'), expected_cards)

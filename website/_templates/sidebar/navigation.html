@@ -1,0 +1,9 @@
+<nav class="sidebar-tree" aria-label="Site navigation">
+  <p class="caption"><span class="caption-text">Explore</span></p>
+  <ul>
+    <li class="toctree-l1{% if pagename == master_doc %} current current-page{% endif %}">
+      <a class="reference internal" href="{{ pathto(master_doc) }}"{% if pagename == master_doc %} aria-current="page"{% endif %}>Home</a>
+    </li>
+  </ul>
+  {{ toctree(collapse=False, maxdepth=1, includehidden=True, titles_only=True) }}
+</nav>

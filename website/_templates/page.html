@@ -1,6 +1,17 @@
 {% extends "!page.html" %}
 {% block content %}
-<div class="page-content{% if pagename == 'index' %} home-page{% elif pagename in ('posts/index', 'paper-reviews/index') %} post-index{% endif %}">
+{% if pagename != master_doc %}
+<nav class="page-breadcrumbs" aria-label="Breadcrumb">
+  <ol>
+    <li><a href="{{ pathto(master_doc) }}">Home</a></li>
+    {% for parent in parents if parent.link != pathto(master_doc) %}
+    <li><a href="{{ parent.link|e }}">{{ parent.title|striptags|e }}</a></li>
+    {% endfor %}
+    <li aria-current="page">{{ title|striptags|e }}</li>
+  </ol>
+</nav>
+{% endif %}
+<div class="page-content{% if pagename == 'index' %} home-page{% elif pagename == 'about' %} about-page{% elif pagename in ('posts/index', 'paper-reviews/index') %} post-index{% endif %}">
 {{ super() }}
 </div>
 {% endblock %}

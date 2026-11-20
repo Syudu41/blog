@@ -1,11 +1,8 @@
-```{rst-class} about-page
-```
-
-# Sudarshan Balaji
-
-:::{container} about-eyebrow
+:::{container} eyebrow
 ABOUT THE AUTHOR
 :::
+
+# Sudarshan Balaji
 
 :::{container} about-intro
 I write to make ideas clearer.
@@ -14,7 +11,7 @@ I write to make ideas clearer.
 This is my personal blog: a space to work through machine learning, mathematics, and research. I share explanations, calculations, and visual examples that connect an idea to how it works.
 
 :::{container} about-links
-[Personal website ↗](https://syudu41.github.io/home/) · [Explore the visualizations](samples/index.md)
+[Blog posts](posts/index.md) · [Paper reviews](paper-reviews/index.md) · [Visualizations](samples/index.md) · [Personal website](https://syudu41.github.io/home/)
 :::
 
 ## What you'll find here
@@ -46,5 +43,5 @@ The visualization pages pair animations with written explanations, so you can fo
 
 :::{container} about-start
 ### A place to start
-Browse the [sample visualizations](samples/index.md) for visual explorations of neural networks, or visit my [personal website](https://syudu41.github.io/home/) to find me beyond the blog.
+Read the [blog posts](posts/index.md), explore my [paper reviews](paper-reviews/index.md), or browse the [visualizations](samples/index.md). You can also return to the [homepage](index.md) or visit my [personal website](https://syudu41.github.io/home/).
 :::
