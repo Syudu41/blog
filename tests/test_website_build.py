@@ -9,7 +9,7 @@ import tempfile
 import unittest
 from html.parser import HTMLParser
 from pathlib import Path
-from urllib.parse import unquote, urlsplit
+from urllib.parse import quote, unquote, urlsplit
 
 from scripts.visualization_workflow import prepare_review, publish, write_json, gallery_entries, split_page, write_page
 
@@ -153,8 +153,16 @@ class WebsiteBuildTests(unittest.TestCase):
             self.assertIn('dataset.theme = "light"', video)
             self.assertTrue((output / "searchindex.js").is_file())
             self.assertTrue((output / ".nojekyll").is_file())
-            self.assertIn('The reading log begins here.',
-                          (output / 'paper-reviews/index.html').read_text())
+            # Authored reviews are valid inputs, not a permanently empty archive.
+            authored_reviews = [page for page in (root / 'website/paper-reviews').glob('*.md')
+                                if page.name != 'index.md']
+            review_index = (output / 'paper-reviews/index.html').read_text()
+            for review in authored_reviews:
+                self.assertIn(f'href="{quote(review.stem)}/"', review_index)
+            if authored_reviews:
+                self.assertNotIn('The reading log begins here.', review_index)
+            else:
+                self.assertIn('The reading log begins here.', review_index)
             # A post, images and downloadable assets need no configuration edits.
             posts = root / "website/posts"
             assets = posts / "assets" / "fixture"
@@ -244,6 +252,11 @@ class WebsiteBuildTests(unittest.TestCase):
             self.assertEqual((output / "samples/index.html").read_text().count('class="sd-card-title'), expected_cards)
             # Review discovery must also update a native incremental Sphinx build.
             reviews = root / 'website/paper-reviews'
+            # Isolate the empty/add/remove scenario in the temporary test copy.
+            # Never remove or edit the author's actual review files.
+            for review in reviews.glob('*.md'):
+                if review.name != 'index.md':
+                    review.unlink()
             review_assets = reviews / 'assets/fixture'
             review_assets.mkdir(parents=True)
             (review_assets / 'notes.md').write_text('Supporting notes, not a website page.\n')
