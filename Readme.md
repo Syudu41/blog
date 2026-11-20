@@ -24,9 +24,7 @@ Create `website/posts/2026-11-19-my-post.md`:
 
 Write your explanation here. Inline mathematics: $h=\max(0,z)$.
 
-$$
-\mathcal L=-\ln p
-$$
+$$ f(x) = y^2$$
 
 ![Description of my figure](assets/my-post/figure.png)
 
@@ -39,13 +37,17 @@ Every `.md` file directly inside `website/posts/` appears automatically. Use `YY
 
 ## Preview and publish
 
-From the repository root:
+From the repository root, activate the website environment and build with Sphinx:
 
 ```sh
-python3 scripts/website.py preview
+source .venv/website/bin/activate
+sphinx-build -b dirhtml -W --keep-going -n website _site
+python -m http.server 8000 --bind 127.0.0.1 --directory _site
 ```
 
-Open http://localhost:8000/posts/. After an edit, run `python3 scripts/website.py build` in another terminal and refresh. Stop preview with Ctrl+C. Builds check references, remove obsolete output, and keep the last successful preview if the build fails.
+Open http://localhost:8000/. After an edit, rerun the Sphinx command in another terminal with the same environment activated, then refresh. Stop the server with Ctrl+C. `dirhtml` produces the directory-style URLs used by the live site, and `-W -n` makes broken references fail the build.
+
+For a clean build after removing or renaming a post, use `python3 scripts/website.py build`. This convenience wrapper runs the same Sphinx builder in a temporary directory, removes obsolete output, and keeps the last successful preview when a build fails. `python3 scripts/website.py preview` combines that clean build with the local server.
 
 When the preview looks right:
 
@@ -60,4 +62,4 @@ Omit the assets path from `git add` for a text-only post. GitHub Actions checks,
 
 You can also add the Markdown file and upload its assets directly on GitHub, then commit to `main`.
 
-See the [website guide](docs/website.md) for code blocks, downloads, other pages, and the retained visualization workflow. The site uses Sphinx, MyST Markdown, and Furo, with a white background, Arial-family text, and LaTeX mathematics.
+See the [website guide](docs/website.md) for code blocks, downloads, other pages, and the retained visualization workflow. The site uses Sphinx, MyST Markdown, and Furo, with a white background, Computer Modern running text, Inter headings and navigation, and LaTeX mathematics. Font files are served locally with their licenses in `website/_static/fonts/`.

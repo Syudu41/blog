@@ -74,7 +74,10 @@ class WebsiteBuildTests(unittest.TestCase):
 
             output = root / "build"
             command = [sys.executable, str(root / "scripts/website.py"), "build", "--output", str(output)]
-            result = subprocess.run(command, capture_output=True, text=True)
+            # The native Sphinx CLI builds the same site without our convenience wrapper.
+            result = subprocess.run([sys.executable, '-m', 'sphinx', '-b', 'dirhtml', '-W',
+                                     '--keep-going', '-n', str(root / 'website'), str(output)],
+                                    capture_output=True, text=True)
             self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
             for page in output.rglob("*.html"):
                 parser = LocalLinks(page)
@@ -118,13 +121,16 @@ class WebsiteBuildTests(unittest.TestCase):
             older = posts / "2090-01-01-fixture-older.md"
             newer = posts / "2091-01-01-fixture-newer.md"
             older.write_text("# Older post fixture\n\nA temporary test post.\n")
-            newer.write_text("# Newer post fixture\n\nInline math: $x^2$.\n")
+            newer.write_text("# Newer post fixture\n\nInline math: $x^2$.\n\n$$ f(x) = y^2$$\n")
             added_posts = subprocess.run(command, capture_output=True, text=True)
             self.assertEqual(added_posts.returncode, 0, added_posts.stdout + added_posts.stderr)
             post_index = (output / "posts/index.html").read_text()
             self.assertLess(post_index.index("2091-01-01-fixture-newer/"),
                             post_index.index("2090-01-01-fixture-older/"))
             self.assertTrue((output / "posts/2091-01-01-fixture-newer/index.html").is_file())
+            math_page = (output / "posts/2091-01-01-fixture-newer/index.html").read_text()
+            self.assertIn('class="math notranslate nohighlight"', math_page)
+            self.assertIn(r'\[ f(x) = y^2\]', math_page)
             self.assertIn("plain-title/", post_index)
             self.assertTrue((output / "posts/plain-title/index.html").is_file())
             self.assertFalse((output / "posts/assets/fixture/notes/index.html").exists())

@@ -28,9 +28,27 @@ print("Hello")
 
 Use `$...$` for inline LaTeX mathematics and `$$...$$` for display mathematics. Use lowercase filenames with hyphens and relative asset paths. A missing image, download, or page reference fails the strict website build.
 
+For example, a display equation can occupy one line:
+
+```markdown
+$$ f(x) = y^2$$
+```
+
+For longer expressions, put the opening and closing `$$` on separate lines. Keep a blank line before and after each display equation. MyST parses the LaTeX and MathJax typesets it in the browser; you do not need a TeX installation to build the blog.
+
 ## Build and preview
 
-From the repository root:
+This is a Sphinx website. You can build it directly using the standard Sphinx CLI:
+
+```sh
+source .venv/website/bin/activate
+sphinx-build -b dirhtml -W --keep-going -n website _site
+python -m http.server 8000 --bind 127.0.0.1 --directory _site
+```
+
+Open http://localhost:8000/. Rerun `sphinx-build` after an edit and refresh the browser. The equivalent module command is `python -m sphinx -b dirhtml -W --keep-going -n website _site`. Use the `dirhtml` builder to match the deployed directory-style URLs. `-W` treats warnings as failures, `--keep-going` reports all warnings, and `-n` checks references strictly.
+
+Sphinx builds incrementally in the output directory; obsolete files can remain after a deletion or rename. The repository's optional helper provides clean builds and preserves the previous working output on failure:
 
 ```sh
 python3 scripts/website.py build
@@ -42,6 +60,12 @@ The preview command builds first and serves http://localhost:8000/. Keep it runn
 The helper uses `.venv/website` when available, otherwise the current Python installation. Each build starts fresh, so removed or renamed posts and assets disappear from output. Failed builds leave the previous successful output in place. `_site/` is generated and ignored by Git. `build --output /path/to/output` can select another output directory; the helper refuses to overwrite a nonempty directory without its generated `.nojekyll` marker.
 
 Commit completed changes and push to `main`. GitHub Actions runs the tests and the same build command before deploying to GitHub Pages. Pull requests run checks and build without deploying. Documentation-only edits do not trigger deployment.
+
+## Site design
+
+The website uses locally bundled Computer Modern Unicode Serif (the web version of Computer Modern Roman) for running text, including bold and italic variants. Inter is used for headings, titles, subtitles, navigation, and other interface text. MathJax keeps mathematics in its TeX math font. The page background stays white, including on devices that prefer dark mode.
+
+Edit `website/_static/website.css` for the layout and typography, `website/_templates/` for the theme overrides, and `website/index.md` for the homepage. Ordinary posts inherit the design automatically. Font sources and licenses are recorded in `website/_static/fonts/NOTICE.txt`. Existing visualization media and its in-frame typography are retained.
 
 ## Edit a visualization page or card
 
