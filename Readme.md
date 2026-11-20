@@ -2,7 +2,7 @@
 
 My personal blog about machine learning, mathematics, and research.
 
-[Read the blog](https://syudu41.github.io/blog/) · [About](https://syudu41.github.io/blog/about/) · [Visualizations](https://syudu41.github.io/blog/samples/)
+[Read the blog](https://syudu41.github.io/blog/) · [Paper reviews](https://syudu41.github.io/blog/paper-reviews/) · [About](https://syudu41.github.io/blog/about/) · [Visualizations](https://syudu41.github.io/blog/samples/)
 
 ## Set up once
 
@@ -34,6 +34,18 @@ $$ f(x) = y^2$$
 Put the accompanying files in `website/posts/assets/my-post/`. Omit the image and download links when you have no assets. No front matter, task folder, or index edit is needed.
 
 Every `.md` file directly inside `website/posts/` appears automatically. Use `YYYY-MM-DD-title.md` to list dated posts newest first; plain filenames also work and sort by filename. Use lowercase names with hyphens for posts and assets. Keep drafts outside `website/`; future dates do not delay publication.
+
+## Add a paper review
+
+Create `website/paper-reviews/YYYY-MM-DD-paper-title.md`, or start with the optional template:
+
+```sh
+cp templates/paper-review.md website/paper-reviews/2026-11-19-paper-title.md
+```
+
+Replace the title, reading date, citation, and prompts with your review. Put any accompanying assets in `website/paper-reviews/assets/paper-title/` and link them as `assets/paper-title/figure.png`. Reviews appear automatically in **Paper reviews**, newest filename first. No index edit is needed, and the section stays valid when empty.
+
+Use the same preview and publishing steps below, staging your review and its assets instead of a blog post.
 
 ## Preview and publish
 

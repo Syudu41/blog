@@ -1,6 +1,6 @@
 {% extends "!page.html" %}
 {% block content %}
-<div class="page-content{% if pagename == 'index' %} home-page{% elif pagename == 'posts/index' %} post-index{% endif %}">
+<div class="page-content{% if pagename == 'index' %} home-page{% elif pagename in ('posts/index', 'paper-reviews/index') %} post-index{% endif %}">
 {{ super() }}
 </div>
 {% endblock %}

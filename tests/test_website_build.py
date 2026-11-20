@@ -102,6 +102,8 @@ class WebsiteBuildTests(unittest.TestCase):
             self.assertIn('dataset.theme = "light"', video)
             self.assertTrue((output / "searchindex.js").is_file())
             self.assertTrue((output / ".nojekyll").is_file())
+            self.assertIn('The reading log begins here.',
+                          (output / 'paper-reviews/index.html').read_text())
             # A post, images and downloadable assets need no configuration edits.
             posts = root / "website/posts"
             assets = posts / "assets" / "fixture"
@@ -189,6 +191,38 @@ class WebsiteBuildTests(unittest.TestCase):
             removed = subprocess.run(command, capture_output=True, text=True)
             self.assertEqual(removed.returncode, 0, removed.stdout + removed.stderr)
             self.assertEqual((output / "samples/index.html").read_text().count('class="sd-card-title'), expected_cards)
+            # Review discovery must also update a native incremental Sphinx build.
+            reviews = root / 'website/paper-reviews'
+            review_assets = reviews / 'assets/fixture'
+            review_assets.mkdir(parents=True)
+            (review_assets / 'notes.md').write_text('Supporting notes, not a website page.\n')
+            first = reviews / '2090-01-01-first-paper.md'
+            latest = reviews / '2091-01-01-latest-paper.md'
+            first.write_text('# First paper review\n\nMy first reading note.\n')
+            latest.write_text('# Latest paper review\n\n$$ f(x) = y^2$$\n\n'
+                              '{download}`Supporting notes <assets/fixture/notes.md>`\n')
+            native = [sys.executable, '-m', 'sphinx', '-b', 'dirhtml', '-W',
+                      '--keep-going', '-n', str(root / 'website'), str(output)]
+            added_reviews = subprocess.run(native, capture_output=True, text=True)
+            self.assertEqual(added_reviews.returncode, 0, added_reviews.stdout + added_reviews.stderr)
+            review_index = (output / 'paper-reviews/index.html').read_text()
+            self.assertLess(review_index.index('2091-01-01-latest-paper/'),
+                            review_index.index('2090-01-01-first-paper/'))
+            self.assertNotIn('The reading log begins here.', review_index)
+            self.assertFalse((output / 'paper-reviews/assets/fixture/notes/index.html').exists())
+            review_page = output / 'paper-reviews/2091-01-01-latest-paper/index.html'
+            parser = LocalLinks(review_page)
+            parser.feed(review_page.read_text())
+            for target in parser.targets:
+                self.assertTrue(target.is_file(), f'Broken review link: {target}')
+            first.unlink()
+            latest.unlink()
+            removed_reviews = subprocess.run(native, capture_output=True, text=True)
+            self.assertEqual(removed_reviews.returncode, 0, removed_reviews.stdout + removed_reviews.stderr)
+            review_index = (output / 'paper-reviews/index.html').read_text()
+            self.assertIn('The reading log begins here.', review_index)
+            self.assertNotIn('2091-01-01-latest-paper/', review_index)
+            self.assertNotIn('2090-01-01-first-paper/', review_index)
             # The actual Sphinx build must refuse output changed since its review.
             (root / "tasks/image-fixture/output.svg").write_text("unreviewed replacement")
             failed = subprocess.run(command, capture_output=True, text=True)

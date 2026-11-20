@@ -36,6 +36,14 @@ $$ f(x) = y^2$$
 
 For longer expressions, put the opening and closing `$$` on separate lines. Keep a blank line before and after each display equation. MyST parses the LaTeX and MathJax typesets it in the browser; you do not need a TeX installation to build the blog.
 
+## Paper reviews
+
+Write one review per Markdown file directly in `website/paper-reviews/`, using `YYYY-MM-DD-paper-title.md`. A `# Title` and your review text are sufficient. The optional [paper review template](../templates/paper-review.md) includes a citation, the central idea, the evidence, your assessment, and follow-up questions.
+
+Reviews are discovered automatically, listed newest filename first, and included in navigation. The archive shows a reading-log introduction until the first review is added. New, renamed, and deleted reviews also refresh the index during native incremental Sphinx builds.
+
+Put assets in `website/paper-reviews/assets/<paper-title>/`. Images, downloads, code blocks, and mathematics use the same syntax as blog posts. Asset Markdown is excluded from page discovery. Keep unfinished reviews outside `website/`; a filename date does not delay publication. Commit the review and its assets, then push to `main` to publish.
+
 ## Build and preview
 
 This is a Sphinx website. You can build it directly using the standard Sphinx CLI:
@@ -125,6 +133,8 @@ Add `my-page` to the existing toctree in `website/index.md` if it should appear 
 | --- | --- |
 | About text | `website/about.md` |
 | Homepage | `website/index.md` |
+| Blog post | `website/posts/<date>-<title>.md` |
+| Paper review | `website/paper-reviews/<date>-<paper-title>.md` |
 | Sample title, card summary or explanation | `website/samples/<id>.md` |
 | Animation request, source or reviewed explanation snapshot | `tasks/<id>/` |
 

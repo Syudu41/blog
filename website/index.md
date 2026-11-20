@@ -11,7 +11,7 @@ Notes on machine learning, mathematics, and the questions that make me look a li
 I write to understand. This is where I slow down an idea, work through the mathematics, and connect it to something concrete. Some entries are explanations; others are questions I'm still exploring.
 
 :::{container} home-actions
-[Read the posts](posts/index.md) · [About me](about.md)
+[Read the posts](posts/index.md) · [Paper reviews](paper-reviews/index.md) · [About me](about.md)
 :::
 
 ## Inside the notebook
@@ -31,6 +31,8 @@ The notation, the intuition, and the small examples that connect them.
 :::{container} notebook-topic
 ### Research notes
 Questions worth keeping, observations, and ideas to return to.
+
+[Read my paper reviews](paper-reviews/index.md)
 :::
 
 ::::
@@ -46,6 +48,7 @@ The visualization collection pairs neural-network animations with written explan
 :hidden:
 
 Blog posts <posts/index>
+Paper reviews <paper-reviews/index>
 Visualizations <samples/index>
 About <about>
 ```
