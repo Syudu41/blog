@@ -1,60 +1,160 @@
-/* Preserve the requested white background, including on dark-mode devices. */
+/* Self-hosted Computer Modern Unicode (Roman) and Inter. */
+@font-face {
+  font-family: "Computer Modern";
+  src: url("fonts/cmunrm.woff") format("woff");
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Computer Modern";
+  src: url("fonts/cmunbx.woff") format("woff");
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Computer Modern";
+  src: url("fonts/cmunti.woff") format("woff");
+  font-style: italic;
+  font-weight: 400;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Computer Modern";
+  src: url("fonts/cmunbi.woff") format("woff");
+  font-style: italic;
+  font-weight: 700;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Inter";
+  src: url("fonts/InterVariable.woff2") format("woff2");
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: swap;
+}
+
+/* A white page in either system color scheme. */
 body, body[data-theme="dark"], body[data-theme="light"] {
   color-scheme: light;
-  --color-foreground-primary: #222;
-  --color-foreground-secondary: #444;
-  --color-foreground-muted: #555;
+  --color-foreground-primary: #252c2b;
+  --color-foreground-secondary: #505b58;
+  --color-foreground-muted: #606b67;
   --color-background-primary: #fff;
   --color-background-secondary: #fff;
-  --color-background-hover: #f4f4f4;
-  --color-background-border: #ddd;
-  --color-brand-primary: #1756a9;
-  --color-brand-content: #1756a9;
+  --color-background-hover: #f0f5f3;
+  --color-background-border: #dce5e1;
+  --color-brand-primary: #175f51;
+  --color-brand-content: #175f51;
   --color-sidebar-background: #fff;
-  --color-sidebar-brand-text: #222;
-  --color-sidebar-link-text: #333;
-  --color-sidebar-link-text--top-level: #222;
-  --color-sidebar-search-background: #fff;
-  --color-sidebar-search-foreground: #222;
-  --font-stack: Arial, Helvetica, sans-serif;
-  --font-stack--headings: Arial, Helvetica, sans-serif;
+  --color-sidebar-brand-text: #252c2b;
+  --color-sidebar-link-text: #505b58;
+  --color-sidebar-link-text--top-level: #252c2b;
+  --color-sidebar-search-background: #f5f8f6;
+  --color-sidebar-search-foreground: #252c2b;
+  --font-stack: "Computer Modern", "Times New Roman", serif;
+  --font-stack--headings: "Inter", Arial, sans-serif;
   background: #fff;
-  color: #222;
+  color: #252c2b;
+}
+body { font-size: 1rem; line-height: 1.75; }
+::selection { background: #dceee6; color: #153f35; }
+h1, h2, h3, h4, h5, h6, .rubric,
+.sidebar-drawer, .mobile-header, .toc-drawer, footer,
+.eyebrow, .home-intro, .home-actions, .about-intro, .about-links,
+.sd-card-title, .sd-card-footer {
+  font-family: "Inter", Arial, sans-serif;
+}
+h1, h2, h3, h4, h5, h6 { color: #202b27; font-weight: 650; }
+h1 { font-size: clamp(2rem, 4vw, 2.75rem); line-height: 1.16; letter-spacing: -.045em; margin: .5rem 0 1.6rem; }
+h2 { font-size: 1.5rem; line-height: 1.35; letter-spacing: -.025em; margin-top: 2.75rem; }
+h3 { font-size: 1.12rem; line-height: 1.4; letter-spacing: -.015em; }
+h4, h5, h6 { line-height: 1.5; }
+article p { margin: 1.1rem 0; }
+article > section > p:first-of-type > em:only-child { color: #606b67; font-size: 1rem; }
+a { text-underline-offset: .2em; text-decoration-thickness: 1px; }
+a:hover { color: #103f36; }
+a:focus-visible, button:focus-visible, input:focus-visible, label:focus-visible {
+  outline: 3px solid #175f51;
+  outline-offset: 4px;
+  border-radius: 2px;
 }
 .theme-toggle-container { display: none; }
-.sample-card { border: 1px solid #ddd; box-shadow: none !important; }
-.sample-card .sd-card-img-top { height: 150px; object-fit: contain; background: #fff; }
-.sample-card .sd-card-title { font-size: 1.1rem; }
-.sample-card .sd-card-footer { font-size: .8rem; color: #555; background: #fff; }
+.content { padding-top: 3rem; }
+.content-icon-container { margin-top: -1.7rem; }
+article { font-size: 1.1875rem; max-width: 46rem; margin-inline: auto; }
 article img, article video { max-width: 100%; height: auto; }
 article video { display: block; width: 100%; object-fit: contain; }
+article blockquote { border-left: 3px solid #8eafa0; padding-left: 1.3rem; color: #505b58; }
+article .math-wrapper { padding: .75rem 0; }
+article table { font-size: 1rem; }
+.highlight { border: 1px solid #dce5e1; border-radius: 8px; }
+.highlight pre { font-size: .875rem; line-height: 1.65; padding: 1.1rem 1.2rem; }
+code.literal { font-size: .8em; }
+footer { font-size: .8125rem; line-height: 1.6; }
+.related-pages { border-top: 1px solid #dce5e1; padding-top: 1.5rem; margin-top: 3rem; }
 
-/* About: a quiet author introduction, followed by a responsive topic grid. */
+/* The book's spine: compact branding and unobtrusive navigation. */
+.sidebar-brand { align-items: flex-start; padding: 2.5rem 1.5rem 1.5rem; text-decoration: none; }
+.brand-monogram { font-size: 2.1rem; font-weight: 750; letter-spacing: -.1em; line-height: 1; color: #175f51; margin-bottom: 1.2rem; }
+.sidebar-brand-text { font-size: 1.05rem; font-weight: 650; letter-spacing: -.035em; }
+.brand-caption { font-size: .8125rem; color: #606b67; margin-top: .4rem; line-height: 1.5; }
+.sidebar-search-container { margin: .5rem 1.1rem 1.5rem; border: 1px solid #dce5e1; border-radius: 6px; }
+.sidebar-search { font-size: .875rem; }
+.sidebar-tree { font-size: .875rem; line-height: 1.6; }
+.sidebar-tree .reference { border-radius: 4px; }
+.sidebar-tree .current-page > .reference { color: #175f51; background: #f0f5f3; }
+.toc-title { font-size: .75rem; font-weight: 650; letter-spacing: .1em; }
+.toc-tree { font-size: .8125rem; line-height: 1.6; }
+.mobile-header .brand { font-size: 1rem; font-weight: 650; letter-spacing: -.03em; }
+
+/* The homepage is an introduction, with fixed links to the automatic archive. */
+.eyebrow, .about-eyebrow { font-family: "Inter", Arial, sans-serif; font-size: .75rem; font-weight: 650; letter-spacing: .13em; color: #606b67; }
+.eyebrow p { margin-top: 0; margin-bottom: 1.25rem; }
+.home-page h1 { font-size: clamp(2.7rem, 5.5vw, 4.1rem); max-width: 11ch; margin-bottom: 1.5rem; }
+.home-intro { font-size: clamp(1.15rem, 2vw, 1.4rem); line-height: 1.55; color: #175f51; letter-spacing: -.02em; max-width: 35ch; }
+.home-page > p { max-width: 61ch; }
+.home-actions { font-size: .875rem; font-weight: 550; margin: 1.75rem 0 3.5rem; }
+.home-page h2 { border-top: 1px solid #dce5e1; padding-top: 2rem; }
+.topic-grid, .about-topics { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1.5rem; margin: 1.5rem 0 3rem; }
+.notebook-topic h3, .about-topic h3 { margin-top: 0; font-size: 1rem; }
+.notebook-topic p, .about-topic p:not(.rubric) { font-size: 1.0625rem; color: #505b58; line-height: 1.6; margin-bottom: 0; }
+.home-page .gallery-callout { padding: 1.4rem 1.6rem; border-left: 3px solid #175f51; background: #f5f8f6; border-radius: 0 8px 8px 0; }
+.gallery-callout h3 { margin-top: 0; }
+.gallery-callout p:last-child { font-family: "Inter", Arial, sans-serif; font-size: .875rem; font-weight: 550; margin-bottom: 0; }
+
+/* Archive entries are discovered by Sphinx's toctree, with no per-post styling. */
+.post-index .toctree-wrapper { margin-top: 2.5rem; }
+.post-index .toctree-wrapper > ul { list-style: none; padding-left: 0; }
+.post-index .toctree-l1 { padding: 1.5rem 0; border-top: 1px solid #dce5e1; }
+.post-index .toctree-l1:last-child { border-bottom: 1px solid #dce5e1; }
+.post-index .toctree-l1 > a { font-family: "Inter", Arial, sans-serif; font-size: 1.2rem; font-weight: 550; letter-spacing: -.025em; text-decoration: none; line-height: 1.5; }
+.post-index .toctree-l1 > a:hover { text-decoration: underline; }
+
+/* Retained media, presented as a quiet collection. */
+.sample-card { border: 1px solid #dce5e1; border-radius: 8px; box-shadow: none !important; overflow: hidden; transition: border-color .15s ease; }
+.sample-card:hover { border-color: #8eafa0; }
+.sample-card .sd-card-img-top { height: 150px; object-fit: contain; background: #fff; border-bottom: 1px solid #edf1ef; }
+.sample-card .sd-card-title { font-size: 1rem; font-weight: 600; letter-spacing: -.02em; line-height: 1.4; }
+.sample-card .sd-card-body { font-size: 1rem; line-height: 1.6; }
+.sample-card .sd-card-footer { font-size: .8125rem; color: #606b67; background: #fff; }
+
 .about-page { padding-top: .75rem; }
-.about-page .about-eyebrow {
-  color: #555;
-  font-size: .75rem;
-  font-weight: 700;
-  letter-spacing: .12em;
+.about-page .about-intro { font-size: 1.4rem; line-height: 1.5; color: #175f51; letter-spacing: -.025em; }
+.about-page .about-links { font-size: .875rem; margin: 1.5rem 0 2.5rem; line-height: 1.9; }
+.about-topic { border-top: 2px solid #8eafa0; padding-top: 1rem; }
+.about-topic .rubric { font-size: 1rem; margin: 0 0 .6rem; }
+.about-start { border-left: 3px solid #175f51; padding: .25rem 0 .25rem 1.25rem; margin-top: 2rem; }
+.about-start .rubric { font-size: 1.1rem; margin-top: 0; }
+.about-start p { margin-bottom: 0; }
+
+@media (max-width: 50rem) {
+  .content { padding-top: 2rem; }
+  .topic-grid, .about-topics { grid-template-columns: 1fr; gap: 1.5rem; }
+  .notebook-topic { border-top: 1px solid #dce5e1; padding-top: 1rem; }
+  .home-actions { margin-bottom: 2.5rem; }
 }
-.about-page .about-eyebrow p { margin-bottom: .7rem; }
-.about-page h1 { font-size: clamp(2rem, 5vw, 3rem); line-height: 1.12; margin-bottom: 1rem; }
-.about-page .about-intro { font-size: 1.4rem; line-height: 1.4; color: #1756a9; }
-.about-page .about-intro p { margin: 0 0 1rem; }
-.about-page .about-links { margin: 1.5rem 0 2.5rem; line-height: 1.9; }
-.about-page h2 { margin-top: 2.5rem; font-size: 1.5rem; }
-.about-page .about-topics {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 1.25rem;
-  margin: 1.5rem 0 2.5rem;
-}
-.about-page .about-topic { border-top: 3px solid #1756a9; padding-top: 1rem; }
-.about-page .about-topic .rubric { font-size: 1.05rem; margin: 0 0 .6rem; }
-.about-page .about-topic p:not(.rubric) { color: #444; font-size: .95rem; line-height: 1.65; margin: 0; }
-.about-page .about-start { border-left: 3px solid #1756a9; padding: .25rem 0 .25rem 1.25rem; margin-top: 2rem; }
-.about-page .about-start .rubric { font-size: 1.1rem; margin-top: 0; }
-.about-page .about-start p { margin-bottom: 0; }
-@media (max-width: 48rem) {
-  .about-page .about-topics { grid-template-columns: 1fr; gap: 1.5rem; }
+@media (prefers-reduced-motion: reduce) {
+  .sample-card { transition: none; }
 }

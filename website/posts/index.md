@@ -1,6 +1,10 @@
-# Blog posts
+:::{container} eyebrow
+THE ARCHIVE
+:::
 
-Notes and explanations on machine learning, mathematics, and research, with the newest posts first.
+# Essays & notes
+
+Working through machine learning, mathematics, and research, one idea at a time. The newest dated posts appear first.
 
 ```{toctree}
 :maxdepth: 1
