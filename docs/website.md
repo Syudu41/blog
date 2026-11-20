@@ -71,7 +71,9 @@ Commit completed changes and push to `main`. GitHub Actions runs the tests and t
 
 ## Site design
 
-The website uses locally bundled Computer Modern Unicode Serif (the web version of Computer Modern Roman) for running text, including bold and italic variants. Inter is used for headings, titles, subtitles, navigation, and other interface text. MathJax keeps mathematics in its TeX math font. The page background stays white, including on devices that prefer dark mode.
+The website uses locally bundled Inter variable fonts for running text, including a true italic companion, and navigation. Geist is used for headings, titles, and subtitles. MathJax keeps mathematics in its TeX math font. The page background stays white, including on devices that prefer dark mode.
+
+The site menu always shows Home, Blog posts, Paper reviews, Visualizations, and About in the same order. It does not expand differently depending on the current page. Individual posts and reviews remain automatically listed in their section indexes. Breadcrumbs link back to Home and parent sections; Furo's separate “On this page” outline lists headings within the current article. On phones, the menu button opens the same site navigation.
 
 Edit `website/_static/website.css` for the layout and typography, `website/_templates/` for the theme overrides, and `website/index.md` for the homepage. Ordinary posts inherit the design automatically. Font sources and licenses are recorded in `website/_static/fonts/NOTICE.txt`. Existing visualization media and its in-frame typography are retained.
 

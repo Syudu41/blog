@@ -23,8 +23,8 @@ html_show_sourcelink = False
 html_copy_source = False
 html_theme_options = {
     "light_css_variables": {
-        "font-stack": '"Computer Modern", "Times New Roman", serif',
-        "font-stack--headings": '"Inter", Arial, sans-serif',
+        "font-stack": '"Inter", Arial, sans-serif',
+        "font-stack--headings": '"Geist", "Inter", Arial, sans-serif',
         "color-background-primary": "#ffffff",
         "color-background-secondary": "#ffffff",
     },

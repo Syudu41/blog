@@ -74,4 +74,4 @@ Omit the assets path from `git add` for a text-only post. GitHub Actions checks,
 
 You can also add the Markdown file and upload its assets directly on GitHub, then commit to `main`.
 
-See the [website guide](docs/website.md) for code blocks, downloads, other pages, and the retained visualization workflow. The site uses Sphinx, MyST Markdown, and Furo, with a white background, Computer Modern running text, Inter headings and navigation, and LaTeX mathematics. Font files are served locally with their licenses in `website/_static/fonts/`.
+See the [website guide](docs/website.md) for code blocks, downloads, other pages, and the retained visualization workflow. The site uses Sphinx, MyST Markdown, and Furo, with a white background, Inter running text and navigation, Geist headings and subtitles, and LaTeX mathematics. Font files are served locally with their licenses in `website/_static/fonts/`. Every page has the same five-link site menu; breadcrumbs provide a route back to Home and the current section.

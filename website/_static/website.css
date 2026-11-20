@@ -1,35 +1,21 @@
-/* Self-hosted Computer Modern Unicode (Roman) and Inter. */
+/* Self-hosted Inter for reading and Geist for headings. */
 @font-face {
-  font-family: "Computer Modern";
-  src: url("fonts/cmunrm.woff") format("woff");
+  font-family: "Inter";
+  src: url("fonts/InterVariable.woff2") format("woff2");
   font-style: normal;
-  font-weight: 400;
-  font-display: swap;
-}
-@font-face {
-  font-family: "Computer Modern";
-  src: url("fonts/cmunbx.woff") format("woff");
-  font-style: normal;
-  font-weight: 700;
-  font-display: swap;
-}
-@font-face {
-  font-family: "Computer Modern";
-  src: url("fonts/cmunti.woff") format("woff");
-  font-style: italic;
-  font-weight: 400;
-  font-display: swap;
-}
-@font-face {
-  font-family: "Computer Modern";
-  src: url("fonts/cmunbi.woff") format("woff");
-  font-style: italic;
-  font-weight: 700;
+  font-weight: 100 900;
   font-display: swap;
 }
 @font-face {
   font-family: "Inter";
-  src: url("fonts/InterVariable.woff2") format("woff2");
+  src: url("fonts/InterVariable-Italic.woff2") format("woff2");
+  font-style: italic;
+  font-weight: 100 900;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Geist";
+  src: url("fonts/Geist-Variable.woff2") format("woff2");
   font-style: normal;
   font-weight: 100 900;
   font-display: swap;
@@ -53,17 +39,20 @@ body, body[data-theme="dark"], body[data-theme="light"] {
   --color-sidebar-link-text--top-level: #252c2b;
   --color-sidebar-search-background: #f5f8f6;
   --color-sidebar-search-foreground: #252c2b;
-  --font-stack: "Computer Modern", "Times New Roman", serif;
-  --font-stack--headings: "Inter", Arial, sans-serif;
+  --font-stack: "Inter", Arial, sans-serif;
+  --font-stack--headings: "Geist", "Inter", Arial, sans-serif;
   background: #fff;
   color: #252c2b;
 }
 body { font-size: 1rem; line-height: 1.75; }
 ::selection { background: #dceee6; color: #153f35; }
 h1, h2, h3, h4, h5, h6, .rubric,
+.home-intro, .about-intro, .sidebar-brand-text,
+.sd-card-title, .related-pages .title {
+  font-family: "Geist", "Inter", Arial, sans-serif;
+}
 .sidebar-drawer, .mobile-header, .toc-drawer, footer,
-.eyebrow, .home-intro, .home-actions, .about-intro, .about-links,
-.sd-card-title, .sd-card-footer {
+.eyebrow, .home-actions, .about-links, .sd-card-footer {
   font-family: "Inter", Arial, sans-serif;
 }
 h1, h2, h3, h4, h5, h6 { color: #202b27; font-weight: 650; }
@@ -83,7 +72,7 @@ a:focus-visible, button:focus-visible, input:focus-visible, label:focus-visible 
 .theme-toggle-container { display: none; }
 .content { padding-top: 3rem; }
 .content-icon-container { margin-top: -1.7rem; }
-article { font-size: 1.1875rem; max-width: 46rem; margin-inline: auto; }
+article { font-size: 1.0625rem; max-width: 46rem; margin-inline: auto; }
 article img, article video { max-width: 100%; height: auto; }
 article video { display: block; width: 100%; object-fit: contain; }
 article blockquote { border-left: 3px solid #8eafa0; padding-left: 1.3rem; color: #505b58; }
@@ -136,7 +125,7 @@ footer { font-size: .8125rem; line-height: 1.6; }
 .post-index .toctree-wrapper > ul { list-style: none; padding-left: 0; }
 .post-index .toctree-l1 { padding: 1.5rem 0; border-top: 1px solid #dce5e1; }
 .post-index .toctree-l1:last-child { border-bottom: 1px solid #dce5e1; }
-.post-index .toctree-l1 > a { font-family: "Inter", Arial, sans-serif; font-size: 1.2rem; font-weight: 550; letter-spacing: -.025em; text-decoration: none; line-height: 1.5; }
+.post-index .toctree-l1 > a { font-family: "Geist", "Inter", Arial, sans-serif; font-size: 1.2rem; font-weight: 550; letter-spacing: -.025em; text-decoration: none; line-height: 1.5; }
 .post-index .toctree-l1 > a:hover { text-decoration: underline; }
 
 /* Retained media, presented as a quiet collection. */

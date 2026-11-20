@@ -1,11 +1,11 @@
-Computer Modern Unicode Serif (the Unicode web adaptation of Computer Modern Roman)
-Files: cmunrm.woff, cmunbx.woff, cmunti.woff, cmunbi.woff
-Source: https://github.com/dreampulse/computer-modern-web-font/tree/e9977be1283466992a2dede47a342655d8426fee/font/Serif
-License: computer-modern-OFL.txt (SIL Open Font License 1.1)
-
-Inter 4.1 variable font
-File: InterVariable.woff2
-Source: https://github.com/rsms/inter/blob/v4.1/docs/font-files/InterVariable.woff2
+Inter 4.1 variable fonts
+Files: InterVariable.woff2, InterVariable-Italic.woff2
+Source: https://github.com/rsms/inter/tree/v4.1/docs/font-files
 License: inter-OFL.txt (SIL Open Font License 1.1)
+
+Geist Sans variable font
+File: Geist-Variable.woff2
+Source: https://github.com/vercel/geist-font/blob/4d655731f83507f0258ce5541c297b6553d5d081/packages/next/dist/fonts/geist-sans/Geist-Variable.woff2
+License: geist-OFL.txt (SIL Open Font License 1.1)
 
 These font files are redistributed without modification and served locally.

@@ -50,6 +50,6 @@ Publication validates the review, copies media to `website/samples/assets/<id>/`
 
 Sphinx builds cards automatically from those Markdown files. Its publication gate still rejects stale render reviews, changed task media, mismatched asset references and unsafe paths. Website prose is authored separately; review it against the visualization before committing. Build success does not certify arbitrary scientific claims in text.
 
-Run the appropriate tests, inspect the built page, commit the completed feature, and push to deploy through GitHub Pages. All pages retain Sphinx, MyST and Furo, a white background and LaTeX mathematics. Website prose uses Computer Modern and headings use Inter; Manim outputs retain their reviewed Arial-family typography.
+Run the appropriate tests, inspect the built page, commit the completed feature, and push to deploy through GitHub Pages. All pages retain Sphinx, MyST and Furo, a white background and LaTeX mathematics. Website prose uses Inter and headings use Geist; Manim outputs retain their reviewed Arial-family typography.
 
 A review JSON validates recorded evidence and file integrity. It does not replace scientific or visual inspection, and does not generate an animation or certify its explanatory quality automatically.

@@ -12,5 +12,5 @@
 - Inspect every generated output and compare it against every task requirement. Run relevant numerical, media, typography, and layout checks; record actual evidence, not assumed passes.
 - Publish output to `website/` only after all checks and requirements pass. Use `scripts/visualization_workflow.py` to prepare the review, publish approved artifacts, and check their integrity. See `docs/visualization-workflow.md` for the process.
 - Re-review output after any requirement, source, explanation, or artifact changes. Do not bypass a failed check or relabel a Manim output as a concept preview.
-- Build the whole website with Sphinx, MyST Markdown, and Furo; retain the white background. Use Computer Modern for website running text and Inter for headings, titles, subtitles, and navigation. Existing Manim typography remains unchanged. All mathematics uses LaTeX.
+- Build the whole website with Sphinx, MyST Markdown, and Furo; retain the white background. Use Inter for website running text and navigation, and Geist for headings, titles, and subtitles. Existing Manim typography remains unchanged. All mathematics uses LaTeX.
 - For explanatory tasks, storyboard and review the visual progression using `docs/visual-standards.md`. Passing rendering and media checks alone does not establish explanatory quality.
